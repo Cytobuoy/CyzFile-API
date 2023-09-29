@@ -1,0 +1,28 @@
+<Project>
+	<!-- This file is a little more complex then you would expect because it is part of the build process
+	  - of a larger application.  So it tries to handle the standalone build, and the build as part of the larger
+	  - application.
+	  -->
+
+  <PropertyGroup>
+		<UpperDirProperties>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</UpperDirProperties>
+  </PropertyGroup>
+
+  <Import Project="$(UpperDirProperties)" Condition=" '$(UpperDirProperties)'!=''"  />
+
+  <!-- Put our package files with the other build intermediates and products.  -->
+  <PropertyGroup>
+	<RestorePackagesPath Condition=" '$(RestorePackagesPath)'==''" >$(MSBuildThisFileDirectory)\..\build\packages</RestorePackagesPath>
+    <RunSettingsFilePath Condition=" '$(RunSettingsFilePath)'== ''" >$(MSBuildThisFileDirectory)\CyzFile-API.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+	<BaseIntermediateOutputPath Condition=" '$(BaseIntermediateOutputPath)' == '' ">$(MSBuildThisFileDirectory)..\build\obj</BaseIntermediateOutputPath>
+    <BaseOutputPath Condition=" '$(BaseOutputPath)' == '' " >$(MSBuildThisFileDirectory)..\build\bin</BaseOutputPath>
+
+	<ThisFolder>CyzFile-API</ThisFolder>
+    <BaseIntermediateOutputPath>$(BaseIntermediateOutputPath)\$(ThisFolder)</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(BaseOutputPath)\$(ThisFolder)</BaseOutputPath>
+  </PropertyGroup>
+  
+</Project>

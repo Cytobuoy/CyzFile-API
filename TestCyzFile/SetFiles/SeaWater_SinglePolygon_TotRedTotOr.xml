@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SetList SerialNumber="CS-2019-96" configuration_date="2019-12-04T00:00:00.0000000" ExclusiveSets="False">
+  <DefaultSet>
+    <ListID>0</ListID>
+    <Name>Default (all)</Name>
+    <Color>Gray</Color>
+    <Visible>true</Visible>
+  </DefaultSet>
+  <GateBasedSet>
+    <ListID>1</ListID>
+    <Name>SeaWater_SinglePolygon_TotRedTotOr</Name>
+    <Color>Blue</Color>
+    <Visible>true</Visible>
+    <GateCollection>
+      <PolygonGate>
+        <XAxis Type="SingleAxis">
+          <Name>Total  FL Red</Name>
+          <IsLog>true</IsLog>
+          <ChannelType>FLRed</ChannelType>
+          <ChannelName>FL Red</ChannelName>
+          <Parameter>Total</Parameter>
+        </XAxis>
+        <YAxis Type="SingleAxis">
+          <Name>Total  Fl Orange</Name>
+          <IsLog>true</IsLog>
+          <ChannelType>FLOrange</ChannelType>
+          <ChannelName>Fl Orange</ChannelName>
+          <Parameter>Total</Parameter>
+        </YAxis>
+        <Path>
+          <Point>
+            <X>26700.64</X>
+            <Y>73.51759</Y>
+          </Point>
+          <Point>
+            <X>15367.96</X>
+            <Y>68.68556</Y>
+          </Point>
+          <Point>
+            <X>9599.581</X>
+            <Y>96.49268</Y>
+          </Point>
+          <Point>
+            <X>10418.23</X>
+            <Y>163.4252</Y>
+          </Point>
+          <Point>
+            <X>18475.01</X>
+            <Y>402.2867</Y>
+          </Point>
+          <Point>
+            <X>78967.27</X>
+            <Y>1415.02</Y>
+          </Point>
+          <Point>
+            <X>518683.8</X>
+            <Y>6992.271</Y>
+          </Point>
+          <Point>
+            <X>1598082</X>
+            <Y>40953.26</Y>
+          </Point>
+          <Point>
+            <X>3851861</X>
+            <Y>156827.6</Y>
+          </Point>
+          <Point>
+            <X>6692310</X>
+            <Y>111633.3</Y>
+          </Point>
+          <Point>
+            <X>6692310</X>
+            <Y>33969.77</Y>
+          </Point>
+          <Point>
+            <X>2085014</X>
+            <Y>5418.719</Y>
+          </Point>
+          <Point>
+            <X>215194.4</X>
+            <Y>453.1122</Y>
+          </Point>
+          <Point>
+            <X>48327.89</X>
+            <Y>88.6313</Y>
+          </Point>
+        </Path>
+      </PolygonGate>
+    </GateCollection>
+  </GateBasedSet>
+</SetList>

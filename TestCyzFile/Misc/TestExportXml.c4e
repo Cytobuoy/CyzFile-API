@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<exportsettings serial="CS-2016-04" configuration_date="2018-04-24" creation_date="2018-08-30 12:55:16Z">
+  <csv_settings delimiter=";" decimal_separator="," />
+  <output_folder>F:\My CytoSense\datafiles\</output_folder>
+  <summary export="false" />
+  <gps_log export="false" />
+  <sensor_logs export="true" />
+  <selected_sets>Default (all),New Set,New Set 1,New Set 2</selected_sets>
+  <listmode export="true" arrival_time_mode="Relative" output="csv,fcs">
+    <channels>FWS L,FWS R,SWS,Fl Yellow,Fl Orange,Fl Red</channels>
+    <parameters>Length,Total,Maximum,Average,Fill factor,Number of cells</parameters>
+  </listmode>
+  <set_statistics export="true" output="csv" append="false">
+    <filename>means_per_set_per_file.csv</filename>
+    <channels>SWS,Fl Yellow,Fl Orange,Fl Red</channels>
+    <parameters>Total,Maximum,Average,Number of cells</parameters>
+    <statistics>min,max,mean,sd,total</statistics>
+  </set_statistics>
+  <cyzfile export="true" />
+  <pulses export="true" output="csv" data="smoothed" />
+  <images export="true" img="png" output="zip" cropped="false" cropped_scalebar="false" uncropped="true" uncropped_scalebar="false" background="true" />
+  <overview_img export="true" scalebar="true" particle_id="true" limit_width="false" target_width="100" img="jpg" />
+</exportsettings>

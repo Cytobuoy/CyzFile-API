@@ -1,0 +1,244 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\packages\MSTest.TestAdapter.2.2.7\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\..\packages\MSTest.TestAdapter.2.2.7\build\net45\MSTest.TestAdapter.props')" />
+  <PropertyGroup>
+    <RootNamespace>TestCyzFile</RootNamespace>
+    <TargetFramework>net7.0</TargetFramework>
+
+    <OutputPath>$(BaseOutputPath)\$(Platform)\$(Configuration)</OutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Platform)\$(Configuration)</IntermediateOutputPath>
+
+    <IsPackable>false</IsPackable>
+
+    <Configurations>Debug;Release;ReleaseErnie;ReleaseWebsite</Configurations>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Gps\**" />
+    <Compile Remove="TestFiles\**" />
+    <EmbeddedResource Remove="Gps\**" />
+    <EmbeddedResource Remove="TestFiles\**" />
+    <None Remove="Gps\**" />
+    <None Remove="TestFiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="1p6umbeads 2011-05-19 13u06.cyz" />
+    <None Remove="Algae and beads very fast 2012-02-16 14u35.cyz" />
+    <None Remove="Algae_SetCombinations_NO_XSets.xml" />
+    <None Remove="Algae_SetCombinations_XSets.xml" />
+    <None Remove="Algae_SingleFreeForm_TotRedTotOr.xml" />
+    <None Remove="Algae_SingleRange_TotRed.xml" />
+    <None Remove="Algae_SingleSet_4Gates.xml" />
+    <None Remove="Algae_Single_Rect_TotRedTotOr.cmw" />
+    <None Remove="Algae_Single_Rect_TotRedTotOr.xml" />
+    <None Remove="beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz" />
+    <None Remove="beads1.6u.cyz-2010-06-16 13-10.CYZ" />
+    <None Remove="BeadsCalibration 2017-02-08 13h50.cyz" />
+    <None Remove="BeadsCalibration 2017-02-08 13h50_Beads.cyz" />
+    <None Remove="DataFiles\1 2011-12-14 13u50.cyz" />
+    <None Remove="DataFiles\1 2011-12-14 13u51.cyz" />
+    <None Remove="DataFiles\algjes machteld 2010-11-22 11u33.cyz" />
+    <None Remove="DataFiles\beads reservoir measurement 2021-10-04 15h00.cyz" />
+    <None Remove="DataFiles\FunctionalTest_measurement#1 2019-01-22 08h52.cyz" />
+    <None Remove="DataFiles\ruistest_1 2023-07-18 14h46_2.cyz" />
+    <None Remove="dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz" />
+    <None Remove="GPS_20121104_134730.log" />
+    <None Remove="LW_2017_protocol_1 2017-04-20 12h00.cyz" />
+    <None Remove="Maaswater gevoeliger 256K 2012-10-10 12u03.cyz" />
+    <None Remove="Misc\GPS_20121104_134730.log" />
+    <None Remove="Misc\GPS_GERALD_2023-04-28 23h59.log" />
+    <None Remove="Misc\TestExportXml.c4e" />
+    <None Remove="Misc\TestExportXml_New.c4e" />
+    <None Remove="Misc\yakult_schedule.sch" />
+    <None Remove="pollen 2011-05-19 16u19.cyz" />
+    <None Remove="profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz" />
+    <None Remove="Seawater_SetCombinations_NO_XSets.xml" />
+    <None Remove="Seawater_SetCombinations_XSets.xml" />
+    <None Remove="SeaWater_SingleFreeForm_TotRedTotOr.xml" />
+    <None Remove="SeaWater_SinglePolygon_TotRedTotOr.xml" />
+    <None Remove="SeaWater_SingleRange_TotRed.xml" />
+    <None Remove="SeaWater_SingleRect_TotRedTotOr.xml" />
+    <None Remove="SeaWater_SingleSet_4Gates.xml" />
+    <None Remove="SetFiles\Algae_SetCombinations_NO_XSets.xml" />
+    <None Remove="SingleBump_Polygon_TotRedTotOr.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DataFiles\1 2011-12-14 13u50.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\1 2011-12-14 13u51.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\1p6umbeads 2011-05-19 13u06.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\Algae and beads very fast 2012-02-16 14u35.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\FunctionalTest_measurement#1 2019-01-22 08h52.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Misc\GPS_20121104_134730.log">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Misc\GPS_GERALD_2023-04-28 23h59.log">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Misc\TestExportXml.c4e">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Misc\TestExportXml_New.c4e">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\Algae_SetCombinations_XSets.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\Algae_SingleFreeForm_TotRedTotOr.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\Algae_SingleRange_TotRed.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\Algae_SingleSet_4Gates.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\Algae_Single_Rect_TotRedTotOr.cmw">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\Algae_Single_Rect_TotRedTotOr.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\beads1.6u.cyz-2010-06-16 13-10.CYZ">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\BeadsCalibration 2017-02-08 13h50.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\BeadsCalibration 2017-02-08 13h50_Beads.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\algjes machteld 2010-11-22 11u33.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\beads reservoir measurement 2021-10-04 15h00.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\ruistest_1 2023-07-18 14h46_2.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\LW_2017_protocol_1 2017-04-20 12h00.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\d0_a1_run_3 2011-06-11 09u28.cyz">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\Maaswater gevoeliger 256K 2012-10-10 12u03.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\nano_cend16_20 2020-10-06 05u00.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\nano_cend16_20 2020-10-07 04u00.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\pollen 2011-05-19 16u19.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\Seawater_SetCombinations_NO_XSets.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\Seawater_SetCombinations_XSets.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\SeaWater_SingleFreeForm_TotRedTotOr.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\SeaWater_SinglePolygon_TotRedTotOr.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\SeaWater_SingleRange_TotRed.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\SeaWater_SingleRect_TotRedTotOr.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\SeaWater_SingleSet_4Gates.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\Algae_SetCombinations_NO_XSets.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SetFiles\SingleBump_Polygon_TotRedTotOr.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="coverlet.collector" Version="3.0.2" />
+	  <PackageReference Include="Castle.Core" version="4.4.0" />
+	  <PackageReference Include="Crc32.NET" Version="1.2.0" />
+	  <PackageReference Include="log4net" Version="2.0.15" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" version="17.0.0" />
+	  <PackageReference Include="MSTest.TestAdapter" version="2.2.8" />
+	  <PackageReference Include="MSTest.TestFramework" version="2.2.8" />
+	  <PackageReference Include="NSubstitute" version="4.2.2" />
+	  <PackageReference Include="OpenCvSharp4" version="4.5.0.20201013" />
+	  <PackageReference Include="OpenCvSharp4.runtime.win" version="4.5.0.20201013" />
+	  <PackageReference Include="OpenCvSharp4.Windows" version="4.5.0.20201013" />
+	  <PackageReference Include="System.Buffers" version="4.5.1" />
+	  <PackageReference Include="System.Drawing.Common" version="7.0.0" />
+	  <PackageReference Include="System.Memory" version="4.5.4" />
+	  <PackageReference Include="System.Numerics.Vectors" version="4.5.0" />
+	  <PackageReference Include="System.Runtime.CompilerServices.Unsafe" version="5.0.0" />
+	  <PackageReference Include="System.Threading.Tasks.Extensions" version="4.5.4" />	
+	
+  </ItemGroup>
+
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+    <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CyzFile\CyzFile.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="GPS_GERALD_2023-04-28 23h59.log">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="DataFiles\Segmented 2014-09-30 15u13.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestExportXml.c4e">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestExportXml_New.c4e">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="yakult_schedule.sch">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+
+</Project>

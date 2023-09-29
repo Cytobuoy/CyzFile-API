@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SetList SerialNumber="CS-2019-96" configuration_date="2019-12-04T00:00:00.0000000" ExclusiveSets="False">
+  <DefaultSet>
+    <ListID>0</ListID>
+    <Name>Default (all)</Name>
+    <Color>Gray</Color>
+    <Visible>true</Visible>
+  </DefaultSet>
+  <GateBasedSet>
+    <ListID>1</ListID>
+    <Name>SeaWater_SingleRange_TotRed</Name>
+    <Color>Blue</Color>
+    <Visible>true</Visible>
+    <GateCollection>
+      <RangeGate>
+        <Axis Type="SingleAxis">
+          <Name>Total  FL Red</Name>
+          <IsLog>true</IsLog>
+          <ChannelType>FLRed</ChannelType>
+          <ChannelName>FL Red</ChannelName>
+          <Parameter>Total</Parameter>
+        </Axis>
+        <RangeMin>4502.907</RangeMin>
+        <RangeMax>7985.163</RangeMax>
+      </RangeGate>
+    </GateCollection>
+  </GateBasedSet>
+</SetList>

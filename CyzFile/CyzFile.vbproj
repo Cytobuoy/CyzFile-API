@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>CytoSense</RootNamespace>
+    <AssemblyName>CyzFile</AssemblyName>
+
+	<TargetFrameworks>net472;net7.0</TargetFrameworks>
+    <OutputPath>$(BaseOutputPath)\$(Platform)\$(Configuration)</OutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Platform)\$(Configuration)</IntermediateOutputPath>
+    <Configurations>Debug;Release;ReleaseErnie;ReleaseWebsite</Configurations>
+    <Platforms>AnyCPU;x64</Platforms>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionStrict>On</OptionStrict>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+	  <PackageReference Include="log4net" Version="2.0.15" />
+	  <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+	  <PackageReference Include="OpenCvSharp4" version="4.5.0.20201013" />
+	  <PackageReference Include="OpenCvSharp4.runtime.win" version="4.5.0.20201013" />
+	  <PackageReference Include="OpenCvSharp4.Windows" version="4.5.0.20201013" />
+	  <PackageReference Include="OpenCvSharp4.WpfExtensions" version="4.5.0.20201013" />
+	  <PackageReference Include="System.Buffers" version="4.5.1" />
+	  <PackageReference Include="System.Drawing.Common" version="7.0.0" />
+	  <PackageReference Include="System.Globalization" version="4.3.0" />
+	  <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+	  <PackageReference Include="System.Memory" version="4.5.4" />
+	  <PackageReference Include="System.Numerics.Vectors" version="4.5.0" />
+	  <PackageReference Include="System.Resources.ResourceManager" version="4.3.0" />
+	  <PackageReference Include="System.Runtime" version="4.3.1" />
+	  <PackageReference Include="System.Runtime.CompilerServices.Unsafe" version="5.0.0" />
+	  <PackageReference Include="System.Runtime.Extensions" version="4.3.1" />
+	  <PackageReference Include="System.ValueTuple" version="4.5.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Update="My Project\Resources.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="My Project\Settings.Designer.vb">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="My Project\Resources.resx">
+			<CustomToolNamespace>My.Resources</CustomToolNamespace>
+			<Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.vb</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="icons/**/*.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="My Project\Resources.Designer.vb">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+</Project>

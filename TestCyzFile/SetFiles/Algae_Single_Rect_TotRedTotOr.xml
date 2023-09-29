@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SetList SerialNumber="CS-2011-39" configuration_date="2012-02-08T00:00:00.0000000" ExclusiveSets="False">
+  <DefaultSet>
+    <ListID>0</ListID>
+    <Name>Default (all)</Name>
+    <Color>Gray</Color>
+    <Visible>true</Visible>
+  </DefaultSet>
+  <GateBasedSet>
+    <ListID>1</ListID>
+    <Name>Algae_Single_Rect_TotRedTotOr</Name>
+    <Color>Blue</Color>
+    <Visible>true</Visible>
+    <GateCollection>
+      <RectangleGate>
+        <XAxis Type="SingleAxis">
+          <Name>Total  FL Red</Name>
+          <IsLog>true</IsLog>
+          <ChannelType>FLRed</ChannelType>
+          <ChannelName>FL Red</ChannelName>
+          <Parameter>Total</Parameter>
+        </XAxis>
+        <YAxis Type="SingleAxis">
+          <Name>Total  FL Orange</Name>
+          <IsLog>true</IsLog>
+          <ChannelType>FLOrange</ChannelType>
+          <ChannelName>FL Orange</ChannelName>
+          <Parameter>Total</Parameter>
+        </YAxis>
+        <X>3888.672</X>
+        <Y>1496.23</Y>
+        <Width>6278.085</Width>
+        <Height>1424.79</Height>
+      </RectangleGate>
+    </GateCollection>
+  </GateBasedSet>
+</SetList>

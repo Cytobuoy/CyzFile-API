@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CyzFileDump": {
+      "commandName": "Project",
+      "commandLineArgs": "-imp \"c:\\tmp\\Green_Smartgrid 2023-08-21 14h02.cyz\""
+    }
+  }
+}
