@@ -568,6 +568,7 @@ End Sub
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz")>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz")>
     <DataRow("DataFiles/FunctionalTest_measurement#1 2019-01-22 08h52.cyz")>
+    <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz")>
     Public Sub TestOpen(filename As String)
         Dim dfw = New DataFileWrapper(filename)
         Dim numParticles = dfw.SplittedParticles.Length ' 

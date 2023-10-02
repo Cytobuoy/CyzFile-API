@@ -1158,6 +1158,28 @@ Namespace CytoSettings
         GrabberOnly = 21
     End Enum
 
+    ' Value below is referenced in some OLD datafiles, so it needs to be defined or they cannot be loaded,
+    ' but it is not used anymore.
+    <Obsolete()>
+    <Serializable()>
+    Public Enum ChannelTypes
+        Unknown = 0
+        FWS = 1
+        FWSL = 2
+        FWSR = 3
+        SWS = 4
+        FLRED = 5
+        FLOrange = 6
+        FLYellow = 7
+        FLGreen = 8
+        Trigger1 = 9
+        Trigger2 = 10
+        DSP = 11
+        Curvature = 12
+        Polarized = 13
+    End Enum
+
+
     <Serializable()> Public Enum ChannelAccessMode
         Normal = 0
         Optical_debugging = 1
