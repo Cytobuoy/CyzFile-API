@@ -15,14 +15,8 @@ Imports CytoSense.Data.ParticleHandling
 ''' </summary>
 ''' <remarks></remarks>
 <TestClass()> Public Class TestDataFileWrapper
-'    Private Const BASE_DATA_DIR As String = "TEST_DATA_BASE"
-'    Private Const DATA_DIR_USER As String = "TEST_DATA_USER"
-'    Private Const DATA_DIR_PWD As String = "TEST_DATA_PWD"
-
 
     Private _testContext As TestContext
-
-'    Private _MismatchesFound As Boolean = False
 
     Public Property TestContext As TestContext
         Get
@@ -32,160 +26,6 @@ Imports CytoSense.Data.ParticleHandling
             _testContext = value
         End Set
     End Property
-
-
-
-'''' <summary>
-'''' Use class initialize and class class cleanup to setup/teardown connections to the server
-'''' that stores the test datafiles.  DO this only if the correct environment variables are
-'''' set. NOTE: Copied form the DataFile tests, UGLY create som eutilities calss for this someday.
-'''' </summary>
-'    Private Shared _networkConnectionPath As String = ""
-'    <ClassInitialize()> _
-'    Public Shared Sub ClassInit(ByVal context As TestContext)
-'        Dim baseDir = Environment.GetEnvironmentVariable(BASE_DATA_DIR)
-'        Dim dataUser = Environment.GetEnvironmentVariable(DATA_DIR_USER)
-'        Dim dataPwd = Environment.GetEnvironmentVariable(DATA_DIR_PWD)
-
-'    If Not String.IsNullOrEmpty(baseDir) AndAlso Not String.IsNullOrEmpty(dataUser) AndAlso Not String.IsNullOrEmpty(dataPwd) Then
-'        AddConnection(baseDir, dataUser, dataPwd)
-'        _networkConnectionPath = baseDir
-'    End If ' Else not all three are set, assume we don't need to do anything.
-'End Sub
-
-'<ClassCleanup()> _
-'Public Shared Sub ClassCleanup()
-'    If Not String.IsNullOrEmpty(_networkConnectionPath) Then
-'        RemoveConnection(_networkConnectionPath)
-'        _networkConnectionPath = ""
-'    End If ' Else no connected network path, so do not need to release it.
-'End Sub
-
-#Region "Win32 Support functions"
-'' Move this stuff to some global Win32 support class/DLL somewhere.
-'Private Enum ResourceUsage As UInteger
-'    Connectable = &H1
-'    Container = &H2
-'    NoLocalDevice = &H4
-'    Sibling = &H8
-'    Attached = &H10
-'    All = Connectable Or Container Or Attached
-'    Reserved = &H80000000UI
-'End Enum
-
-'Private Enum ResourceDisplayType As UInteger
-'    Generic = &H0
-'    Domaim = &H1
-'    Server = &H2
-'    Share = &H3
-'    File = &H4
-'    Group = &H5
-'    Network = &H6
-'    Root = &H7
-'    ShareAdmin = &H8
-'    Directory = &H9
-'    Tree = &HA
-'    NDSContainer = &HB
-'End Enum
-
-'Private Enum ResourceType As UInteger
-'    Any = &H0
-'    Disk = &H1
-'    Print = &H2
-'    Reserved = &H8
-'    Unknown = &HFFFFFFFFUI
-'End Enum
-
-'Private Enum ResourceScope As UInteger
-'    Connected = &H1
-'    GlobalNet = &H2
-'    Remembered = &H3
-'    Recent = &H4
-'    Context = &H5
-'End Enum
-
-'<StructLayout(LayoutKind.Sequential)> _
-'Private Structure NETRESOURCE
-'    Public dwScope As ResourceScope
-'    Public dwType As ResourceType
-'    Public dwDisplayType As ResourceDisplayType
-'    Public dwUsage As ResourceUsage
-'    Public lpLocalName As String
-'    Public lpRemoteName As String
-'    Public lpComment As String
-'    Public lpProvider As String
-'End Structure
-
-'Private Const NO_ERROR As UInteger = 0
-'Private Const ERROR_EXTENDED_ERROR As UInteger = &H800704B8UI
-
-
-'<DllImport("mpr.dll", SetLastError:=True)> _
-'Private Shared Function WNetAddConnection2( _
-'                       ByRef lpNetResource As NETRESOURCE, _
-'                       ByVal lpPassword As String, _
-'                       ByVal lpUserName As String, _
-'                       ByVal dwFlags As Integer) As UInteger
-'End Function
-
-'<DllImport("mpr.dll", SetLastError:=True)> _
-'Private Shared Function WNetCancelConnection2( _
-'                      ByVal lpName As String, _
-'                      ByVal dwFlags As Long, _
-'                      ByVal fForce As Long) As UInteger
-'End Function
-
-
-'<DllImport("mpr.dll", SetLastError:=True)> _
-'Private Shared Function WNetGetLastError( _
-'                      ByRef lpError As Integer, _
-'                      ByVal lpErrorBuf As StringBuilder, _
-'                      ByVal nErrorBufSize As Integer, _
-'                      ByVal lpNameBuf As StringBuilder, _
-'                      ByVal nNameBufSize As Integer) As UInteger
-'End Function
-
-'Private Const ERROR_SUCCESS As Integer = 0
-
-'Private Shared Sub AddConnection(path As String, user As String, pwd As String)
-'    Dim connInfo As New NETRESOURCE()
-'    connInfo.lpRemoteName = path
-'    connInfo.lpLocalName = Nothing
-'    connInfo.dwType = ResourceType.Disk
-'    connInfo.lpProvider = Nothing
-
-'    Dim result = WNetAddConnection2(connInfo, pwd, user, 0)
-'    If result <> ERROR_SUCCESS Then
-'        If (result <> ERROR_EXTENDED_ERROR) Then
-'            Throw New Win32Exception(UIntError2IntError(result))
-'        End If
-'        Dim errNum As Integer = 0
-'        Dim errBuf As New StringBuilder(1024)
-'        Dim nameBuf As New StringBuilder(1024)
-'        Dim r2 = WNetGetLastError(errNum, errBuf, 1024, nameBuf, 1024)
-'        If r2 = NO_ERROR Then
-'            Throw New Exception(String.Format("Error: {0} - '{1}' ({2})", errNum, errBuf.ToString(), nameBuf.ToString()))
-'        End If
-
-'        Throw New Exception("Unknown error in use connection")
-
-'    End If
-'End Sub
-
-'Private Shared Sub RemoveConnection(path As String)
-'    Dim r = WNetCancelConnection2(path, 0, 1)
-'    If r <> NO_ERROR Then
-'        Throw New Win32Exception(UIntError2IntError(r))
-'    End If
-'End Sub
-
-'Public Shared Function UIntError2IntError(e As UInteger) As Integer
-'    Dim bts As Byte() = BitConverter.GetBytes(e)
-'    Return BitConverter.ToInt32(bts, 0)
-'End Function
-
-#End Region
-
 
     Public Function GetPropertyValue(ByVal obj As Object, ByVal PropName As String) As Object
         Dim objType As Type = obj.GetType()
@@ -736,6 +576,34 @@ End Sub
         End If
         Assert.IsTrue(True) ' If we get here, all is well.
     End Sub
+
+
+    ' This is a very old and very rare data format.  It is probably the first attempt to create a custom datafile format.
+    ' It consists of a file serialized in multiple parts, a bit like the current segmented file format. But different.
+    ' Until today I did not know it existed, and I am not sure it actually exists out there in "the wild".
+    ' Of the approx. 40000 files I scanned on our servers, there were 4 in this format, no more
+    ' For now I decided not to invest anymore time in this format, just report we do not support it.
+    ' If it turns out there are actually significant data files that use this format we will look
+    ' at supporting them.  The code can still be found in the repository for the CytoOLD DLL.
+   <DataTestMethod>
+   <DataRow("DataFiles/Measurement 2012-06-20 14u01.cyz")>
+    Public Sub TestOpenSectioned(filename As String)
+        Try
+            Dim dfw = New DataFileWrapper(filename)
+            Dim numParticles = dfw.SplittedParticles.Length ' 
+            If numParticles > 0 Then
+                Dim p1 = dfw.SplittedParticles(0) ' Force loading of all the particle Data.
+            End If
+            Assert.Fail("File is a sctioned file that is not supported, should have thrown.") ' If we get here, all is well.
+        Catch ex As Exception
+            If ex.InnerException IsNot Nothing AndAlso ex.InnerException.Message.StartsWith("Sectioned datafiles are not supported") Then
+                Assert.IsTrue(True) ' We expect this because this format is not supported!
+            Else    ' Another unexpected exception happend.
+                Assert.Fail(String.Format("Expected 'Sectioned datafiles are not supported' error, got: '{0} ({1})'", ex.Message, If(ex.InnerException IsNot Nothing,ex.InnerException.Message,"")))
+            End If
+        End Try
+    End Sub
+
 
 
     ' Some older files did not store JPEG streams, but serialized a Bitmap class instead, which internally

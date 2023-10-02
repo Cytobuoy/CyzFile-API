@@ -80,6 +80,9 @@ Namespace Serializing
                 ' The original Bitmap class is not available on .Net core, replace with our own class.
                 assemblyName = Assembly.GetExecutingAssembly().FullName
                 typeName     = "CytoSense.Imaging.CyzFileBitmap"
+            Else If typeName = "CytoSense.Data.Data+DataFileIndex" Then
+                Throw New Exception("Sectioned datafiles are not supported, if these files are important to you please contact CytoBuoy to see if we can find a solution!")
+                ' NOTE: Support code for this can be found in the Cyto__OLD 2.8.0.0 DLL.
             Else If assemblyName.StartsWith("CytoSense")
                 assemblyName = Assembly.GetExecutingAssembly().FullName  ' NOTE: We renamed the assembly when making it public.
             End If

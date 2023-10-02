@@ -41,6 +41,7 @@
     <None Remove="DataFiles\algjes machteld 2010-11-22 11u33.cyz" />
     <None Remove="DataFiles\beads reservoir measurement 2021-10-04 15h00.cyz" />
     <None Remove="DataFiles\FunctionalTest_measurement#1 2019-01-22 08h52.cyz" />
+    <None Remove="DataFiles\Measurement 2012-06-20 14u01.cyz" />
     <None Remove="DataFiles\ruistest_1 2023-07-18 14h46_2.cyz" />
     <None Remove="dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz" />
     <None Remove="GPS_20121104_134730.log" />
@@ -78,6 +79,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DataFiles\FunctionalTest_measurement#1 2019-01-22 08h52.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\Measurement 2012-06-20 14u01.cyz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Misc\GPS_20121104_134730.log">
