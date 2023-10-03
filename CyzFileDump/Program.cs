@@ -162,10 +162,6 @@ namespace CyzFileDump
         {
             Console.WriteLine($"Particle ID: {p.ID}");
 
-
-            // We start with the actual pulse shapes for each channel.  This is the base data, the other parameters are
-            // all calculated using these pulse shapes.
-
             Console.WriteLine($"Pulse Shapes:");
             foreach( ChannelData cd in p.ChannelData)
             {

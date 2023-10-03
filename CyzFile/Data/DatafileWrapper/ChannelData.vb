@@ -30,11 +30,13 @@ Namespace Data.ParticleHandling.Channel
                     Case "_channelInformation" 
                         _channelInformation = DirectCast(current.Value,CytoSense.CytoSettings.channel)
                     Case "_parameters"
-                        Dim doublePars() As Double = DirectCast(current.Value,Double())
-                        ReDim _parameters(doublePars.Length-1)
-                        For i As Integer = 0 To doublePars.Length-1
-                            _parameters(i) = CSng(doublePars(i))
-                        Next
+                        If current.Value IsNot Nothing Then
+                            Dim doublePars() As Double = DirectCast(current.Value,Double())
+                            ReDim _parameters(doublePars.Length-1)
+                            For i As Integer = 0 To doublePars.Length-1
+                                _parameters(i) = CSng(doublePars(i))
+                            Next
+                        End If ' Else no data serialized.
                     Case "_cytosettings"
                         _cytosettings =  DirectCast(current.Value,CytoSense.CytoSettings.CytoSenseSetting)
                     Case "TimeOfArrival"

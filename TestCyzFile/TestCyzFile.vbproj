@@ -41,6 +41,8 @@
     <None Remove="DataFiles\1p6um NF beads 2013-04-08 14u56.cyz" />
     <None Remove="DataFiles\algjes machteld 2010-11-22 11u33.cyz" />
     <None Remove="DataFiles\beads reservoir measurement 2021-10-04 15h00.cyz" />
+    <None Remove="DataFiles\BerreIIF 2011-09-26 17u10.cyz" />
+    <None Remove="DataFiles\BerreIIF 2011-09-26 17u10_orig.cyz" />
     <None Remove="DataFiles\FunctionalTest_measurement#1 2019-01-22 08h52.cyz" />
     <None Remove="DataFiles\Measurement 2012-06-20 14u01.cyz" />
     <None Remove="DataFiles\ruistest_1 2023-07-18 14h46_2.cyz" />
@@ -80,6 +82,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DataFiles\Algae and beads very fast 2012-02-16 14u35.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\BerreIIF 2011-09-26 17u10.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\BerreIIF 2011-09-26 17u10_orig.cyz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DataFiles\FunctionalTest_measurement#1 2019-01-22 08h52.cyz">
