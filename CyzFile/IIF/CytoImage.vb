@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports OpenCvSharp
 
 Namespace Data.ParticleHandling
 
@@ -28,8 +29,8 @@ Namespace Data.ParticleHandling
         Private _cytoSettings As CytoSettings.CytoSenseSetting 'is used only for background image currently
 
         'Particle width data
-        <Obsolete()> Private _pwst As Point
-        <Obsolete()> Private _pwend As Point
+        <Obsolete()> Private _pwst As Drawing.Point
+        <Obsolete()> Private _pwend As Drawing.Point
 
 
         Public Sub New(cytosettings As CytoSettings.CytoSenseSetting, im As Serializing.CytoMemoryStream)
@@ -85,6 +86,10 @@ Namespace Data.ParticleHandling
                 _imageStream = value
             End Set
         End Property
+
+        Public Function GetImageAsMat() As Mat
+            Return ImageUtil.LoadOpenCvImage(_imageStream)
+        End Function
 
         Public ReadOnly Property isProcessed As Boolean
             Get
