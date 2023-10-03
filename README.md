@@ -65,10 +65,21 @@ This is demonstrated below:
 using using CytoSense.Data;
 
 DataFileWrapper dfw = new DataFileWrapper(filename);
+dfw.CytoSettings.setChannelVisualisationMode(ChannelAccessMode.Optical_debugging);
+ChannelData.VarLength = 13; // Calculate the alternate variable height length parameter at a height of 13%
 ```
 
 NOTE: _dfw_ is short for DataFileWrapper, you will see that often in this document and the sample code.
 
+In the example we set the ChannelVisualizationMode to Optical_debugging.  Doing this will allow access to the
+split Forward Scatter Left(FWS) and Forward Scatter Right channels.  These can be used to check the alignment 
+of the instrument.  Normally only the combined Forward Scatter is available, but when you enable the optical debugging
+mode, then the channel list will contain both the combined FWS channel, _and_ the split FWS Left and FWS Right
+channels. (For instruments that have separate FWS detectors, most have but a few very old ones do not.)
+
+The next line controls the calculation for the _Variable Height Length Parameter_, please refer to the CytoClus
+documentation for details on this parameter.  It is a variation of the normal length parameter, but calculated at
+a different height of the pulse shape.
 
 Some older instruments had problems with concentration measurements. This results in data files where the
 measured pre-concentration is significantly different from the concentration during the measurement.  In most
@@ -186,7 +197,6 @@ As you can see, not all information is available via the ```MeasurementInfo```, 
 or particle concentration si available directly from the ```DataFileWrapper```.
 
 
-
 ### Auxillary Sensor Data
 
 This is a record of all other data that is recorded during a measurement, this includes the temperature in various
@@ -215,7 +225,7 @@ were simply not present in the instrument.
 
 ### Particle Data
 
-The datafile wrapper contains an array of all the particles, which is called ```SplittedParticles``` (for hystoric reasons).
+The data file wrapper contains an array of all the particles, which is called ```SplittedParticles``` (for historic reasons).
 To access the particles you simply loop over the array.  Each parameter supports a number of channels, this number and the
 type of the channels can be found in the instrument description.  And in the documentation for the specific instrument.
 
@@ -223,7 +233,7 @@ Then for each channel, several different parameters can be retrieved, such as th
 These are the parameters that are normally used in dot plots to analyzed the data. The different parameters are documented
 in the help files for our CytoClus software.
 
-An example of accessing this is given below, here we look over the (first 1000) particles, and we output the number of samples
+An example of accessing this is given below, here we look over the (first 100) particles, and we output the number of samples
 a particle was long, for the FWS channel the calculated particle length, and for the FlRed channel the total amount.  And
 finally a flag to indicate if we have an image for the particle.
 
@@ -236,7 +246,7 @@ private static void DumpParticleInformation( DataFileWrapper dfw )
     int numParticles = dfw.SplittedParticles.Length;
     for(int pIdx=0; pIdx<numParticles; ++pIdx)
     {
-        if (pIdx >= 1000)
+        if (pIdx >= 100)
             break;
         var p = dfw.SplittedParticles[pIdx];
         Console.WriteLine($"{pIdx,3}: #samples={p.ChannelData[0].Data.Length}, " + 
@@ -248,14 +258,72 @@ private static void DumpParticleInformation( DataFileWrapper dfw )
 
 ```
 
-### Image Data
+To get a clearer overview of all the information available, the example program also contains the function ```DumpCompleteParticle```
+which is called only for the first information:
 
+```C#
+private static void DumpCompleteParticle( Particle p)
+{
+    Console.WriteLine($"Particle ID: {p.ID}");
+
+    Console.WriteLine($"Pulse Shapes:");
+    foreach( ChannelData cd in p.ChannelData)
+    {
+        string[] values = cd.Data.Select((v) => v.ToString(System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+        Console.WriteLine($"    - {cd.Information.Description}: {String.Join(',', values)}");
+    }
+
+    Console.WriteLine($"Parameter Values:");
+    foreach( ChannelData cd in p.ChannelData)
+    {
+        Console.WriteLine($"    - {cd.Information.Description}:");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Length]}: {cd.get_Parameter(ChannelData.ParameterSelector.Length)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Total]}: {cd.get_Parameter(ChannelData.ParameterSelector.Total)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Maximum]}: {cd.get_Parameter(ChannelData.ParameterSelector.Maximum)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Average]}: {cd.get_Parameter(ChannelData.ParameterSelector.Average)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Inertia]}: {cd.get_Parameter(ChannelData.ParameterSelector.Inertia)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.CentreOfGravity]}: {cd.get_Parameter(ChannelData.ParameterSelector.CentreOfGravity)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.FillFactor]}: {cd.get_Parameter(ChannelData.ParameterSelector.FillFactor)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Asymmetry ]}: {cd.get_Parameter(ChannelData.ParameterSelector.Asymmetry )}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.NumberOfCells ]}: {cd.get_Parameter(ChannelData.ParameterSelector.NumberOfCells )}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.SampleLength]}: {cd.get_Parameter(ChannelData.ParameterSelector.SampleLength)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.TimeOfArrival]}: {cd.get_Parameter(ChannelData.ParameterSelector.TimeOfArrival)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.First]}: {cd.get_Parameter(ChannelData.ParameterSelector.First)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Last]}: {cd.get_Parameter(ChannelData.ParameterSelector.Last)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Minimum]}: {cd.get_Parameter(ChannelData.ParameterSelector.Minimum)}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.SWSCOV ]}: {cd.get_Parameter(ChannelData.ParameterSelector.SWSCOV )}");
+        Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.VariableLength ]}: {cd.get_Parameter(ChannelData.ParameterSelector.VariableLength)}");
+    }
+}
+```
+
+It first writes the recorded pulse for each channel to the output, and then it calculates all the supported parameters
+for each of the channels.
+
+### Image Data
 
 In the example above we checked if a particle has an image, when looking specifically for images, there is a different 
 array: ```SplittedParticlesWithImages```, this contains only the particles with images, so it makes processing just the
 images a little easier and faster.
 
+The image part of the sample program looks like:
 
+```C#
+if (exportImages)
+{ 
+    Console.WriteLine($"Exporting background image");
+    Cv2.ImWrite("background_image.jpg", dfw.CytoSettings.iif.OpenCvBackground);
+    ExportImages(dfw);
+    ExportCroppedImages(dfw);
+}
+```
+
+Apart form images of particles we (almost) always take an image of the empty flow cell, this is called the background
+image and is used for our automatic image processing.  If you want to implement your own image processing then you
+will need this image as well. (It is provided as an OpenCV Mat object, so we use OpenCV functions to save it to a file.)
+
+The next step is accessing the complete images.  These are stored in the file as a JPEG compressed image stream,
+so exporting them to file is simply copying the stream to a file, no processing is needed.
 
 ```C#
 private static void ExportImages( DataFileWrapper dfw )
@@ -284,13 +352,38 @@ complete recorded image as a JPG file.  In the sample above we just copy the ima
 Note that you should not forget to reset the image streams position to 0 before you start using it.  Sometimes
 it is still set to the end because of earlier use of the property and then you would see an empty file.
 
-The image handling part also contains ```GetCroppedImage```, this function tries to crop the image so it will
-only contain the object in the picture, and not the whole pictures.  The functions takes several parameters,
-these are all described in the CytoClus documentation.
 
-    NOTE: Currently the cropping functions and a few other image functions return windows specific image
-    formats and as a result the library does not compile for the net7.0 target, but it needs net7.0-windows.
-    I will look into this and see if I can change this.  I can probably replace these types with non windows
-    specific types (e.g. OpenCV image types).  That way the library will not be windows only anymore.  So if
-    all goes well this type will change in the future.
+And finally the ```ExportCroppedImages``` function will use the built in object detection to extract
+images of just the object.
+
+```C#
+private static void ExportCroppedImages( DataFileWrapper dfw )
+{
+    int numImagedParticles = dfw.SplittedParticlesWithImages.Length;
+    for( int imgIdx=0; imgIdx<numImagedParticles;++imgIdx)
+    {
+        if (imgIdx >= 100)
+            break;
+
+        var imgP = dfw.SplittedParticlesWithImages[imgIdx];
+        string imgName = $"particle_{imgP.ID}_cropped.jpg";
+
+        var crpImg = imgP.ImageHandling.GetCroppedImage(25, 1.1, 7, 1);
+        if (imgP.ImageHandling.CropResult == CytoImage.CropResultEnum.CropOK)
+        { 
+            Console.WriteLine($"{imgIdx,2}: Writing {imgName}");
+            Cv2.ImWrite(imgName, crpImg);
+        }
+        else // there was a problem cropping the image, examine the result enum to see what the problem was.
+        {
+            Console.WriteLine($"{imgIdx,2}: Cropping failed ('{imgP.ImageHandling.CropResult}')");
+        }
+    }
+}
+```
+
+The image handling part provides the function ```GetCroppedImage```.  The functions takes several parameters,
+these are all described in the CytoClus documentation.  The returned image is an ```OpenCV``` ```Mat``` object,
+this can be saved to disk using ```OpenCV``` functions just as we did with the background image.
+
 

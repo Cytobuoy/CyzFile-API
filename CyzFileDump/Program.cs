@@ -1,6 +1,9 @@
 ﻿using CytoSense.Data;
 using CytoSense.CytoSettings;
+using CytoSense.Data.ParticleHandling;
 using CytoSense.Data.ParticleHandling.Channel;
+using System.Collections.Generic;
+using OpenCvSharp;
 
 namespace CyzFileDump
 {
@@ -29,6 +32,10 @@ namespace CyzFileDump
 
 
             DataFileWrapper dfw = new DataFileWrapper(filename);
+            dfw.CytoSettings.setChannelVisualisationMode(ChannelAccessMode.Optical_debugging);
+            ChannelData.VarLength = 13; // Calculate the alternate variable height length parameter at a height of 13%
+
+
             // Some old files can have a problem where the pre-concentration measurement and the actual
             // concentration during the measurement disagree.  If this happens and you try to use
             // the data this will result in an exception.  You can check this before hand, and force the
@@ -56,11 +63,19 @@ namespace CyzFileDump
                 DumpGeneralInformation(dfw);
 
             if (displayParticles)
+            { 
+                if (dfw.SplittedParticles.Length > 0)
+                    DumpCompleteParticle(dfw.SplittedParticles[0]);
                 DumpParticleInformation(dfw);
+            }
 
             if (exportImages)
+            { 
+                Console.WriteLine($"Exporting background image");
+                Cv2.ImWrite("background_image.jpg", dfw.CytoSettings.iif.OpenCvBackground);
                 ExportImages(dfw);
-
+                ExportCroppedImages(dfw);
+            }
         }
 
         /// <summary>
@@ -128,7 +143,7 @@ namespace CyzFileDump
             int numParticles = dfw.SplittedParticles.Length;
             for(int pIdx=0; pIdx<numParticles; ++pIdx)
             {
-                if (pIdx >= 1000)
+                if (pIdx >= 100)
                     break;
                 var p = dfw.SplittedParticles[pIdx];
                 Console.WriteLine($"{pIdx,3}: #samples={p.ChannelData[0].Data.Length}, " + 
@@ -137,6 +152,51 @@ namespace CyzFileDump
                                   $"image={p.hasImage}");
             }
         }
+
+
+        /// <summary>
+        /// Dump all available information for one particle.
+        /// </summary>
+        /// <param name="p"></param>
+        private static void DumpCompleteParticle( Particle p)
+        {
+            Console.WriteLine($"Particle ID: {p.ID}");
+
+
+            // We start with the actual pulse shapes for each channel.  This is the base data, the other parameters are
+            // all calculated using these pulse shapes.
+
+            Console.WriteLine($"Pulse Shapes:");
+            foreach( ChannelData cd in p.ChannelData)
+            {
+                string[] values = cd.Data.Select((v) => v.ToString(System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+                Console.WriteLine($"    - {cd.Information.Description}: {String.Join(',', values)}");
+            }
+
+            Console.WriteLine($"Parameter Values:");
+            foreach( ChannelData cd in p.ChannelData)
+            {
+                Console.WriteLine($"    - {cd.Information.Description}:");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Length]}: {cd.get_Parameter(ChannelData.ParameterSelector.Length)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Total]}: {cd.get_Parameter(ChannelData.ParameterSelector.Total)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Maximum]}: {cd.get_Parameter(ChannelData.ParameterSelector.Maximum)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Average]}: {cd.get_Parameter(ChannelData.ParameterSelector.Average)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Inertia]}: {cd.get_Parameter(ChannelData.ParameterSelector.Inertia)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.CentreOfGravity]}: {cd.get_Parameter(ChannelData.ParameterSelector.CentreOfGravity)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.FillFactor]}: {cd.get_Parameter(ChannelData.ParameterSelector.FillFactor)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Asymmetry ]}: {cd.get_Parameter(ChannelData.ParameterSelector.Asymmetry )}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.NumberOfCells ]}: {cd.get_Parameter(ChannelData.ParameterSelector.NumberOfCells )}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.SampleLength]}: {cd.get_Parameter(ChannelData.ParameterSelector.SampleLength)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.TimeOfArrival]}: {cd.get_Parameter(ChannelData.ParameterSelector.TimeOfArrival)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.First]}: {cd.get_Parameter(ChannelData.ParameterSelector.First)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Last]}: {cd.get_Parameter(ChannelData.ParameterSelector.Last)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.Minimum]}: {cd.get_Parameter(ChannelData.ParameterSelector.Minimum)}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.SWSCOV ]}: {cd.get_Parameter(ChannelData.ParameterSelector.SWSCOV )}");
+                Console.WriteLine($"        + {ChannelData.ParameterNames[(int)ChannelData.ParameterSelector.VariableLength ]}: {cd.get_Parameter(ChannelData.ParameterSelector.VariableLength)}");
+            }
+        }
+
+
 
         /// <summary>
         /// Export all images to jpg files in the current folder.
@@ -160,6 +220,42 @@ namespace CyzFileDump
                 {
                     imgP.ImageHandling.ImageStream.Position = 0;
                     imgP.ImageHandling.ImageStream.CopyTo( fileStream );
+                }
+            }
+        }
+
+        /// <summary>
+        /// Besides the complete stored image, our CytoClus also has the option to extract cropped images
+        /// with just the object.  Often the image is much larger then the particle in it, and cropping it
+        /// will make it much clearer what is in the image.
+        /// 
+        /// The process and the parameters available for the object detection are described in the
+        /// CytoClus documentation, so I will not repeat that here.  I will just use default settings.
+        /// </summary>
+        /// <param name="dfw"></param>
+        /// <remarks>The object detection and cropping is implemented using the OpenCV library, and
+        /// the results of the cropping function are OpenCV image objects.  Therefore we also
+        /// use OpenCV functions to save them to a file.</remarks>
+        private static void ExportCroppedImages( DataFileWrapper dfw )
+        {
+            int numImagedParticles = dfw.SplittedParticlesWithImages.Length;
+            for( int imgIdx=0; imgIdx<numImagedParticles;++imgIdx)
+            {
+                if (imgIdx >= 100)
+                    break;
+
+                var imgP = dfw.SplittedParticlesWithImages[imgIdx];
+                string imgName = $"particle_{imgP.ID}_cropped.jpg";
+
+                var crpImg = imgP.ImageHandling.GetCroppedImage(25, 1.1, 7, 1);
+                if (imgP.ImageHandling.CropResult == CytoImage.CropResultEnum.CropOK)
+                { 
+                    Console.WriteLine($"{imgIdx,2}: Writing {imgName}");
+                    Cv2.ImWrite(imgName, crpImg);
+                }
+                else // there was a problem cropping the image, examine the result enum to see what the problem was.
+                {
+                    Console.WriteLine($"{imgIdx,2}: Cropping failed ('{imgP.ImageHandling.CropResult}')");
                 }
             }
         }
@@ -228,7 +324,7 @@ namespace CyzFileDump
             Console.WriteLine("                                                                            ");
             Console.WriteLine("    -h   - Display this help screen.                                        ");
             Console.WriteLine("    -i   - Output some basic information.                                   ");
-            Console.WriteLine("    -p   - Display particle information (only the first 1000).              ");
+            Console.WriteLine("    -p   - Display particle information (only the first 100).               ");
             Console.WriteLine("    -m   - iMages output the images as JPEG into the current folder.        ");
             Console.WriteLine("                                                                            ");
             Console.WriteLine("                                                                            ");
