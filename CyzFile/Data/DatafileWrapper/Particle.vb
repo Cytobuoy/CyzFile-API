@@ -116,7 +116,7 @@ Namespace Data.ParticleHandling
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public ReadOnly Property TOF() As Single
+        Public ReadOnly Property TOF As Single
             Get
                 Return (_channelData_hardware(0).Data_Raw.Length - 1) * _CytoSettings.Sample_to_um_ConversionFactor
 
@@ -263,7 +263,7 @@ Namespace Data.ParticleHandling
             _ID = id
         End Sub
 
-        Public ReadOnly Property ChannelData_Hardware() As ChannelData_Hardware()
+        Public ReadOnly Property ChannelData_Hardware As ChannelData_Hardware()
             Get
                 Return _channelData_hardware
             End Get
@@ -275,7 +275,7 @@ Namespace Data.ParticleHandling
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks>0 is only available if the machine is curvature enabled, 1 and 2 need to be initialized in CytoClus!</remarks>
-        Public ReadOnly Property ChannelData_Virtual() As ChannelData()
+        Public ReadOnly Property ChannelData_Virtual As ChannelData()
             Get
                 If Object.Equals(Nothing, _virtualChannelData) Then
                     initVirtualChannels()
@@ -331,7 +331,7 @@ Namespace Data.ParticleHandling
             End Get
         End Property
 
-        Private Function GenerateChannelData() As ChannelData()
+        Private Function GenerateChannelData As ChannelData()
             Dim output As New List(Of ChannelData)(12) 'Preallocate a capacity to improve memory performance
 
             For i = 0 To _CytoSettings.ChannelList.Count - 1 ' get a list of channels to be created from the cytosettings 
@@ -938,7 +938,7 @@ Namespace Data.ParticleHandling
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public ReadOnly Property getSVD() As MathNet.Numerics.LinearAlgebra.Factorization.Svd(Of Complex32)
+        Public ReadOnly Property getSVD As MathNet.Numerics.LinearAlgebra.Factorization.Svd(Of Complex32)
             Get
                 Dim channelmat As New MathNet.Numerics.LinearAlgebra.Complex32.DenseMatrix(ChannelData.Length, ChannelData(1).Data.Length)
 
