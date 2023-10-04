@@ -131,6 +131,7 @@ Namespace MeasurementSettings
                 _PMTlevels = CType(other._PMTlevels.Clone(),Byte())   'DEEP
             End If
 
+            _subFolder               = other._subFolder
             _userRemarks             = other._userRemarks
             _autoBlockSize           = other._autoBlockSize
             _maxTimeOut              = other._maxTimeOut
@@ -1238,6 +1239,22 @@ Namespace MeasurementSettings
 
                 Return "User sensitivity"
             End Get
+        End Property
+
+		Private _subfolder As String = ""
+
+        <Category("File"),
+            DisplayName("subfolder"),
+            DescriptionAttribute(""),
+            ComponentModel.Browsable(True)>
+        Public Property Subfolder As String
+            Get
+                Return _subfolder
+            End Get
+
+            Set(ByVal value As String)
+                _subfolder = value
+            End Set
         End Property
 
         Private _userRemarks As String
