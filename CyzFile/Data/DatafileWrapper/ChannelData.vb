@@ -13,7 +13,7 @@ Namespace Data.ParticleHandling.Channel
         ' situation.  We will never use these objects, but we need to be able to de-serialize them correctly or the whole deserialization
         ' will fail.  Since we no longer save these kind of objects to disk, I will only support loading, and writing will
         ' immediately fail.
-        Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+        Public Overridable Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
             Throw New NotImplementedException()
         End Sub
 
@@ -1055,7 +1055,11 @@ Return calculateMvLookup_Linear_8bit(1)
                     Case "_data_raw" 
                         _data_raw = DirectCast(current.Value, Byte())
                     Case "_data"
-                        _data = DirectCast(current.Value,Single())
+                        If current.ObjectType = GetType(System.Byte()) Then
+                            _data_raw = DirectCast(current.Value, Byte())
+                        Else
+                            _data = DirectCast(current.Value,Single())
+                        End If
                     Case "_channelDataConversion"
                         _channelDataConversion = DirectCast(current.Value,MeasurementSettings.LogConversion)
                 End Select

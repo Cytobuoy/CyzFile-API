@@ -5,7 +5,6 @@ Imports CytoSense.Data.Analysis
 
 Namespace Serializing
 
-
     ''' <summary>
     ''' Binder so we can step in and handle deserialization and serialization of memory streams. The new .Net 7.0 does not support this anymore
     ''' but we still have a large amount of old files, so we need a way to handle that. 
@@ -44,7 +43,11 @@ Namespace Serializing
                 typeName     = "CytoSense.Data.ParticleHandling.Particle"
             Else If typeName = "CytoSense.Data.ParticleHandling+ChannelData" Then
                 assemblyName = Assembly.GetExecutingAssembly().FullName
-                typeName     = "CytoSense.Data.ParticleHandling.Channel.ChannelData"
+                ' The new Channeldata is an abstract baseclass, but from some very old data files, it is a 
+                ' a normal class. So we cannot replace it with the abstract class.  Instead we replace it with
+                ' it's most basic subclass the ChannelData_Hardware class.  Since the actual content of the class is not
+                ' used, it does not really matter, and this allows us to load the file without error.
+                typeName     = "CytoSense.Data.ParticleHandling.Channel.ChannelData_Hardware"
             Else If typeName = "CytoSense.Data.ParticleHandling+ChannelData_Hardware" Then
                 assemblyName = Assembly.GetExecutingAssembly().FullName
                 typeName     = "CytoSense.Data.ParticleHandling.Channel.ChannelData_Hardware"
