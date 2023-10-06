@@ -39,6 +39,7 @@
     <None Remove="DataFiles\1 2011-12-14 13u50.cyz" />
     <None Remove="DataFiles\1 2011-12-14 13u51.cyz" />
     <None Remove="DataFiles\1p6um NF beads 2013-04-08 14u56.cyz" />
+    <None Remove="DataFiles\1umFLYbeads 2011-02-21 10u51.cyz" />
     <None Remove="DataFiles\algjes 2011-01-07 14u59.cyz" />
     <None Remove="DataFiles\algjes machteld 2010-11-22 11u33.cyz" />
     <None Remove="DataFiles\beads 2010-12-08 15u00.cyz" />
@@ -81,6 +82,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DataFiles\1p6umbeads 2011-05-19 13u06.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataFiles\1umFLYbeads 2011-02-21 10u51.cyz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DataFiles\Algae and beads very fast 2012-02-16 14u35.cyz">

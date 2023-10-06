@@ -1,14 +1,5 @@
-﻿Imports System.Text
-Imports System.IO
-Imports Microsoft.VisualStudio.TestTools.UnitTesting
-Imports System.Runtime.InteropServices
-Imports System.ComponentModel
-Imports System
-Imports CytoSense.Data
-Imports TestUtils
+﻿Imports CytoSense.Data
 Imports Force.Crc32
-Imports CytoSense.Data.SegmentedData
-Imports CytoSense.Data.ParticleHandling
 
 ''' <summary>
 ''' Test functions for the datafile wrapper and datafilewrapperfunctions class.
@@ -573,6 +564,7 @@ End Sub
     <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz")>
     <DataRow("DataFiles/algjes 2011-01-07 14u59.cyz")>
     <DataRow("DataFiles/beads 2010-12-08 15u00.cyz")>
+    <DataRow("DataFiles/1umFLYbeads 2011-02-21 10u51.cyz")>
     Public Sub TestOpen(filename As String)
         Dim dfw = New DataFileWrapper(filename)
         Dim numParticles = dfw.SplittedParticles.Length ' 

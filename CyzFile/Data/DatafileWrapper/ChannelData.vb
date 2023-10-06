@@ -1057,6 +1057,12 @@ Return calculateMvLookup_Linear_8bit(1)
                     Case "_data"
                         If current.ObjectType = GetType(System.Byte()) Then
                             _data_raw = DirectCast(current.Value, Byte())
+                        Else If current.ObjectType = GetType(System.Double()) Then
+                            Dim tmp As Double() = DirectCast(current.Value, Double())
+                            Redim _data(tmp.Length-1)
+                            For i As Integer = 0 To tmp.Length-1
+                                _data(i) = CSng(tmp(i))
+                            Next
                         Else
                             _data = DirectCast(current.Value,Single())
                         End If
