@@ -1269,7 +1269,7 @@ Namespace CytoSettings
 
 
         Public Function getFlowSpeed(speed As Integer) As Double
-            If hasDCSamplePump And hasaPIC Then
+            If hasDCSamplePump AndAlso hasaPIC AndAlso DCSamplePump IsNot Nothing Then
                 Return DCSamplePump.getFlowSpeed(speed)
             Else
                 'in te voegen voor backwards compatability, of niet gekalibreerde samplepumps:
