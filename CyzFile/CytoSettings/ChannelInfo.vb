@@ -171,7 +171,7 @@ Namespace CytoSettings
         End Sub
 
         ''' <summary>
-        ''' Constructor for SCPI FWS channel
+        ''' Constructor for scpi FWS channel and IGNORE channel types.
         ''' </summary>
         ''' <param name="ChannelName"></param>
         ''' <param name="ChannelColor"></param>
@@ -180,7 +180,7 @@ Namespace CytoSettings
             name = ChannelName
             _channelType = chanType
 
-            visible = True
+            visible = (chanType <> ChannelTypesEnum.DSP)
             highsensitivity = False
             color = ChannelColor
             lowcheck = 0
