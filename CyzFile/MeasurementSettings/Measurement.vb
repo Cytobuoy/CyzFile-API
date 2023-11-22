@@ -375,6 +375,9 @@ Namespace MeasurementSettings
                 _iifSetDefinitionXml = ""
             End If
 
+           If _subfolder Is Nothing Then
+                _subfolder = ""
+            End If
         End Sub
 
         <NonSerialized()> Private _status As String = ""
