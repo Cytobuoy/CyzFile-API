@@ -261,7 +261,10 @@ Namespace MeasurementSettings
             MinimumAutoSpeedSetting = 1 ' Minimum speed setting.
 
             If _cytosettings.hasFJDataElectronics Then
-                Me.TriggerLevelsFJ(2) = CInt(30 / _cytosettings.triggerlevelConstant)
+                Dim trigValue As Integer = CInt(30 / _cytosettings.triggerlevelConstant)
+                For i = 0 To TriggerLevelsFJ.Length - 1 
+                    TriggerLevelsFJ(i) = trigValue
+                Next
             Else
                 Me.TriggerLevelByte1e = 30
                 Me.TriggerLevelByte2e = 30
