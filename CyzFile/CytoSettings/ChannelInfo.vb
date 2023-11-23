@@ -196,14 +196,14 @@ Namespace CytoSettings
         ''' <param name="c"></param>
         ''' <param name="channelPMT_id">As printed on circuit board! Actual index address is -1, this is handled internally</param>        
         ''' <remarks></remarks>
-        Public Sub New(ByVal ChannelName As String, chanType As ChannelTypesEnum, ByVal c As Color, ByVal channelPMT_id As Byte, ByVal channelPMT_level_minimum As Byte, ByVal channelPMT_level_maximum As Byte, Optional pmtInf As PmtData = Nothing)
+        Public Sub New(ChannelName As String, chanType As ChannelTypesEnum, isLowSense As Boolean, c As Color, channelPMT_id As Byte, channelPMT_level_minimum As Byte, channelPMT_level_maximum As Byte, Optional pmtInf As PmtData = Nothing)
             _cytoSenseOpticalUnitProperty = PMTOptionsEnum.AdjustablePMTs
 
             name = ChannelName
             _channelType = chanType
 
             visible = True
-            highsensitivity = True
+            highsensitivity = Not isLowSense
             color = c
             hasI2CPMTLevel = True
             _PMT_id = CByte(channelPMT_id - 1)

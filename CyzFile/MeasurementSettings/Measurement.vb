@@ -343,15 +343,9 @@ Namespace MeasurementSettings
                     _configuredSamplePumpSpeed = CByte(_SamplePompSpeed)
                 End If
                 If _cytosettings IsNot Nothing Then
-                    If _cytosettings.hasaDCSamplePump Then
-                        _actualSamplePumpSpeedSetting            = 256 - _SamplePompSpeed
-                        _configuredSamplePumpSpeedSetting        = 256 - _configuredSamplePumpSpeed
-                        _configuredMinimalSamplePumpSpeedSetting = 256 - _minimumAutoSpeed
-                    Else ' Very old sample pump stepper, pre DC
-                        _actualSamplePumpSpeedSetting            = _SamplePompSpeed
-                        _configuredSamplePumpSpeedSetting        = _configuredSamplePumpSpeed
-                        _configuredMinimalSamplePumpSpeedSetting = _minimumAutoSpeed
-                    End If 
+                   _actualSamplePumpSpeedSetting            = 256 - _SamplePompSpeed
+                   _configuredSamplePumpSpeedSetting        = 256 - _configuredSamplePumpSpeed
+                   _configuredMinimalSamplePumpSpeedSetting = 256 - _minimumAutoSpeed
                 End If ' Else no cytoSettings, so we cannot do this check. For channel data conversion we do it on first access,
                        ' we do this when setting the CytoSettings property. Lets do this for us as well.
 

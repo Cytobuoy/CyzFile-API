@@ -394,6 +394,10 @@ Namespace Calibration
             ''' <param name="speed">Direct byte level speed</param>
             ''' <returns></returns>
             Public Function getFlowSpeed(ByVal speed As Byte) As Double
+                If speed = 0 Then
+                    Return 0.0
+                End If
+                speed = CByte(256 - speed)
                 If _depriciatedConstant = 0 Then
                     Dim tmp As Double = getRatio(speed)
                     If tmp > 1 Then
