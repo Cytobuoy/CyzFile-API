@@ -31,7 +31,9 @@ Namespace Serializing
         ''' <param name="typeName"></param>
         ''' <returns></returns>
         Public Overrides Function BindToType(assemblyName As String, typeName As String) As Type
-            ' Debug.Print(assemblyName + "***" + typeName + "***")
+            Debug.Assert(Not (assemblyName.StartsWith("CyzFile") ) , "Serialized datafile contains reference to 'CyzFile' dll.")
+            Debug.Assert(Not (assemblyName.StartsWith("CytoUtils") ) , "Serialized datafile contains reference to 'CytoUtils' dll.")
+
             If typeName.Contains(".MemoryStream") Then
                 assemblyName = Assembly.GetExecutingAssembly().FullName
                 typeName     = "CytoSense.Serializing.CytoMemoryStream"
@@ -90,11 +92,10 @@ Namespace Serializing
                 assemblyName = Assembly.GetExecutingAssembly().FullName  ' NOTE: We renamed the assembly when making it public.
             End If
 
-            ' The following line of code returns the type.
-            'Debug.Print("==>" + assemblyName + "***" + typeName + "***")
-            Dim tp As Type =  Type.GetType(String.Format("{0}, {1}", typeName, assemblyName))
-            return tp
+            Return Type.GetType(String.Format("{0}, {1}", typeName, assemblyName))
         End Function
+
+        Private const CYTOSENSE_DLL_NAME As String = "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null"
 
         ''' <summary>
         ''' Wen writing, if the file has to be compatible we have to replace it with the name of the original
@@ -115,6 +116,16 @@ Namespace Serializing
                 ' System.Drawing.Bitmap
                 assemblyName = "System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
                 typeName     = "System.Drawing.Bitmap"
+            Else If serializedType.Assembly.FullName.StartsWith("CyzFile") Then
+                ' Record it with the name of the original DLL, so the data files stay compatible.
+                assemblyName = CYTOSENSE_DLL_NAME
+            Else If serializedType.FullName.StartsWith("System.Collections.Generic.List") Then
+                Dim oldTypeName = serializedType.FullName
+                Dim commaIdx As Integer = oldTypeName.IndexOf(",")
+                Dim genericTypeAssemblyName = oldTypeName.Substring(commaIdx+2) ' Assembly name of subtype (and ]] at the end).
+                If genericTypeAssemblyName.StartsWith("CyzFile,") Then
+                    typeName = oldTypeName.Substring(0,commaIdx+2) + CYTOSENSE_DLL_NAME + "]]"
+                End If
             Else
                 MyBase.BindToName(serializedType,assemblyName,typeName)
             End If
