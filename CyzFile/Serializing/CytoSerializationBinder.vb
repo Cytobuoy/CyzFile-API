@@ -107,10 +107,10 @@ Namespace Serializing
         ''' <param name="assemblyName"></param>
         ''' <param name="typeName"></param>
         Public  Overrides Sub BindToName(serializedType As Type, ByRef assemblyName As string, ByRef typeName As String)
-            If serializedType.Name.Contains("CytoMemoryStream") Then
+            If serializedType.FullName.Contains("CytoMemoryStream") Then
                 assemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
                 typeName     = "System.IO.MemoryStream"
-            Else If serializedType.Name.Contains("CyzFileBitmap") Then
+            Else If serializedType.FullName.Contains("CyzFileBitmap") Then
                 ' We never write DspImage stuff anymore, but we do need to support writing background images
                 ' this way.  So for that we need to support writing the CyzFileBitmap class, and name as a 
                 ' System.Drawing.Bitmap
@@ -118,13 +118,17 @@ Namespace Serializing
                 typeName     = "System.Drawing.Bitmap"
             Else If serializedType.Assembly.FullName.StartsWith("CyzFile") Then
                 ' Record it with the name of the original DLL, so the data files stay compatible.
+                typeName = Nothing
                 assemblyName = CYTOSENSE_DLL_NAME
             Else If serializedType.FullName.StartsWith("System.Collections.Generic.List") Then
                 Dim oldTypeName = serializedType.FullName
                 Dim commaIdx As Integer = oldTypeName.IndexOf(",")
                 Dim genericTypeAssemblyName = oldTypeName.Substring(commaIdx+2) ' Assembly name of subtype (and ]] at the end).
                 If genericTypeAssemblyName.StartsWith("CyzFile,") Then
+                    assemblyName = Nothing ' Behavior of the baseclass for system types, set to Nothing.
                     typeName = oldTypeName.Substring(0,commaIdx+2) + CYTOSENSE_DLL_NAME + "]]"
+                Else
+                    MyBase.BindToName(serializedType,assemblyName,typeName)
                 End If
             Else
                 MyBase.BindToName(serializedType,assemblyName,typeName)
