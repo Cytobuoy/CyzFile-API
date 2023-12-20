@@ -89,6 +89,10 @@ Namespace Data.ParticleHandling
             End IF
         End Function
 
+		Public Function GetImageAsMat() As OpenCvSharp.Mat
+            Return ImageUtil.LoadOpenCvImage(_imageStream)
+        End Function
+
         Public Property ImageMat As OpenCvSharp.Mat
             Get
                 Return _imageMat
