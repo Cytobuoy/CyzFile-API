@@ -13,15 +13,30 @@ Namespace Data.ParticleHandling
             _image = New CytoImage(CytoSettings, dspparticle.ImageStream)
         End Sub
 
-        Public Sub New(ByVal p As CytoSense.Data.ParticleHandling.Particle, imagestream As Serializing.CytoMemoryStream)
+        Public Sub New(ByVal p As CytoSense.Data.ParticleHandling.Particle, imagestream As IO.MemoryStream)
             MyBase.New(p.ChannelData_Hardware, p.ID, p.CytoSettings, p.MeasurementSettings)
             _image = New CytoImage(CytoSettings, imagestream)
         End Sub
-
+        Public Sub New(ByVal p As CytoSense.Data.ParticleHandling.Particle, image As CytoImage)
+            MyBase.New(p.ChannelData_Hardware, p.ID, p.CytoSettings, p.MeasurementSettings)
+            _image = image
+        End Sub
+        Public Sub New(p As CytoSense.Data.ParticleHandling.Particle, image As OpenCvSharp.Mat, imagestream As IO.MemoryStream, cropRect As OpenCvSharp.Rect)
+            MyBase.New(p.ChannelData_Hardware, p.ID, p.CytoSettings, p.MeasurementSettings)
+            _image = New CytoImage(CytoSettings, image, imagestream, cropRect)
+        End Sub
         Public Sub New(p As RawIIFParticle, cytoSettings As CytoSense.CytoSettings.CytoSenseSetting, measurement As CytoSense.MeasurementSettings.Measurement, start As DateTime)
             MyBase.New(p, cytoSettings, measurement, start)
-            _image = New CytoImage(cytoSettings, p.ImageStream)
+            _image = New CytoImage(cytoSettings, p.ImageStream, p.CropRect)
         End Sub
+
+        
+
+        'Public ReadOnly Property Image As Image
+        '    Get
+        '        Return _image.Image
+        '    End Get
+        'End Property
 
         ''' <summary>
         ''' Gives access to the images and related functions and properties

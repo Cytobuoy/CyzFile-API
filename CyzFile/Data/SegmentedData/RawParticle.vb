@@ -122,11 +122,13 @@ Namespace Data.SegmentedData
         End Sub
 
 
-        Public Property ImageStream As Serializing.CytoMemoryStream
+        Public Property ImageStream As IO.MemoryStream
+        Public Property CropRect As OpenCvSharp.Rect
 
         Public Sub New(p As CytoSense.Data.ParticleHandling.ImagedParticle, clusterInfo As Cluster, TimeOfArrival As DateTime)
             MyBase.New(p, p.ID, clusterInfo, TimeOfArrival)
             _ImageStream = p.ImageHandling.ImageStream
+            _cropRect = p.ImageHandling.CropRect
         End Sub
 
     End Class

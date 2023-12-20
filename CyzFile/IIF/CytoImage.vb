@@ -1,5 +1,4 @@
 ﻿Imports System.Drawing
-Imports OpenCvSharp
 
 Namespace Data.ParticleHandling
 
@@ -10,7 +9,7 @@ Namespace Data.ParticleHandling
         <Obsolete()> Private _ScaleBar As Boolean = True
 
         'Properties
-        <Obsolete()> Public imageCropped As Boolean = False
+        Public imageCropped As Boolean = False
         <Obsolete()> Public userDefinedCrop As Boolean = False 'not yet implemented
 
         Public CropResult As CropResultEnum = CropResultEnum.AwaitingCrop
@@ -25,20 +24,32 @@ Namespace Data.ParticleHandling
 
 
         'Data
-        Private _imageStream As Serializing.CytoMemoryStream
+        Private _imageMat As OpenCvSharp.Mat
+        Private _imageStream As System.IO.MemoryStream
+        Private _croppedRect As OpenCvSharp.Rect
         Private _cytoSettings As CytoSettings.CytoSenseSetting 'is used only for background image currently
 
         'Particle width data
-        <Obsolete()> Private _pwst As Drawing.Point
-        <Obsolete()> Private _pwend As Drawing.Point
+        <Obsolete()> Private _pwst As System.Drawing.Point
+        <Obsolete()> Private _pwend As System.Drawing.Point
 
 
-        Public Sub New(cytosettings As CytoSettings.CytoSenseSetting, im As Serializing.CytoMemoryStream)
+        Public Sub New(cytosettings As CytoSettings.CytoSenseSetting, im As IO.MemoryStream, Optional crpRct As OpenCvSharp.Rect = Nothing)
             _cytoSettings = cytosettings
             _imageStream = im
-
+            _croppedRect = crpRct
             If _imageStream.Capacity > _imageStream.Length Then
-                _imageStream.Capacity = CInt(_imageStream.Length)
+                _imageStream.Capacity = Cint(_imageStream.Length)
+            End If
+        End Sub
+
+        Public Sub New(cytosettings As CytoSettings.CytoSenseSetting, im As OpenCvSharp.Mat, ims As IO.MemoryStream, crpRct As OpenCvSharp.Rect)
+            _cytoSettings = cytosettings
+            _imageMat = im
+            _imageStream = ims
+            _croppedRect = crpRct
+            If im.IsSubmatrix Then
+                imageCropped = true
             End If
         End Sub
 
@@ -73,23 +84,39 @@ Namespace Data.ParticleHandling
                 Return Nothing
             Else
                 SyncLock _imageStream
-                    Return AutoCropOpenCV(_imageStream, _cytoSettings.iif.OpenCvBackground, _cytoSettings.iif.OpenCvBackgroundMean, marginBase, marginFactor, bgThreshold, erosionDilation, brightFieldCorrection, extendObjectDetection)
+                    Return AutoCropOpenCV(_imageStream, _cytoSettings.iif.OpenCvBackground, _cytoSettings.iif.OpenCvBackgroundMean, marginBase, marginFactor, bgThreshold, erosionDilation, brightFieldCorrection, extendObjectDetection, _croppedRect)
                 End SyncLock
             End IF
         End Function
 
-        Public Property ImageStream As Serializing.CytoMemoryStream
+        Public Property ImageMat As OpenCvSharp.Mat
+            Get
+                Return _imageMat
+            End Get
+            Set(value As OpenCvSharp.Mat)
+                _imageMat = value
+            End Set
+        End Property
+
+        Public Property ImageStream As System.IO.MemoryStream
             Get
                 Return _imageStream
             End Get
-            Set(ByVal value As Serializing.CytoMemoryStream)
+            Set(ByVal value As System.IO.MemoryStream)
                 _imageStream = value
             End Set
         End Property
 
-        Public Function GetImageAsMat() As Mat
-            Return ImageUtil.LoadOpenCvImage(_imageStream)
-        End Function
+        ''' <summary>
+        ''' Return the bounding box used in cropping this image (if it was cropped)
+        ''' </summary>
+        ''' <returns></returns>
+
+        Public ReadOnly Property CropRect As OpenCvSharp.Rect
+            Get 
+                Return _croppedRect
+            End Get
+        End Property
 
         Public ReadOnly Property isProcessed As Boolean
             Get
@@ -127,45 +154,44 @@ Namespace Data.ParticleHandling
         ''' <param name="marginFactor"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function AutoCropOpenCV(ByVal sourceStream As Serializing.CytoMemoryStream, ByVal bgImg As OpenCvSharp.Mat, bgMean As Double, marginBase As Integer, marginFactor As Double, bgThreshold As Integer, erosionDilation As Integer, brightFieldCorrection As Boolean, extendObjectDetection As Boolean) As OpenCvSharp.Mat
+        Public Function AutoCropOpenCV(ByVal sourceStream As System.IO.MemoryStream, ByVal bgImg As OpenCvSharp.Mat, bgMean As Double, marginBase As Integer, marginFactor As Double, bgThreshold As Integer, erosionDilation As Integer, brightFieldCorrection As Boolean, extendObjectDetection As Boolean, optional ByVal croppedRect As OpenCvSharp.Rect = Nothing) As OpenCvSharp.Mat
             If CropResult = CropResultEnum.AwaitingCrop OrElse (marginBase <> _cropMarginBase OrElse marginFactor <> _cropMarginFactor OrElse bgThreshold <> _cropBgThreshold OrElse  erosionDilation <> _cropErosionDilation) Then ' Do the calculations.
                 If bgImg Is Nothing Then 'No background, cannot crop.
                     CropResult = CropResultEnum.BackgroundNeededButNotFound
                 Else
-                    SyncLock _imageStream 
+                    SyncLock _imageStream
                         Dim img = ImageUtil.LoadOpenCvImage(sourceStream)
-                        If img.Size <> bgImg.Size Then
-                            CropResult = CropResultEnum.BackgroundWrong
-                        Else
-                            Dim unsortedCountours = ImageUtil.DetectObjects(img, bgImg, bgThreshold, erosionDilation)
-                            Dim objContours = unsortedCountours.OrderByDescending(Function(cnt As OpenCvSharp.Point()) OpenCvSharp.Cv2.ContourArea(cnt)).ToList()
+                        If Not IsNothing(croppedRect) AndAlso Not croppedRect = OpenCvSharp.Rect.Empty Then
+                            bgImg = New OpenCvSharp.Mat(bgImg, croppedRect)
+                        End If
+                        Dim unsortedCountours = ImageUtil.DetectObjects(img, bgImg, bgThreshold, erosionDilation)
+                        Dim objContours = unsortedCountours.OrderByDescending(Function(cnt As OpenCvSharp.Point()) OpenCvSharp.Cv2.ContourArea(cnt)).ToList()
 
-                            If objContours IsNot Nothing AndAlso objContours.Count > 0 Then
-                                Dim objCntr = objContours(0)
-                                Dim rect = OpenCvSharp.Cv2.BoundingRect(objCntr)
-                                Dim largeRect = ImageUtil.CalculateLargeBoundingBox(rect, marginBase, marginFactor, img.Cols,img.Rows, IMG_STEP_SIZE, IMG_STEP_SIZE)
+                        If objContours IsNot Nothing AndAlso objContours.Count > 0 Then
+                            Dim objCntr = objContours(0)
+                            Dim rect = OpenCvSharp.Cv2.BoundingRect(objCntr)
+                            Dim largeRect = ImageUtil.CalculateLargeBoundingBox(rect, marginBase, marginFactor, img.Cols,img.Rows, IMG_STEP_SIZE, IMG_STEP_SIZE)
 
-                                If extendObjectDetection Then
-                                    Dim extObjBB As OpenCVSharp.Rect
-                                    Dim extLargeBB As OpenCVSharp.Rect
-                                    Dim extObjContours As List(Of OpenCvSharp.Point()) = Nothing
-                                    ImageUtil.ExtendDetectedObject(objContours, rect, largerect, marginBase, marginFactor, img.Cols,img.Rows, IMG_STEP_SIZE, IMG_STEP_SIZE, extObjBB, extLargeBB, extObjContours) 
-                                    _cropRectangle = New Rectangle(extLargeBB.X, extLargeBB.Y, extLargeBB.Width, extLargeBB.Height)
-                                Else
-                                    _cropRectangle = New Rectangle(largeRect.X, largeRect.Y, largeRect.Width, largeRect.Height)
-                                End If
-
-                                CropResult           = CropResultEnum.CropOK
-                                _cropMarginBase      = marginBase
-                                _cropMarginFactor    = marginFactor
-                                _cropBgThreshold     = bgThreshold
-                                _cropErosionDilation = erosionDilation
-                                Dim newImage = ImageUtil.LoadOpenCvImage(sourceStream)
-                                Dim cropRect = New OpenCvSharp.Rect(_cropRectangle.X,_cropRectangle.Y,_cropRectangle.Width, _cropRectangle.Height)
-                                _croppedImage = ImageUtil.CropEnhanceImage(newImage, cropRect, brightFieldCorrection, bgImg, bgMean)
+                            If extendObjectDetection Then
+                                Dim extObjBB As OpenCVSharp.Rect
+                                Dim extLargeBB As OpenCVSharp.Rect
+                                Dim extObjContours As List(Of OpenCvSharp.Point()) = Nothing
+                                ImageUtil.ExtendDetectedObject(objContours, rect, largerect, marginBase, marginFactor, img.Cols,img.Rows, IMG_STEP_SIZE, IMG_STEP_SIZE, extObjBB, extLargeBB, extObjContours) 
+                                _cropRectangle = New Rectangle(extLargeBB.X, extLargeBB.Y, extLargeBB.Width, extLargeBB.Height)
                             Else
-                                CropResult = CropResultEnum.NoBlobFound
+                                _cropRectangle = New Rectangle(largeRect.X, largeRect.Y, largeRect.Width, largeRect.Height)
                             End If
+
+                            CropResult           = CropResultEnum.CropOK
+                            _cropMarginBase      = marginBase
+                            _cropMarginFactor    = marginFactor
+                            _cropBgThreshold     = bgThreshold
+                            _cropErosionDilation = erosionDilation
+                            Dim newImage = ImageUtil.LoadOpenCvImage(sourceStream)
+                            Dim cropRect = New OpenCvSharp.Rect(_cropRectangle.X,_cropRectangle.Y,_cropRectangle.Width, _cropRectangle.Height)
+                            _croppedImage = ImageUtil.CropEnhanceImage(newImage, cropRect, brightFieldCorrection, bgImg, bgMean)
+                        Else
+                            CropResult = CropResultEnum.NoBlobFound
                         End If
                     End SyncLock
                 End If
