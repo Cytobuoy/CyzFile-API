@@ -127,6 +127,11 @@ Namespace Data
 				Me._SequentialHalltimeoutsOccurred = _SequentialHallTimeoutsOccurred
             End Sub
 
+			Public Sub New(ByVal MeasurementStartTime As Date, ByVal backgroundlevel As DetectorBackgroundNoiselevel)
+				Me.MeasurementStartTime = MeasurementStartTime
+				Me.DetectorBackgroundLevel = backgroundlevel
+			 End Sub
+
             Private MeasurementStartTime As DateTime 'depreciated. Replaced by log. Keep for legacy compatibility reasons
             Private MeasureTime As Single 'Depreciated. Replaced by log. Keep for legacy compatibility reasons
             Public ConcentrationClass As CytoSense.Concentration.HWConcentrations

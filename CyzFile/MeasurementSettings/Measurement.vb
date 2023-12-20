@@ -1014,6 +1014,17 @@ Namespace MeasurementSettings
             End Set
         End Property
 
+		Private _IsBackgroundOnly As Boolean = False
+
+		Public Property IsBackgroundOnly As Boolean
+			Get
+				Return _IsBackgroundOnly
+			End Get
+		    Set(value As Boolean)
+				_IsBackgroundOnly = value
+		    End Set
+		End Property
+
         Private _IIFCheck As Boolean = False
 
         <Category("Image in Flow"),
