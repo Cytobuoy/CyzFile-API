@@ -1,4 +1,7 @@
 ﻿Imports CytoSense.Data.Analysis
+Imports CytoSense.Serializing
+Imports CytoSense.CytoSettings
+Imports System.Xml
 
 Namespace PlotSettings
 
@@ -9,6 +12,7 @@ Namespace PlotSettings
     ''' <remarks></remarks>
     <Serializable()> _
     Public Class HistPlotDefinition
+		Implements IXmlDocumentIO
         Private _name As String        
         Private _nBins As Integer = 128
         Private _logScale As Boolean = False
@@ -17,6 +21,10 @@ Namespace PlotSettings
         Private _overlayNormalDist As Boolean = False
 
         <NonSerialized> Public Event settingsChanged()
+
+		Public Sub New()
+
+		End Sub
 
         ''' <summary>
         ''' General constructor
@@ -69,6 +77,47 @@ Namespace PlotSettings
         Public Overrides Function ToString() As String
             Return _name
         End Function
+
+		Public Overridable Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentWrite
+			Dim hDef = document.AppendChildElement(parentNode, "HistogramDefinition")
+			hDef.SetAttribute("Name", _name)
+			hDef.SetAttribute("nBins",_nBins.ToString())
+			hDef.SetAttribute("LogScale",_logScale.ToString())
+			hDef.SetAttribute("ThreeSigmaRange",_threeSigmaRange.ToString())
+			hDef.SetAttribute("CumulativeMode",_cumulativeMode.ToString())
+			hDef.SetAttribute("OverlayNormalDistribution",_overlayNormalDist.ToString())
+
+            If TryCast(Axis , IXmlDocumentIO) IsNot Nothing Then
+                Select Case Axis.GetType()
+                    Case GetType(SingleAxis)
+                        DirectCast(Axis, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(hDef, "Axis"))
+
+                    Case GetType(RatioAxis)
+                        DirectCast(Axis, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(hDef, "Axis")) 
+                End Select
+            End If
+		End Sub
+
+		Public Overridable Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentRead
+			_name = parentNode.GetAttribute("Name")
+			_nBins = parentNode.GetAttributeAsInteger("nBins")
+			_logScale = parentNode.GetAttributeAsBoolean("LogScale")
+			_threeSigmaRange = parentNode.GetAttributeAsBoolean("ThreeSigmaRange")
+			_cumulativeMode = parentNode.GetAttributeAsBoolean("CumulativeMode")
+			_overlayNormalDist = parentNode.GetAttributeAsBoolean("OverlayNormalDistribution")
+			
+			Dim axNode = parentNode.Item("Axis")
+			Select Case axNode.GetAttribute("Type")
+				Case "SingleAxis"
+					Dim ax As New SingleAxis()
+					ax.XmlDocumentRead(document, axNode)
+					Axis = ax
+				Case "RatioAxis"
+					Dim ax As New RatioAxis()
+					ax.XmlDocumentRead(document, axNode)
+					Axis = ax
+			End Select
+		End Sub
 
 
         Public Property LogScale As Boolean
@@ -134,9 +183,15 @@ Namespace PlotSettings
     ''' <remarks></remarks>
     <Serializable()> _
     Public Class DotPlotDefinition
+		Implements IXmlDocumentIO
+
         Private _name As String
         Private _xAxis As Axis
         Private _yAxis As Axis
+
+		Public Sub New()
+
+		End Sub
 
         ''' <summary>
         ''' General constructor
@@ -187,7 +242,59 @@ Namespace PlotSettings
         Public Overrides Function ToString() As String
             Return _name
         End Function
+
+		Public Overridable Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentWrite
+            Dim cDef = document.AppendChildElement(parentNode, "CytogramDefinition")
+			cDef.SetAttribute("Name", _name)
+			If TryCast(xAxis , IXmlDocumentIO) IsNot Nothing Then
+                Select Case xAxis.GetType()
+                    Case GetType(SingleAxis)
+                        DirectCast(xAxis, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(cDef, "XAxis"))
+
+                    Case GetType(RatioAxis)
+                        DirectCast(xAxis, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(cDef, "XAxis")) 
+                End Select
+            End If
+			If TryCast(yAxis , IXmlDocumentIO) IsNot Nothing Then
+                Select Case yAxis.GetType()
+                    Case GetType(SingleAxis)
+                        DirectCast(yAxis, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(cDef, "YAxis"))
+
+                    Case GetType(RatioAxis)
+                        DirectCast(yAxis, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(cDef, "YAxis")) 
+                End Select
+            End If
+		End Sub
+
+		Public Overridable Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentRead
+			_name = parentNode.GetAttribute("Name")
+			Dim axX = parentNode.Item("XAxis")
+			Select Case axX.GetAttribute("Type")
+				Case "SingleAxis"
+					Dim ax As New SingleAxis()
+					ax.XmlDocumentRead(document, axX)
+					_xAxis = ax
+				Case "RatioAxis"
+					Dim ax As New RatioAxis()
+					ax.XmlDocumentRead(document, axX)
+					_xAxis = ax
+			End Select
+
+			Dim axY = parentNode.Item("YAxis")
+			Select Case axY.GetAttribute("Type")
+				Case "SingleAxis"
+					Dim ax As New SingleAxis()
+					ax.XmlDocumentRead(document, axY)
+					_yAxis = ax
+				Case "RatioAxis"
+					Dim ax As New RatioAxis()
+					ax.XmlDocumentRead(document, axY)
+					_yAxis = ax
+			End Select
+		End Sub
     End Class
+
+	
 
 
     ''' <summary>

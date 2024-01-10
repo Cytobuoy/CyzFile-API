@@ -148,15 +148,19 @@ Namespace Data.Analysis
         Public Overrides Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement)
             MyBase.XmlDocumentWrite(document, parentNode)
 
-            document.AppendChildElement(parentNode, "RangeMin", _rangeMin)
-            document.AppendChildElement(parentNode, "RangeMax", _rangeMax)
+            parentNode.SetAttribute("RangeMin", _rangeMin.ToString(cultureIndependentFormat))
+            parentNode.SetAttribute("RangeMax", _rangeMax.ToString(cultureIndependentFormat))
         End Sub
 
         Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement)
             MyBase.XmlDocumentRead(document, parentNode)
 
-            _rangeMin = parentNode.ReadChildElementAsSingle("RangeMin")
-            _rangeMax = parentNode.ReadChildElementAsSingle("RangeMax")
+            If Not parentNode.TryGetAttribute(Of Single)("RangeMin", _rangeMin) Then
+				_rangeMin = parentNode.GetAttributeAsSingle("RangeMin")
+				_rangeMax = parentNode.GetAttributeAsSingle("RangeMax")
+			Else
+				_rangeMax = parentNode.GetAttributeAsSingle("RangeMax")
+			End If
         End Sub
 
         Public Overrides ReadOnly Property Axes As Axis()

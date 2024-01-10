@@ -155,12 +155,14 @@ Namespace Data.Analysis
         End Property
 
         Public Overridable Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentWrite
-            document.AppendChildElement(parentNode, "Name", Name) ' written but not read
-            document.AppendChildElement(parentNode, "IsLog", _isLog)
+            parentNode.setAttribute("Name", Name) ' written but not read
+            parentNode.setAttribute("IsLog", _isLog.ToString())
         End Sub
 
         Public Overridable Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentRead
-            _isLog = parentNode.ReadChildElementAsBoolean("IsLog")
+            If Not parentNode.TryGetAttribute(Of Boolean)("IsLog", _isLog) Then
+				_isLog = parentNode.ReadChildElementAsBoolean("IsLog")
+            End If
         End Sub
     End Class
 
@@ -287,6 +289,10 @@ Namespace Data.Analysis
                 Return Nothing
             End If
 
+			If CytoSettings Is Nothing
+				CytoSettings = datafile.CytoSettings
+			End If
+
             Dim cacheEntry = valuesCache.GetEntry(Name)
 
             SyncLock cacheEntry
@@ -322,17 +328,23 @@ Namespace Data.Analysis
             MyBase.XmlDocumentWrite(document, parentNode)
 
             parentNode.SetAttribute("Type", Me.GetType().Name)
-            document.AppendChildElement(parentNode, "ChannelType", _channelType.ToString())
-            document.AppendChildElement(parentNode, "ChannelName", _channelName)
-            document.AppendChildElement(parentNode, "Parameter", _parameter.ToString())
+            parentNode.SetAttribute("ChannelType", _channelType.ToString())
+            parentNode.SetAttribute("ChannelName", _channelName)
+            parentNode.SetAttribute("Parameter", _parameter.ToString())
         End Sub
 
         Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentRead
             MyBase.XmlDocumentRead(document, parentNode)
 
-            _channelType = parentNode.ReadChildElementAsEnum(Of CytoSettings.ChannelTypesEnum)("ChannelType")
-            _channelName = parentNode.ReadChildElementAsString("ChannelName")
-            _parameter = parentNode.ReadChildElementAsEnum(Of ChannelData.ParameterSelector)("Parameter")
+            If Not parentNode.TryGetAttribute(Of String)("ChannelName", _channelName) Then
+				_channelType = parentNode.ReadChildElementAsEnum(Of CytoSettings.ChannelTypesEnum)("ChannelType")
+				_channelName = parentNode.ReadChildElementAsString("ChannelName")
+				_parameter = parentNode.ReadChildElementAsEnum(Of ChannelData.ParameterSelector)("Parameter")
+
+			Else
+				_channelType = parentNode.GetAttributeAsEnum(Of ChannelTypesEnum)("ChannelType")
+				_parameter = parentNode.GetAttributeAsEnum(Of ChannelData.ParameterSelector)("Parameter")
+			End If
 
             _cytoSettings = Nothing
             _channel      = Nothing

@@ -475,7 +475,14 @@ Namespace Data.Analysis
         End Sub
         
 
-        Public Shared Sub XmlSerialize(setsList As SetsList, Serial As String, ConfigDate As Date, filename As String)
+        ''' <summary>
+		''' Used in serializing for exporting sets or setlists from the set library
+		''' </summary>
+		''' <param name="setsList"></param>
+		''' <param name="Serial"></param>
+		''' <param name="ConfigDate"></param>
+		''' <param name="filename"></param>
+        Public Shared Sub XmlSerialize(setsList As SetsList, Serial As String, ConfigDate As Date, filename As String) 
             Dim xmlDocument As New XmlDocument()
             Dim rootElement As XmlElement = xmlDocument.CreateElement("SetList")
 

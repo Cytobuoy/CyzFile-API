@@ -90,6 +90,17 @@ Namespace Serializing
                 ' NOTE: Support code for this can be found in the Cyto__OLD 2.8.0.0 DLL.
             Else If assemblyName.StartsWith("CytoSense")
                 assemblyName = Assembly.GetExecutingAssembly().FullName  ' NOTE: We renamed the assembly when making it public.
+
+			Else If typeName.Contains("+MDIWindowStates+MDIWindowState") Then
+				If typeName.Contains("System.Collections.Generic.List")
+					typeName = GetType(List(Of MDIWindowStateData)).FullName
+				Else
+					typeName = GetType(MDIWindowStateData).FullName
+					assemblyName = Assembly.GetExecutingAssembly().FullName	
+				End If
+			ElseIf typeName.Contains("+MDIWindowStates")
+				typeName = GetType(MDIWindowStatesData).FullName
+				assemblyName = Assembly.GetExecutingAssembly().FullName
             End If
 
             Return Type.GetType(String.Format("{0}, {1}", typeName, assemblyName))

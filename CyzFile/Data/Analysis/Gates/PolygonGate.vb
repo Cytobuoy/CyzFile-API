@@ -324,8 +324,8 @@ Namespace Data.Analysis
 
             For Each point In _pathPoints
                 Dim pointElement = document.AppendChildElement(pathElement, "Point")
-                document.AppendChildElement(pointElement, "X", point.X)
-                document.AppendChildElement(pointElement, "Y", point.Y)
+                pointElement.SetAttribute("X", point.X.ToString(cultureIndependentFormat))
+                pointElement.SetAttribute("Y", point.Y.ToString(cultureIndependentFormat))
             Next
         End Sub
 
@@ -337,9 +337,15 @@ Namespace Data.Analysis
             Dim pathNode As XmlNode = parentNode.Item("Path")
 
             If pathNode IsNot Nothing Then
-                For Each pointNode As XmlElement In pathNode.ChildNodes()
-                    _pathPoints.Add(New Drawing.PointF(pointNode.ReadChildElementAsSingle("X"), pointNode.ReadChildElementAsSingle("Y")))
-                Next
+                If pathNode.ChildNodes()(0).HasChildNodes Then
+					For Each pointNode As XmlElement In pathNode.ChildNodes()
+						_pathPoints.Add(New Drawing.PointF(pointNode.ReadChildElementAsSingle("X"), pointNode.ReadChildElementAsSingle("Y")))
+					Next
+				Else
+					For Each pointNode As XmlElement In pathNode.ChildNodes()
+						_pathPoints.Add(New Drawing.PointF(pointNode.GetAttributeAsSingle("X"), pointNode.GetAttributeAsSingle("Y")))
+					Next
+				End If 
             End If
 
             SetValuesOnDeserialized(Nothing)

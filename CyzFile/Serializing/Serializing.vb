@@ -158,6 +158,22 @@ Namespace Serializing
             MS.Read(buf, 0, CInt(MS.Length))
             Return buf
         End Function
+
+		<Serializable>
+		Public Class MDIWindowStatesData
+			Public windows As List(Of MDIWindowStateData)
+		End Class
+
+		<Serializable>
+		Public Class MDIWindowStateData
+			Public x As Integer
+			Public y As Integer
+			Public width As Integer
+			Public height As Integer
+			Public openend As Boolean
+			Public text As String
+		End Class
+
     End Module
 
 End Namespace

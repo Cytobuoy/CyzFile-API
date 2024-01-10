@@ -27,7 +27,7 @@ Namespace Serializing
     ''' 
     ''' </summary>
     Public Module XMLDocumentExtensions
-        Dim cultureIndependentFormat As NumberFormatInfo = New NumberFormatInfo()
+        Public cultureIndependentFormat As NumberFormatInfo = New NumberFormatInfo()
 
 
         <Extension>
@@ -66,10 +66,40 @@ Namespace Serializing
             Return AddAttribute(document, node, name, dt.ToString("o", cultureIndependentFormat))
         End Function
 
+		<Extension>
+        Public Function GetAttributeAsBoolean( node As XmlElement, name As String) As Boolean
+            Return Boolean.Parse(node.GetAttributeNode(name).Value)
+        End Function
+
         <Extension>
         Public Function GetAttributeAsDateTime( node As XmlElement, name As String) As DateTime
             Return DateTime.Parse(node.GetAttributeNode(name).Value)
         End Function
+
+		 <Extension>
+        Public Function GetAttributeAsString( node As XmlElement, name As String) As String
+            Return node.GetAttributeNode(name).Value
+        End Function
+
+		<Extension>
+        Public Function GetAttributeAsSingle( node As XmlElement, name As String) As Single
+            Return Single.Parse(node.GetAttributeNode(name).Value, cultureIndependentFormat)
+        End Function
+
+        <Extension>
+        Public Function GetAttributeAsDouble( node As XmlElement, name As String) As Double
+            Return Double.Parse(node.GetAttributeNode(name).Value, cultureIndependentFormat)
+        End Function
+
+		<Extension>
+		Public Function GetAttributeAsInteger( node As XmlElement, name As String) As Integer
+			Return CInt(node.GetAttribute(name))
+		End Function
+
+		<Extension>
+		Public Function GetAttributeAsEnum(of T)( node As XmlElement, name As String) As T
+			Return CType([Enum].Parse(GetType(T), node.GetAttribute(name)), T)
+		End Function
 
         <Extension>
         Public Function TryGetAttribute( node As XmlElement, name As String, ByRef value As DateTime) As Boolean
@@ -79,14 +109,6 @@ Namespace Serializing
             Else
                 Return False
             End If
-        End Function
-
-
-
-
-        <Extension>
-        Public Function GetAttributeAsString( node As XmlElement, name As String) As String
-            Return node.GetAttributeNode(name).Value
         End Function
 
         <Extension>
@@ -116,7 +138,11 @@ Namespace Serializing
         Public Function TryGetAttribute(Of T)( node As XmlElement, name As String, ByRef value As T) As Boolean
             Dim attr = node.GetAttributeNode(name)
             If attr IsNot Nothing Then
-                value = CType([Enum].Parse(GetType(T), attr.Value), T)
+                If GetType(T) Is GetType([Enum])
+					value = CType([Enum].Parse(GetType(T), attr.Value), T)
+				Else
+					value = DirectCast(Convert.ChangeType(attr.Value, GetType(T), cultureIndependentFormat), T)
+				End If       
                 Return True
             Else
                 Return False
@@ -127,17 +153,16 @@ Namespace Serializing
         Public Function TryGetAttribute(Of T)( node As XmlElement, name As String, ByRef value As T, defValue As T) As Boolean
             Dim attr = node.GetAttributeNode(name)
             If attr IsNot Nothing Then
-                value = CType([Enum].Parse(GetType(T), attr.Value), T)
+                If GetType(T) Is GetType([Enum])
+					value = CType([Enum].Parse(GetType(T), attr.Value), T)
+				Else
+					value = DirectCast(Convert.ChangeType(attr.Value, GetType(T), cultureIndependentFormat), T)
+				End If           
                 Return True
             Else
                 value = defValue
                 Return False
             End If
-        End Function
-
-        <Extension>
-        Public Function GetAttributeAsBoolean( node As XmlElement, name As String) As Boolean
-            Return Boolean.Parse(node.GetAttributeNode(name).Value)
         End Function
 
         <Extension>
@@ -183,18 +208,6 @@ Namespace Serializing
                 Return False
             End If
         End Function
-
-
-        <Extension>
-        Public Function GetAttributeAsSingle( node As XmlElement, name As String) As Single
-            Return Single.Parse(node.GetAttributeNode(name).Value, cultureIndependentFormat)
-        End Function
-
-        <Extension>
-        Public Function GetAttributeAsDouble( node As XmlElement, name As String) As Double
-            Return Double.Parse(node.GetAttributeNode(name).Value, cultureIndependentFormat)
-        End Function
-
 
 
         <Extension>

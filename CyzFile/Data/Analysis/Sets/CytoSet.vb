@@ -307,17 +307,23 @@ Namespace Data.Analysis
         Public MustOverride Function Clone() As CytoSet
 
         Public Overridable Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentWrite
-            document.AppendChildElement(parentNode, "ListID", _listID.ToString())
-            document.AppendChildElement(parentNode, "Name", _name)
-            document.AppendChildElement(parentNode, "Color", _myColor.Name)
-            document.AppendChildElement(parentNode, "Visible", _visible)
+            parentNode.SetAttribute("ListID", _listID.ToString())
+            parentNode.SetAttribute("Name", _name)
+            parentNode.SetAttribute("Color", _myColor.Name)
+            parentNode.SetAttribute("Visible", _visible.ToString())
         End Sub
 
         Public Overridable Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentRead
-            _listID = parentNode.ReadChildElementAsInteger("ListID")
-            _name = parentNode.ReadChildElementAsString("Name")
-            _myColor = Color.FromName(parentNode.ReadChildElementAsString("Color"))
-            _visible = parentNode.ReadChildElementAsBoolean("Visible")
+            If Not parentNode.TryGetAttribute(Of Integer)("ListID", _listID)
+				_listID = parentNode.ReadChildElementAsInteger("ListID")
+				_name = parentNode.ReadChildElementAsString("Name")
+				_myColor = Color.FromName(parentNode.ReadChildElementAsString("Color"))
+				_visible = parentNode.ReadChildElementAsBoolean("Visible")
+			Else
+				_name = parentNode.GetAttribute("Name")
+				_myColor = Color.FromName(parentNode.GetAttribute("Color"))
+				_visible = parentNode.GetAttributeAsBoolean("Visible")
+			End If
         End Sub
     End Class
 

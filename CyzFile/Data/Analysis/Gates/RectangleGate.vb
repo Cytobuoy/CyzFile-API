@@ -60,11 +60,6 @@ Namespace Data.Analysis
 
             clone.DataFile = datafile
 
-            If datafile IsNot Nothing Then
-                clone.XAxis.CytoSettings = datafile.CytoSettings
-                clone.YAxis.CytoSettings = datafile.CytoSettings
-            End If
-
             Return clone
         End Function
 
@@ -170,19 +165,25 @@ Namespace Data.Analysis
         Public Overrides Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement)
             MyBase.XmlDocumentWrite(document, parentNode)
 
-            document.AppendChildElement(parentNode, "X", _rectangle.X)
-            document.AppendChildElement(parentNode, "Y", _rectangle.Y)
-            document.AppendChildElement(parentNode, "Width", _rectangle.Width)
-            document.AppendChildElement(parentNode, "Height", _rectangle.Height)
+            parentNode.SetAttribute("X", _rectangle.X.ToString(cultureIndependentFormat))
+            parentNode.SetAttribute("Y", _rectangle.Y.ToString(cultureIndependentFormat))
+            parentNode.SetAttribute("Width", _rectangle.Width.ToString(cultureIndependentFormat))
+            parentNode.SetAttribute("Height", _rectangle.Height.ToString(cultureIndependentFormat))
         End Sub
 
         Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement)
             MyBase.XmlDocumentRead(document, parentNode)
 
-            _rectangle.X = parentNode.ReadChildElementAsSingle("X")
-            _rectangle.Y = parentNode.ReadChildElementAsSingle("Y")
-            _rectangle.Width = parentNode.ReadChildElementAsSingle("Width")
-            _rectangle.Height = parentNode.ReadChildElementAsSingle("Height")
+            If Not parentNode.TryGetAttribute(Of Single)("X", _rectangle.X) Then
+				_rectangle.X = parentNode.ReadChildElementAsSingle("X")
+				_rectangle.Y = parentNode.ReadChildElementAsSingle("Y")
+				_rectangle.Width = parentNode.ReadChildElementAsSingle("Width")
+				_rectangle.Height = parentNode.ReadChildElementAsSingle("Height")
+			Else
+				_rectangle.Y = parentNode.GetAttributeAsSingle("Y")
+				_rectangle.Width = parentNode.GetAttributeAsSingle("Width")
+				_rectangle.Height = parentNode.GetAttributeAsSingle("Height")
+			End If
         End Sub
 
     End Class
