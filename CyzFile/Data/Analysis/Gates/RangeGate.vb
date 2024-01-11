@@ -155,11 +155,11 @@ Namespace Data.Analysis
         Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement)
             MyBase.XmlDocumentRead(document, parentNode)
 
-            If Not parentNode.TryGetAttribute(Of Single)("RangeMin", _rangeMin) Then
-				_rangeMin = parentNode.GetAttributeAsSingle("RangeMin")
+            If parentNode.TryGetAttribute(Of Single)("RangeMin", _rangeMin) Then
 				_rangeMax = parentNode.GetAttributeAsSingle("RangeMax")
 			Else
-				_rangeMax = parentNode.GetAttributeAsSingle("RangeMax")
+				_rangeMin = parentNode.ReadChildElementAsSingle("RangeMin")
+				_rangeMax = parentNode.ReadChildElementAsSingle("RangeMax")
 			End If
         End Sub
 

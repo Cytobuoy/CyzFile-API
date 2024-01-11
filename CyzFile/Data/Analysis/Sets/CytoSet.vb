@@ -314,15 +314,15 @@ Namespace Data.Analysis
         End Sub
 
         Public Overridable Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentRead
-            If Not parentNode.TryGetAttribute(Of Integer)("ListID", _listID)
+            If parentNode.TryGetAttribute(Of Integer)("ListID", _listID)
+				_name = parentNode.GetAttribute("Name")
+				_myColor = Color.FromName(parentNode.GetAttribute("Color"))
+				_visible = parentNode.GetAttributeAsBoolean("Visible")
+			Else		
 				_listID = parentNode.ReadChildElementAsInteger("ListID")
 				_name = parentNode.ReadChildElementAsString("Name")
 				_myColor = Color.FromName(parentNode.ReadChildElementAsString("Color"))
 				_visible = parentNode.ReadChildElementAsBoolean("Visible")
-			Else
-				_name = parentNode.GetAttribute("Name")
-				_myColor = Color.FromName(parentNode.GetAttribute("Color"))
-				_visible = parentNode.GetAttributeAsBoolean("Visible")
 			End If
         End Sub
     End Class

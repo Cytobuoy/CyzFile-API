@@ -138,7 +138,7 @@ Namespace Serializing
         Public Function TryGetAttribute(Of T)( node As XmlElement, name As String, ByRef value As T) As Boolean
             Dim attr = node.GetAttributeNode(name)
             If attr IsNot Nothing Then
-                If GetType(T) Is GetType([Enum])
+                If GetType(T).IsEnum
 					value = CType([Enum].Parse(GetType(T), attr.Value), T)
 				Else
 					value = DirectCast(Convert.ChangeType(attr.Value, GetType(T), cultureIndependentFormat), T)
@@ -153,7 +153,7 @@ Namespace Serializing
         Public Function TryGetAttribute(Of T)( node As XmlElement, name As String, ByRef value As T, defValue As T) As Boolean
             Dim attr = node.GetAttributeNode(name)
             If attr IsNot Nothing Then
-                If GetType(T) Is GetType([Enum])
+                If GetType(T).IsEnum
 					value = CType([Enum].Parse(GetType(T), attr.Value), T)
 				Else
 					value = DirectCast(Convert.ChangeType(attr.Value, GetType(T), cultureIndependentFormat), T)

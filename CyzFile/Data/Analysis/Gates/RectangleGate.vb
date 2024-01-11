@@ -174,15 +174,15 @@ Namespace Data.Analysis
         Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement)
             MyBase.XmlDocumentRead(document, parentNode)
 
-            If Not parentNode.TryGetAttribute(Of Single)("X", _rectangle.X) Then
+            If parentNode.TryGetAttribute(Of Single)("X", _rectangle.X) Then
+				_rectangle.Y = parentNode.GetAttributeAsSingle("Y")
+				_rectangle.Width = parentNode.GetAttributeAsSingle("Width")
+				_rectangle.Height = parentNode.GetAttributeAsSingle("Height")
+			Else
 				_rectangle.X = parentNode.ReadChildElementAsSingle("X")
 				_rectangle.Y = parentNode.ReadChildElementAsSingle("Y")
 				_rectangle.Width = parentNode.ReadChildElementAsSingle("Width")
 				_rectangle.Height = parentNode.ReadChildElementAsSingle("Height")
-			Else
-				_rectangle.Y = parentNode.GetAttributeAsSingle("Y")
-				_rectangle.Width = parentNode.GetAttributeAsSingle("Width")
-				_rectangle.Height = parentNode.GetAttributeAsSingle("Height")
 			End If
         End Sub
 

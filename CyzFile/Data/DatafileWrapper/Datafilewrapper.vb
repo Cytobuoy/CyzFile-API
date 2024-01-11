@@ -920,7 +920,7 @@ Namespace Data
         <Category("Measurement results"), DisplayName("Concentration"), DescriptionAttribute(""), Browsable(True), CytoSense.Data.DataBase.Attributes.Format("0.#E0 \p/µL")>
         Public ReadOnly Property Concentration As Double
             Get
-                If Double.IsNegativeInfinity(_concentration) And MeasurementInfo.MeasurementCounters IsNot Nothing Then 'MeasurementCounters can probably (need to check to be certain) be changed to IsBackgroundMeasurement after this has been implemented from another branch
+                If Double.IsNegativeInfinity(_concentration) Then
                     getConcentration()
                 End If
                 Return _concentration
