@@ -241,7 +241,13 @@ Namespace Data.Analysis
 
         Public Overrides ReadOnly Property Name As String
             Get
-                Return ChannelData.ParameterNames(_parameter) & " " & ChannelData.ParameterUnits(_parameter) & " " & Channel.ToString
+                Dim chName As String = ""
+                If Not String.IsNullOrEmpty(_channelName) Then
+                    chName = _channelName
+                ELse
+                    chName = Channel.ToString()
+                End If
+                Return ChannelData.ParameterNames(_parameter) & " " & ChannelData.ParameterUnits(_parameter) & " " & chName
             End Get
         End Property
 
