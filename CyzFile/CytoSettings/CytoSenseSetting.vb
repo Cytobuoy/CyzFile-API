@@ -213,7 +213,10 @@ Namespace CytoSettings
         Stepper = 2
     End enum
 
-
+    public enum AutomaticSheathSpeedControl_t
+        AutoOff = 0
+        AutoOn = 1
+    End enum
 
     ''' <summary>
     ''' This class encompasses all settings a machine can have
@@ -320,6 +323,7 @@ Namespace CytoSettings
         Public hasFlowSensor As Boolean = False
         Public Model As String = ""
         Public SheathPumpController As SheathPumpControllerType_t ' What is the type of the sheath pump.
+        Public AutomaticSheathSpeedControl As AutomaticSheathSpeedControl_t ' Are we using automatic adjustments (based on flow sensor, or not?)
         <OnDeserializing()>
         Private Sub PrepareForDeserializing(sc As StreamingContext)
             PowerSaveLeaveBlowerOn = True ' Default this new member to True, so it will be true if it was not explicitly stored.
