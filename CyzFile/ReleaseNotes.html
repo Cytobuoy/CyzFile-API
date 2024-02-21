@@ -30,13 +30,12 @@ th {
   background-color:#FFD20A;
   color:#fff;
 }
-# alternate background colors
-tr:nth-child(odd) {
-  color:#000;
-  background-color:#FFE27A;
+
+table tr:nth-child(odd) {
+    color: #000;
+    background-color: #FFE27A;
 }
 
-# No wrapping on the date column
 tr td:nth-child(2){
     white-space: nowrap;
 }
@@ -51,13 +50,25 @@ tr td:nth-child(2){
               <th>Description</th>
           </tr>
           <tr>
+              <td>1.1.1.0</td>
+              <td>2023-11-30</td>
+              <td>
+                  <h4>Changes</h4>
+                  <ul>
+                      <li>Added support for data files where the images have been live cropped during acquisition.  This is possible since CytoUsb version 6.2</li>
+                      <li>Added support for measurements with just a background measurement and no real measurement data at all.</li>
+                      <li>Added support for serializing some structures to XML files. This is used for settings files in newer versions of CytoClus.</li>
+                  </ul>
+              </td>
+          </tr>
+          <tr>
               <td>1.1.0.0</td>
               <td>2023-11-30</td>
               <td>
                   <h4>First Release</h4>
-				  
-				  This is the first release version of the CyzFile DLL.  This version is the also used in the next 
-				  official releases of CytoUsb and CytoClus.
+
+                  This is the first release version of the CyzFile DLL.  This version is the also used in the next
+                  official releases of CytoUsb and CytoClus.
               </td>
           </tr>
       </table>
