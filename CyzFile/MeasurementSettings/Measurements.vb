@@ -6,10 +6,10 @@ Namespace MeasurementSettings
         Private _cytosettings As CytoSense.CytoSettings.CytoSenseSetting
         Public release As New Serializing.VersionTrackableClass(New Date(2011, 7, 11))
 
-        Public Sub New(ByVal cytosettings As CytoSense.CytoSettings.CytoSenseSetting, ByVal addMain As Boolean)
+        Public Sub New(cytosettings As CytoSense.CytoSettings.CytoSenseSetting, folderPath As String, addMain As Boolean)
             _cytosettings = cytosettings
             If addMain Then
-                Dim tmpMeasurement As New CytoSense.MeasurementSettings.Measurement("Main", cytosettings)
+                Dim tmpMeasurement As New CytoSense.MeasurementSettings.Measurement("Main", folderPath, cytosettings)
                 addMeasurement(tmpMeasurement)
             End If
         End Sub

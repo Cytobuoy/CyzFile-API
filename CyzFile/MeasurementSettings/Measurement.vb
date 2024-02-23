@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Text
 Imports System.Runtime.Serialization
+Imports System.IO
 
 Namespace MeasurementSettings
 
@@ -47,9 +48,9 @@ Namespace MeasurementSettings
         Public release As New Serializing.VersionTrackableClass(New Date(2013, 4, 23))
         <NonSerialized()> Public Event RefreshNeeded()
 
-        Public Sub New(ByVal name As String, ByVal cytosettings As CytoSense.CytoSettings.CytoSenseSetting)
+        Public Sub New(name As String, folderPath As String, cytosettings As CytoSense.CytoSettings.CytoSenseSetting)
             _cytosettings = cytosettings
-            SetDefaultMeasurement(name)
+            SetDefaultMeasurement(name, folderPath)
         End Sub
 
         ''' <summary>
@@ -245,7 +246,7 @@ Namespace MeasurementSettings
             _depthProfile = New List(Of Single)(other._depthProfile)
         End Sub
 
-        Private Sub SetDefaultMeasurement(ByVal name As String)
+        Private Sub SetDefaultMeasurement(name As String, folderPath As String)
             Me.Enabled = True
 
             'A speed of 1ul/s is recommended for novice users. Below an ugly but easy way to find the recommended samplespeedbyte for all possible pump configurations. 
@@ -279,7 +280,7 @@ Namespace MeasurementSettings
             For i As Int16 = 0 To 7
                 Me.LowCheck(i) = False
             Next
-            Me.SaveTextbox = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) & "\My CytoSense\Datafiles\" & name & ".cyz"
+            Me.SaveTextbox = folderPath + name + ".cyz"
             Me.FlushCheck = False
             Me.TellCheck = False
             Me.IIFCheck = False
