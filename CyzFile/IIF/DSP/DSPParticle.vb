@@ -23,6 +23,7 @@ Namespace DSP
 
         Private _Image As Imaging.CyzFileBitmap ' was a system.draming.image, we override with our own type .Image
         Private _imageStream As Serializing.CytoMemoryStream
+		Private _cropRect As OpenCvSharp.Rect
         <Runtime.Serialization.OptionalField()> Private _ProcessedImage As Imaging.CyzFileBitmap ' Image ' Provides place for a preprocessed particle image
 
         Private MatchSucces As Boolean 'moet eigenlijk DataMatchSucces worden
@@ -35,12 +36,13 @@ Namespace DSP
 
 
 
-        Public Sub New(ByVal ParticleID As Integer, ByVal BlockID As Integer, ByVal ImageID As Integer, ByVal ParResults As Double(), ByVal ChannelData As Byte(), ByVal ImageStream As Serializing.CytoMemoryStream)
+        Public Sub New(ByVal ParticleID As Integer, ByVal BlockID As Integer, ByVal ImageID As Integer, ByVal ParResults As Double(), ByVal ChannelData As Byte(), ByVal ImageStream As Serializing.CytoMemoryStream, ByVal cropRect As OpenCvSharp.Rect)
             _PartID = ParticleID
             _ImageID = ImageID
             _ParResults = ParResults
             _ChannelData = ChannelData
             _imageStream = ImageStream
+			_cropRect = cropRect
             _BlockID = BlockID
             _ImageMatchSucces = True
             MatchSucces = True
@@ -68,6 +70,12 @@ Namespace DSP
                 Return _imageStream
             End Get
         End Property
+
+		Public ReadOnly Property CropRect As OpenCvSharp.Rect
+			Get
+				Return _cropRect
+			End Get
+		End Property
 
         ''' <summary>
         ''' Solves memory issues with Image

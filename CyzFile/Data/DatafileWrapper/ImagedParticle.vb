@@ -10,7 +10,7 @@ Namespace Data.ParticleHandling
 
         Public Sub New(p As CytoSense.Data.ParticleHandling.Particle, dspparticle As DSP.DSPParticle)
             MyBase.New(p.ChannelData_Hardware, p.ID, p.CytoSettings, p.MeasurementSettings)
-            _image = New CytoImage(CytoSettings, dspparticle.ImageStream)
+            _image = New CytoImage(CytoSettings, dspparticle.ImageStream, dspparticle.CropRect)
         End Sub
 
         Public Sub New(ByVal p As CytoSense.Data.ParticleHandling.Particle, imagestream As IO.MemoryStream)
