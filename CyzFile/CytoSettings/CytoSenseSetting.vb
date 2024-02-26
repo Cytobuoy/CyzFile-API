@@ -35,7 +35,7 @@ Namespace CytoSettings
         DAC_5578    =  3
         PCA_9534    =  4
         MCP_3428    =  5
-        Reserved_6  =  6
+        EBST_V2     =  6  '// Connected to the EBST V2. Note: Only with Scpi controller.
         Reserved_7  =  7
         Reserved_8  =  8
         Reserved_9  =  9
@@ -85,8 +85,8 @@ Namespace CytoSettings
                     Return "PCA 9534"
                 Case IoExpanderType.MCP_3428
                     Return "ADC MCP 3428"
-                Case IoExpanderType.Reserved_6
-                    Return "RESERVED 6"
+                Case IoExpanderType.EBST_V2
+                    Return "EBST V2"
                 Case IoExpanderType.Reserved_7
                     Return "RESERVED 7"
                 Case IoExpanderType.Reserved_8
