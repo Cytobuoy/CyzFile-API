@@ -85,7 +85,7 @@ Namespace DSP
             If Not Object.Equals(Nothing, _Image) And Object.Equals(Nothing, _imageStream) Then
                 ' Dim ms As New CytoSense.Serializing.CytoMemoryStream
                 ' _Image.Save(ms, Drawing.Imaging.ImageFormat.Jpeg)
-                _imageStream = New CytoSense.Serializing.CytoMemoryStream(_Image.Data)
+                _imageStream = New CytoSense.Serializing.CytoMemoryStream(_Image.Data, 0, _Image.Data.Length, False, True)
                 _Image = Nothing
             End If
         End Sub

@@ -21,7 +21,7 @@ Namespace DSP
                     ' with this problem on our servers. So I have not been able to test the code. In theory it should
                     ' work. :-(
                     Dim tmp As CytoSense.Imaging.CyzFileBitmap  = CType(ImageData,CytoSense.Imaging.CyzFileBitmap)    'due to error when changing to imagestream files with both ImageData as a stream and ImageData as an image may exist. This property takes care of this.
-                    Return New Serializing.CytoMemoryStream(tmp.Data)
+                    Return New Serializing.CytoMemoryStream(tmp.Data, 0, tmp.Data.Length, False, True)
                     
                     ' Original code for the SYstem.Drawing.Bitmap class 
                     ' Dim tmp As Image = CType(ImageData,Image)    'due to error when changing to imagestream files with both ImageData as a stream and ImageData as an image may exist. This property takes care of this.

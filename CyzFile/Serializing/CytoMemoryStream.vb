@@ -22,8 +22,8 @@ Namespace Serializing
         Inherits MemoryStream
         Implements ISerializable
 
-        Public Sub New(byteArr As Byte())
-            MyBase.New(byteArr)
+        Public Sub New(buffer As Byte(), index As Integer, count As Integer, writable As Boolean, publiclyVisible As Boolean)
+            MyBase.New(buffer,index, count,writable,publiclyVisible)
         End Sub
 
 		Public Sub New()
