@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>CytoSense</RootNamespace>
     <AssemblyName>CyzFile</AssemblyName>
-
+	<ProductName>CyzFile</ProductName>
 	<TargetFrameworks>net472;net7.0</TargetFrameworks>
     <OutputPath>$(BaseOutputPath)\$(Platform)\$(Configuration)</OutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Platform)\$(Configuration)</IntermediateOutputPath>
@@ -28,7 +28,7 @@
 	  <PackageReference Include="System.Drawing.Common" version="7.0.0" />
 	  <PackageReference Include="System.Globalization" version="4.3.0" />
 	  <PackageReference Include="System.IO.Ports" Version="7.0.0" />
-	  <PackageReference Include="System.Memory" version="4.5.4" />
+	  <PackageReference Include="System.Memory" version="4.5.5" />
 	  <PackageReference Include="System.Numerics.Vectors" version="4.5.0" />
 	  <PackageReference Include="System.Resources.ResourceManager" version="4.3.0" />
 	  <PackageReference Include="System.Runtime" version="4.3.1" />
@@ -79,16 +79,16 @@
 	</ItemGroup>
 
 
-  <Target Name="CyzFileGetVersionInfo" BeforeTargets="PrepareForBuild" >
-	<Exec Command="git describe --always --long --dirty" ConsoleToMsBuild="True" >
+  <Target Name="CyzFileGetVersionInfo" BeforeTargets="PrepareForBuild">
+	<Exec Command="git describe --always --long --dirty" ConsoleToMsBuild="True">
 		<Output TaskParameter="ConsoleOutput" PropertyName="GitVersionStuff" />
 	</Exec>
 
 	<CreateProperty Value="$(GitVersionStuff)">
-		<Output PropertyName="InformationalVersion" TaskParameter="Value"/>
+		<Output PropertyName="InformationalVersion" TaskParameter="Value" />
 	</CreateProperty>
 	<CreateProperty Value="$(GitVersionStuff)">
-		<Output PropertyName="Description" TaskParameter="Value"/>
+		<Output PropertyName="Description" TaskParameter="Value" />
 	</CreateProperty>
 
   </Target>
