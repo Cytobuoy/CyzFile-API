@@ -4,6 +4,8 @@
     <RootNamespace>CytoSense</RootNamespace>
     <AssemblyName>CyzFile</AssemblyName>
 	<ProductName>CyzFile</ProductName>
+	<ProjectName>CyzFile</ProjectName>
+	
 	<TargetFrameworks>net472;net7.0</TargetFrameworks>
     <OutputPath>$(BaseOutputPath)\$(Platform)\$(Configuration)</OutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Platform)\$(Configuration)</IntermediateOutputPath>
