@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.Drawing
+Imports System.IO
 Imports System.Text
 Imports System.Xml
 Imports CytoSense.Serializing
@@ -25,8 +26,8 @@ Namespace Data.Analysis
         End Property
 
         Public Sub New()
-            _list = New List(Of CytoSet)
-            ExclusiveSets = False
+			_list = New List(Of CytoSet) From {New DefaultSet(Color.Gray)}
+			ExclusiveSets = False
         End Sub
 
         ''' <summary>
@@ -144,6 +145,14 @@ Namespace Data.Analysis
         ''' <param name="item"></param>
         ''' <remarks></remarks>
         Public Sub Remove(ByRef item As CytoSet)
+
+			If item.type = cytoSetType.DefaultAll Then
+                If _list.Find(Function(cytoSet As CytoSet) cytoSet.type = cytoSetType.DefaultAll) IsNot Nothing Then
+					Debug.Assert(False, "Removing the default set is kinda illegal")
+                    Return
+                End If
+            End If
+
             Dim toRemove As New Queue(Of CytoSet)()
             toRemove.Enqueue(item)
 
@@ -185,6 +194,7 @@ Namespace Data.Analysis
 
             If item.type = cytoSetType.DefaultAll Then
                 If _list.Find(Function(cytoSet As CytoSet) cytoSet.type = cytoSetType.DefaultAll) IsNot Nothing Then
+					Debug.Assert(False, "Adding defaultSet when it already exists")
                     Return
                 End If
             End If
@@ -285,7 +295,7 @@ Namespace Data.Analysis
 
         <System.Diagnostics.DebuggerStepThrough()>
         Public Sub Clear()
-            _list.Clear()
+            _list = New List(Of CytoSet) From {New DefaultSet(Color.Gray)}
         End Sub
 
         <System.Diagnostics.DebuggerStepThrough()>
