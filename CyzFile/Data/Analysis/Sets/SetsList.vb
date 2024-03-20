@@ -26,7 +26,7 @@ Namespace Data.Analysis
         End Property
 
         Public Sub New()
-			_list = New List(Of CytoSet) From {New DefaultSet(Color.Gray)}
+			_list = New List(Of CytoSet) From {New DefaultSet(Color.Black)}
 			ExclusiveSets = False
         End Sub
 
@@ -79,7 +79,13 @@ Namespace Data.Analysis
             ElseIf s.type = cytoSetType.unassignedParticles Then
                 Add(New UnassignedParticlesSet(Me, s.colorOfSet, dfw, s.ListID, s.Visible))
             ElseIf s.type = cytoSetType.DefaultAll Then
-                Add(New DefaultSet(dfw, s.colorOfSet, s.ListID, s.Visible))
+				'Setlist now always has a defaultSet, so adding it makes no sense anymore. Still perform all actions that happen when normally creating a set with these paramaters
+                _list(0).colorOfSet = s.colorOfSet
+				_list(0).Visible = s.Visible
+				_list(0).datafile = dfw
+				If dfw IsNot Nothing Then
+					_list(0).RecalculateParticleIndices()
+				End If	
             ElseIf s.type = cytoSetType.gateBased Then
                 Add(New gateBasedSet(dfw, DirectCast(s,gateBasedSet)))
             ElseIf s.type = cytoSetType.combined Then ' Subsets may not be present, we finalize later.

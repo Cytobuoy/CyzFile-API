@@ -67,7 +67,7 @@ Namespace Data.Analysis
         ''' Needed by XML de-serializer code
         ''' </summary>
         Public Sub New()
-            MyBase.New(defaultSetName, cytoSetType.DefaultAll, Color.Red)
+            MyBase.New(defaultSetName, cytoSetType.DefaultAll, Color.Black)
         End Sub
 
         Public Sub New(color As Color)
