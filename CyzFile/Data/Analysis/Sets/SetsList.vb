@@ -406,10 +406,10 @@ Namespace Data.Analysis
                         _list.Add(cytoSet)
 
                     Case "DefaultSet"
-                        Dim cytoSet As New DefaultSet()
-                        cytoSet.XmlDocumentRead(document, setNode)
-                        _list.Add(cytoSet)
-
+                        ' The default set is always present, even in newly created setlist, so we do not add it/
+                        ' Instead retrieve it and let it load its properties from the XmlDocument.
+                        Dim defSet = FindSetById(0)
+                        defSet.XmlDocumentRead(document, setNode)
                     Case "AllImagesSet"
                         Dim cytoSet = New AllImagesSet()
                         cytoSet.XmlDocumentRead(document, setNode)
