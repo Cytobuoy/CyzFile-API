@@ -30,6 +30,17 @@ Namespace Data.Analysis
 			ExclusiveSets = False
         End Sub
 
+
+        ''' <summary>
+        ''' Simply delete all sets, except the default one, we MUST always have the default set, that cannot be deleted.
+        ''' This is a single function instead of removing every item one by one because that involves a lot of processing
+        ''' to find references, and when doing it like this we can simply remove all items except the first without 
+        ''' processing references which is much easier
+        ''' </summary>
+        Public Sub DeleteAllNonDefaultSets()
+            _list.RemoveRange(1,_list.Count-1)
+        End Sub
+
         ''' <summary>
         ''' You cannot simply copy individual sets because some sets refer to other sets in the
         ''' list, so just cloning individual sets does not work.
