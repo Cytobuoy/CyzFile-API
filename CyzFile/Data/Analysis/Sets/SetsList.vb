@@ -482,7 +482,7 @@ Namespace Data.Analysis
                 End If
 
                 Dim gateSet = TryCast(cytoSet, gateBasedSet)
-                If gateSet IsNot Nothing Then
+                If gateSet IsNot Nothing AndAlso cytoSettings IsNot Nothing Then
                     For Each gate In gateSet.allGates
                         gate.UpdateCytoSettings(cytoSettings)
                     Next
