@@ -15,6 +15,7 @@ Namespace Data.Analysis
 
         Private _list As List(Of CytoSet)
         Private _exclusiveSets As Boolean
+		Private _serialNumber As String
 
         Public Property ExclusiveSets As Boolean
             Get
@@ -25,9 +26,20 @@ Namespace Data.Analysis
             End Set
         End Property
 
-        Public Sub New()
-			_list = New List(Of CytoSet) From {New DefaultSet(Color.Black)}
+		Public ReadOnly Property SerialNumber As String
+			Get
+				Return _serialNumber
+			End Get
+		End Property
+
+		Private Sub New()
+			_list = New List(Of CytoSet) From {New DefaultSet(Color.Gray)}
 			ExclusiveSets = False
+		End Sub
+
+        Public Sub New(serialNumber As String)
+			Me.New()
+			_serialNumber = serialNumber
         End Sub
 
 
@@ -51,7 +63,7 @@ Namespace Data.Analysis
         ''' </summary>
         ''' <returns></returns>
         Public Function Clone(targetDfw As DataFileWrapper) As SetsList
-            Dim newSetList = New SetsList()
+            Dim newSetList = New SetsList(_serialNumber)
             newSetList.ExclusiveSets = ExclusiveSets
 
             For Each s In _list
@@ -374,6 +386,7 @@ Namespace Data.Analysis
 
         Public Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentWrite
             parentNode.SetAttribute("ExclusiveSets", ExclusiveSets.ToString())
+			parentNode.SetAttribute("SerialNumber", SerialNumber)
 
             For Each cytoSet In _list
                 If TryCast(cytoSet, IXmlDocumentIO) IsNot Nothing Then
@@ -408,6 +421,7 @@ Namespace Data.Analysis
 
         Public Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentRead
             ExclusiveSets = Boolean.Parse(parentNode.GetAttribute("ExclusiveSets"))
+			_serialNumber = parentNode.GetAttribute("SerialNumber")
 
             For Each setNode As XmlElement In parentNode.ChildNodes()
                 Select Case setNode.Name
@@ -509,12 +523,11 @@ Namespace Data.Analysis
 		''' <param name="Serial"></param>
 		''' <param name="ConfigDate"></param>
 		''' <param name="filename"></param>
-        Public Shared Sub XmlSerialize(setsList As SetsList, Serial As String, ConfigDate As Date, filename As String) 
+        Public Shared Sub XmlSerialize(setsList As SetsList, ConfigDate As Date, filename As String) 
             Dim xmlDocument As New XmlDocument()
             Dim rootElement As XmlElement = xmlDocument.CreateElement("SetList")
 
             xmlDocument.AppendChild(rootElement)
-            rootElement.SetAttribute("SerialNumber", Serial)
             xmlDocument.AddAttribute(rootElement, "configuration_date", ConfigDate)
 
             setsList.XmlDocumentWrite(xmlDocument, rootElement)
