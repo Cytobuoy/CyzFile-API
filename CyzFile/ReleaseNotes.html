@@ -50,17 +50,33 @@ tr td:nth-child(2){
               <th>Description</th>
           </tr>
           <tr>
+              <td>1.1.3.0</td>
+              <td>2024-04-12</td>
+              <td>
+                  <h4>Changes</h4>
+                  <ul>
+                      <li>Small changes to setlist and XML serialization to allow CytoClus to use XML serialization
+                          for its workspaces.</li>
+                      <li>A few small project file changes to make nuget package restore happier.</li>
+                  </ul>
+              </td>
+          </tr>
+          <tr>
               <td>1.1.2.0</td>
               <td>2024-03-08</td>
               <td>
                   <h4>Changes</h4>
                   <ul>
-                      <li>Added a new constructor to the CytoMemoryStream that allows making a slightly more efficient implementation of imagedisplay
-                          in CytoUsb.</li>
+                      <li>
+                          Added a new constructor to the CytoMemoryStream that allows making a slightly more efficient implementation of imagedisplay
+                          in CytoUsb.
+                      </li>
                       <li>Added support for storing some options for the new External Beads Sheath and Toxin system. (Version 2)</li>
                       <li>Added support for old instruments (2017 and before) and live cropping during acquisition.</li>
-                      <li>Add support for a different location of the basic CytoSense folders (only interesting inside CytoUsb and CytoClus, not
-                          when using the CyzFile dll directly.)</li>
+                      <li>
+                          Add support for a different location of the basic CytoSense folders (only interesting inside CytoUsb and CytoClus, not
+                          when using the CyzFile dll directly.)
+                      </li>
                       <li>Fixed release notes, the date on the previous entry was incorrect..</li>
                   </ul>
               </td>
