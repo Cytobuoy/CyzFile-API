@@ -535,6 +535,7 @@ Namespace CytoSettings
         Public EnableDepthTrigger As Boolean
         Public DisableResetDSP As Boolean
         Public EnableExternalPump As Boolean
+        Public EnableExternalPinchValve As Boolean ' Use the external pinch valve for sample pump control, either pinch, or pump or neither, never both.
         Public EnableContinuMode As Boolean 'obsolete, because Ruud electronics will never support continu mode 
 
 
