@@ -6,7 +6,7 @@
 	<ProductName>CyzFile</ProductName>
 	<ProjectName>CyzFile</ProjectName>
 	
-	<TargetFrameworks>net472;net7.0</TargetFrameworks>
+	<TargetFrameworks>net7.0</TargetFrameworks>
     <OutputPath>$(BaseOutputPath)\$(Platform)\$(Configuration)</OutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Platform)\$(Configuration)</IntermediateOutputPath>
     <Configurations>Debug;Release;ReleaseErnie;ReleaseWebsite</Configurations>
