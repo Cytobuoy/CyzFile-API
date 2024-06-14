@@ -633,6 +633,7 @@ Namespace CytoSettings
         Public GpsWarnAge As TimeSpan     = TimeSpan.FromMinutes(2)' If the last fix is older then this, it is a warning.
         Public GpsErrorAge As TimeSpan    = TimeSpan.FromMinutes(5) 'If the last fix is older then this, it is an error.
 
+        Public MinimumSampleChamberRefreshInterval As TimeSpan = TimeSpan.FromMinutes(2)' Minimum time the sample chamber should be open to allow the content to refresh. 
         Public ExternalPumpTime As Double 'in s
         Public ExternalPumpTime_OverlapWithNormalFlush As Double 'in s
 
