@@ -1,3 +1,5 @@
+Imports System.Runtime.Serialization
+
 Namespace Scheduling
 
 
@@ -5,7 +7,7 @@ Namespace Scheduling
 
         Inherits MeasurementTask
 
-        Private _done_at As New Microsoft.VisualBasic.Collection
+        Private _done_at As New CytoCollection()
 
           Public Overrides Function isIntervalMeasurement() As Boolean
             Return True
@@ -75,7 +77,6 @@ Namespace Scheduling
         ''' <param name="shutdownDelay">Interval in seconds</param>
         ''' <returns></returns>
         Public Function InstrumentCanShutDown(shutdownDelay As Integer) As Boolean
-
             If Not IsActive() Then
                 Return True
             End If
@@ -186,7 +187,7 @@ Namespace Scheduling
             ElseIf _done_at.Count = 0 Then
                 Return New Date(0)
             Else
-                Return CType(_done_at(_done_at.Count),Date)
+                Return CType(_done_at.Last(),Date)
             End If
         End Function
 

@@ -37,7 +37,25 @@ Namespace Serializing
             If typeName.Contains(".MemoryStream") Then
                 assemblyName = Assembly.GetExecutingAssembly().FullName
                 typeName     = "CytoSense.Serializing.CytoMemoryStream"
-            Else If typeName = "CytoSense.Data.ParticleHandling+Particle" Then
+			Else If typeName.Contains("VisualBasic.Collection") Then
+				assemblyName = GetType(CytoCollection).Assembly.FullName
+				typeName = GetType(CytoCollection).FullName
+			Else If typeName.Contains("System.Globalization.CultureInfo") Then
+				assemblyName = GetType(CytoCultureInfo).Assembly.FullName
+				typeName = GetType(CytoCultureInfo).FullName
+			Else If typeName.Contains("System.Globalization.TextInfo") Then
+				assemblyName = GetType(CytoTextInfo).Assembly.FullName
+				typeName = GetType(CytoTextInfo).FullName
+			Else If typeName.Contains("System.Globalization.NumberFormatInfo") Then
+				assemblyName = GetType(CytoNumberFormatInfo).Assembly.FullName
+				typeName = GetType(CytoNumberFormatInfo).FullName
+			Else If typeName.Contains("System.Globalization.DateTimeFormatInfo") Then
+				assemblyName = GetType(CytoDateTimeFormatInfo).Assembly.FullName
+				typeName = GetType(CytoDateTimeFormatInfo).FullName
+			Else If typeName.Contains("System.Globalization.") AndAlso typeName.Contains("Calendar") Then
+				assemblyName = GetType(CytoCalendar).Assembly.FullName
+				typeName = GetType(CytoCalendar).FullName
+			Else If typeName = "CytoSense.Data.ParticleHandling+Particle" Then
                 ' In some old DLLs the particle class was in a Module ParticleHandleing, and now it is in a namespace.
                 ' and the DSP particle incorrectly
                 ' contained a reference to these particles.  So we have to remap them to the new class
@@ -121,7 +139,10 @@ Namespace Serializing
             If serializedType.FullName.Contains("CytoMemoryStream") Then
                 assemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
                 typeName     = "System.IO.MemoryStream"
-            Else If serializedType.FullName.Contains("CyzFileBitmap") Then
+			Else If serializedType.FullName.Contains("CytoCollection") Then
+				assemblyName = GetType(Collection).Assembly.FullName
+				typeName = GetType(Collection).FullName
+			Else If serializedType.FullName.Contains("CyzFileBitmap") Then
                 ' We never write DspImage stuff anymore, but we do need to support writing background images
                 ' this way.  So for that we need to support writing the CyzFileBitmap class, and name as a 
                 ' System.Drawing.Bitmap
