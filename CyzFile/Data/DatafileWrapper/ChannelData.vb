@@ -843,23 +843,23 @@ End Function
         End Property
         <Serializable> Public Enum ParameterSelector 'Serializable for dot plot presets in cc4
             Length = 0
-            Total = 1
-            Maximum = 2
-            Average = 3
-            Inertia = 4
-            CentreOfGravity = 5
-            FillFactor = 6
-            Asymmetry = 7
-            NumberOfCells = 8
-            SampleLength = 9
-            TimeOfArrival = 10
-            First = 11
-            Last = 12
-            Minimum = 13
+            Total
+            Maximum
+            Average
+            Inertia
+            CentreOfGravity
+            FillFactor
+            Asymmetry
+            NumberOfCells
+            SampleLength
+            TimeOfArrival
+            First
+            Last
+            Minimum
 #If SWSCOV Then
-            SWSCOV = 14
+            SWSCOV
 #End If
-            VariableLength = 15
+            VariableLength
 
         End Enum
 

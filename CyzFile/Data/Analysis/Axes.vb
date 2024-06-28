@@ -184,7 +184,7 @@ Namespace Data.Analysis
         Private _cytoSettings As CytoSettings.CytoSenseSetting
         <NonSerialized()> Public _channelIdx As Integer = -1
         <NonSerialized()> Private _channelIdxInHardware As Boolean = False
-        Public _parameter As ChannelData.ParameterSelector
+        Private _parameter As ChannelData.ParameterSelector
 
         ''' <summary>
         ''' Needed for XML (de)serialization
