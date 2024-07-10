@@ -28,6 +28,9 @@ Namespace Data.Analysis
 
 		Public ReadOnly Property SerialNumber As String
 			Get
+				If String.IsNullOrEmpty(_serialNumber) Then
+					_serialNumber = _list(0).datafile.CytoSettings.SerialNumber
+				End If
 				Return _serialNumber
 			End Get
 		End Property
