@@ -26,13 +26,17 @@ Namespace Data.Analysis
             End Set
         End Property
 
-		Public ReadOnly Property SerialNumber As String
+		Public Property SerialNumber As String
 			Get
-				If String.IsNullOrEmpty(_serialNumber) Then
-					_serialNumber = _list(0).datafile.CytoSettings.SerialNumber
-				End If
 				Return _serialNumber
 			End Get
+			Set(value As String)
+				If String.IsNullOrEmpty(value) Then
+					Debug.WriteLine("Tried to write empty string to serialNumber")
+					Return
+				End If
+				_serialNumber = value
+			End Set
 		End Property
 
 		Private Sub New()
@@ -424,7 +428,14 @@ Namespace Data.Analysis
 
         Public Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentRead
             ExclusiveSets = Boolean.Parse(parentNode.GetAttribute("ExclusiveSets"))
-			_serialNumber = parentNode.GetAttribute("SerialNumber")
+
+			Dim tmpserialNumber = parentNode.GetAttribute("SerialNumber")
+			'Only write it if the xml version is not empty.
+			If Not String.IsNullOrEmpty(tmpserialNumber) AndAlso String.Equals(tmpserialNumber, SerialNumber) Then 
+				SerialNumber = tmpserialNumber
+			Else
+				Debug.WriteLine("Sets Serialnumber was empty or different from workspace")
+			End If
 
             For Each setNode As XmlElement In parentNode.ChildNodes()
                 Select Case setNode.Name
@@ -516,6 +527,10 @@ Namespace Data.Analysis
                     Next
                 End If
             Next
+
+			If String.IsNullOrEmpty(SerialNumber) AndAlso cytoSettings IsNot Nothing Then
+				SerialNumber = cytoSettings.SerialNumber
+			End If
         End Sub
         
 
