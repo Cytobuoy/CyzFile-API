@@ -7,7 +7,7 @@ Imports CytoSense.Serializing
 
 Namespace Data.Analysis
 
-    <Serializable()> Public Class combinedSet
+    <Serializable()> Public Class CombinedSet
         Inherits CompositeSet
         Implements ISerializable
 
@@ -112,9 +112,9 @@ Namespace Data.Analysis
 
         Public Overrides Function Clone() As CytoSet
             If _datafile Is Nothing Then
-                Return New combinedSet(Name, colorOfSet, _set1, _set2, _myGateCombi)
+                Return New CombinedSet(Name, colorOfSet, _set1, _set2, _myGateCombi)
             Else
-                Return New combinedSet(Name, colorOfSet, _set1, _set2, _myGateCombi, _datafile, ListID, Visible)
+                Return New CombinedSet(Name, colorOfSet, _set1, _set2, _myGateCombi, _datafile, ListID, Visible)
             End If
 
         End Function

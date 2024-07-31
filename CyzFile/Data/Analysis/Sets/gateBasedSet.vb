@@ -4,7 +4,7 @@ Imports CytoSense.Serializing
 
 Namespace Data.Analysis
 
-    <Serializable()> Public Class gateBasedSet
+    <Serializable()> Public Class GateBasedSet
         Inherits CytoSet
 
         Private gatesUpdated As Boolean = False ' Not used anymore, but unsure if it can remove because it is serialized
@@ -44,14 +44,14 @@ Namespace Data.Analysis
         ''' Copy Constructor
         ''' </summary>
         ''' <param name="other"></param>
-        Public Sub New(other As gateBasedSet)
+        Public Sub New(other As GateBasedSet)
             Me.New(other.Name, other.colorOfSet, other.datafile)
             For Each cgate As IGate In other.allGates
                 addGate(cgate.CreateWorkfileCopy(other.datafile))
             Next
         End Sub
 
-        Public Sub New(dfw As DataFileWrapper, other As gateBasedSet)
+        Public Sub New(dfw As DataFileWrapper, other As GateBasedSet)
             Me.New(other.Name, other.colorOfSet, dfw, other.ListID, other.Visible)
 
             For Each gate As IGate In other.allGates
@@ -284,7 +284,7 @@ Namespace Data.Analysis
         End Function
 
         Public Overrides Function Clone() As CytoSet
-            Return New gateBasedSet(Me)
+            Return New GateBasedSet(Me)
         End Function
 
         Public Overrides Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement) 

@@ -299,7 +299,7 @@ Public Class TestSets
         For i = 0 To testSetList.Count - 1
             testSetList(i).datafile = dfw
             If testSetList(i).type = cytoSetType.gateBased Then
-                Dim gbSet = CType(testSetList(i), gateBasedSet)
+                Dim gbSet = CType(testSetList(i), GateBasedSet)
                 For gIdx = 0 To gbSet.allGates.Count - 1
                     Dim gate = CType(gbSet.allGates(gIdx),Gate)
                     gate.DataFile = dfw
@@ -731,7 +731,7 @@ Public Class TestSets
         For i = 0 To testSetList.Count - 1
             testSetList(i).datafile = dfw
             If testSetList(i).type = cytoSetType.gateBased Then
-                Dim gbSet = CType(testSetList(i), gateBasedSet)
+                Dim gbSet = CType(testSetList(i), GateBasedSet)
                 For gIdx = 0 To gbSet.allGates.Count - 1
                     Dim gate = CType(gbSet.allGates(gIdx),Gate)
                     gate.DataFile = dfw
@@ -806,7 +806,7 @@ Public Class TestSets
         Dim usedParticleIndicesArrayList = New List(Of Integer())
 
         For Each currentSet In Sets
-            Dim gbSet = TryCast(currentSet, gateBasedSet)
+            Dim gbSet = TryCast(currentSet, GateBasedSet)
 
             If gbSet Is Nothing Then
                 Continue For
@@ -842,7 +842,7 @@ Public Class TestSets
         For i = 0 To testSetList.Count - 1
             testSetList(i).datafile = dfw
             If testSetList(i).type = cytoSetType.gateBased Then
-                Dim gbSet = CType(testSetList(i), gateBasedSet)
+                Dim gbSet = CType(testSetList(i), GateBasedSet)
                 For gIdx = 0 To gbSet.allGates.Count - 1
                     Dim gate = CType(gbSet.allGates(gIdx),Gate)
                     gate.DataFile = dfw
