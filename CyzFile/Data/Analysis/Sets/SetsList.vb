@@ -117,10 +117,10 @@ Namespace Data.Analysis
 					_list(0).RecalculateParticleIndices()
 				End If	
             ElseIf s.type = cytoSetType.gateBased Then
-                Add(New GateBasedSet(dfw, DirectCast(s,GateBasedSet)))
+                Add(New gateBasedSet(dfw, DirectCast(s,gateBasedSet)))
             ElseIf s.type = cytoSetType.combined Then ' Subsets may not be present, we finalize later.
-                Dim combSet As CombinedSet = CType(s, CombinedSet)
-                Add(New CombinedSet(combSet.Name, combSet.colorOfSet, Nothing, Nothing, combSet.GateCombination, dfw, s.ListID, s.Visible))
+                Dim combSet As combinedSet = CType(s, combinedSet)
+                Add(New combinedSet(combSet.Name, combSet.colorOfSet, Nothing, Nothing, combSet.GateCombination, dfw, s.ListID, s.Visible))
             ElseIf s.type = cytoSetType.OrSet Then ' Subsets may not be present, we finalize later.
                 Dim incOrSet = DirectCast(s, OrSet)
                 Add(New OrSet(incOrSet.Name, incOrSet.colorOfSet, New List(Of CytoSet)(), dfw, incOrSet.AutoSet, s.ListID, s.Visible))
@@ -145,8 +145,8 @@ Namespace Data.Analysis
         ElseIf srcSet.type = cytoSetType.gateBased Then
             ' Nothing to do, completely added in Add BasicSetInfo
         ElseIf srcSet.type = cytoSetType.combined Then
-            Dim combSrcSet As CombinedSet = CType(srcSet, CombinedSet)
-            Dim destSet As CombinedSet = CType(FindSetById(combSrcSet.ListID), CombinedSet)
+            Dim combSrcSet As combinedSet = CType(srcSet, combinedSet)
+            Dim destSet As combinedSet = CType(FindSetById(combSrcSet.ListID), combinedSet)
             'find the sets that are combined
             Dim destSet1 As CytoSet = FindSetById(combSrcSet.Set1.ListID)
             Dim destSet2 As CytoSet = FindSetById(combSrcSet.Set2.ListID)
@@ -292,7 +292,7 @@ Namespace Data.Analysis
         ''' <param name="listId"></param>
         ''' <returns></returns>
         Private Function SetIsAffectedByChange(s As CytoSet, listId As Integer) As Boolean
-            Dim cSet = TryCast(s, CombinedSet)
+            Dim cSet = TryCast(s, combinedSet)
             If cSet Is Nothing Then
                 Return False
             End If
@@ -384,7 +384,7 @@ Namespace Data.Analysis
 
         Public Sub InvalidateGatebasedSets()
             For Each currentSet In _list
-                Dim gbs = TryCast(currentSet, GateBasedSet)
+                Dim gbs = TryCast(currentSet, gateBasedSet)
                 If gbs IsNot Nothing Then
                     gbs.Invalid = True
                 End If
@@ -398,7 +398,7 @@ Namespace Data.Analysis
             For Each cytoSet In _list
                 If TryCast(cytoSet, IXmlDocumentIO) IsNot Nothing Then
                     Select Case cytoSet.GetType()
-                        Case GetType(GateBasedSet)
+                        Case GetType(gateBasedSet)
                             DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "GateBasedSet"))
 
                         Case GetType(DefaultSet)
@@ -407,7 +407,7 @@ Namespace Data.Analysis
                         Case GetType(AllImagesSet)
                             DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "AllImagesSet"))
 
-                        Case GetType(CombinedSet)
+                        Case GetType(combinedSet)
                             DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "CombinedSet"))
 
                         Case GetType(OrSet)
@@ -440,7 +440,7 @@ Namespace Data.Analysis
             For Each setNode As XmlElement In parentNode.ChildNodes()
                 Select Case setNode.Name
                     Case "GateBasedSet"
-                        Dim cytoSet As New GateBasedSet()
+                        Dim cytoSet As New gateBasedSet()
                         cytoSet.XmlDocumentRead(document, setNode)
                         _list.Add(cytoSet)
 
@@ -455,7 +455,7 @@ Namespace Data.Analysis
                         _list.Add(cytoSet)
 
                     Case "CombinedSet"
-                        Dim cytoSet = New CombinedSet()
+                        Dim cytoSet = New combinedSet()
                         cytoSet.XmlDocumentRead(document, setNode)
                         _list.Add(cytoSet)
 
@@ -506,7 +506,7 @@ Namespace Data.Analysis
                     orSet.UpdateSets(realChildSets)
                 End If
 
-                Dim combinedSet = TryCast(cytoSet, CombinedSet)
+                Dim combinedSet = TryCast(cytoSet, combinedSet)
 
                 If combinedSet IsNot Nothing Then
                     Dim realSet1 = FindSetById(combinedSet.Set1.ListID)
@@ -520,7 +520,7 @@ Namespace Data.Analysis
                     unassignedSet.allSets = Me
                 End If
 
-                Dim gateSet = TryCast(cytoSet, GateBasedSet)
+                Dim gateSet = TryCast(cytoSet, gateBasedSet)
                 If gateSet IsNot Nothing AndAlso cytoSettings IsNot Nothing Then
                     For Each gate In gateSet.allGates
                         gate.UpdateCytoSettings(cytoSettings)
@@ -597,19 +597,19 @@ Namespace Data.Analysis
             Return Nothing
         End Function
 
-        Public Sub updateGateDefinition(selectedSet As GateBasedSet, gate As Gate)
+        Public Sub updateGateDefinition(selectedSet As gateBasedSet, gate As Gate)
             Dim setInList As CytoSet = FindSetByName(selectedSet.Name)
 
             If setInList IsNot Nothing Then
-                DirectCast(setInList, GateBasedSet).updateGateDefinition(gate)
+                DirectCast(setInList, gateBasedSet).updateGateDefinition(gate)
             End If
         End Sub
 
-        Public Sub deleteGate(selectedSet As GateBasedSet, xAxis As Axis, yAxis As Axis)
+        Public Sub deleteGate(selectedSet As gateBasedSet, xAxis As Axis, yAxis As Axis)
             Dim setInList As CytoSet = FindSetByName(selectedSet.Name)
 
             If setInList IsNot Nothing Then
-                DirectCast(setInList, GateBasedSet).deleteGate(xAxis, yAxis)
+                DirectCast(setInList, gateBasedSet).deleteGate(xAxis, yAxis)
             End If
         End Sub
     End Class

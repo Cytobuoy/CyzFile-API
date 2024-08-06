@@ -73,7 +73,7 @@ Namespace MeasurementSettings
             If Not selset.type = Data.Analysis.cytoSetType.gateBased Then
                 Throw New InvalidIIFParametersException("Only single gatebased sets can be used in hardware.")
             End If
-            Dim gbset = TryCast(selset, CytoSense.Data.Analysis.GateBasedSet)
+            Dim gbset = TryCast(selset, CytoSense.Data.Analysis.gateBasedSet)
             For Each g As CytoSense.Data.Analysis.Gate In gbset.allGates
                 If Not (g.Type = Data.Analysis.GateType.Rectangle OrElse g.Type = Data.Analysis.GateType.Range) Then
                     Throw New InvalidIIFParametersException(String.Format("Only ranges and rectangles can be processed by the DSP, you used something else: {0}", g.ToString))

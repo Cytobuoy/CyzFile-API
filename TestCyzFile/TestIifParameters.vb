@@ -27,7 +27,7 @@ Public Class TestIifParameters
     Public Sub TestRangeBasedSet_1()
         Dim cytoSettings = TestConfig.TestInstrument3()
         Dim swsMaxAxis = New SingleAxis(cytoSettings.ChannelList(1),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Total, cytoSettings)
-        Dim gbSet As New GateBasedSet("TestSet1", System.Drawing.Color.Red)
+        Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim rangeGate As Gate = New RangeGate(swsMaxAxis, 15.0,   5471.12) 
         gbSet.addGate(rangeGate)
 
@@ -62,7 +62,7 @@ Public Class TestIifParameters
     Public Sub TestRangeBasedSet_2()
         Dim cytoSettings = TestConfig.TestInstrument3()
         Dim swsMaxAxis = New SingleAxis(cytoSettings.ChannelList(1),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Total, cytoSettings)
-        Dim gbSet As New GateBasedSet("TestSet1", System.Drawing.Color.Red)
+        Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim rangeGate As Gate = New RangeGate(swsMaxAxis, 16.0F,   15.0F) 
         gbSet.addGate(rangeGate)
 
@@ -98,7 +98,7 @@ Public Class TestIifParameters
         Dim cytoSettings      = TestConfig.TestInstrument3()
         Dim swsTotalAxis      = New SingleAxis(cytoSettings.ChannelList(1),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Total, cytoSettings)
         Dim flYellowHsMaxAxis = New SingleAxis(cytoSettings.ChannelList(3),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Maximum, cytoSettings)
-        Dim gbSet As New GateBasedSet("TestSet1", System.Drawing.Color.Red)
+        Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim swsRangeGate As Gate    = New RangeGate(swsTotalAxis, 15.0,   5471.12) 
         Dim yellowRangeGate As Gate = New RangeGate(flYellowHsMaxAxis, 50.0F,   100.0F) 
         gbSet.addGate(swsRangeGate)
@@ -157,7 +157,7 @@ Public Class TestIifParameters
         Dim swsMaxAxis       As Axis  = New SingleAxis(cytoSettings.ChannelList(1),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Total, cytoSettings)
         Dim flYellowHsMaxAxis As Axis = New SingleAxis(cytoSettings.ChannelList(3),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Maximum, cytoSettings)
 
-        Dim gbSet As New GateBasedSet("TestSet1", System.Drawing.Color.Red)
+        Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim rectGate As Gate = New RectangleGate(swsMaxAxis, flYellowHsMaxAxis, 15.0F,   5471.12F, 50.0F,   100.0F)
         gbSet.addGate(rectGate)
         Dim iifParams As New CytoSense.MeasurementSettings.IIFParameters(cytoSettings, gbSet)
@@ -210,7 +210,7 @@ Public Class TestIifParameters
         Dim flYellowHsMaxAxis     As Axis = New SingleAxis(cytoSettings.ChannelList(3),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Maximum, cytoSettings)
         Dim swsLengthxAxis        As Axis = New SingleAxis(cytoSettings.ChannelList(1),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Length,  cytoSettings)
 
-        Dim gbSet As New GateBasedSet("TestSet1", System.Drawing.Color.Red)
+        Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim rectGate As Gate = New RectangleGate(swsTotalAxis, flYellowHsMaxAxis, 15.0F,   5471.12F, 50.0F,   100.0F)
         gbSet.addGate(rectGate)
         Dim rangeGate As Gate = New RangeGate(swsLengthxAxis, 10.0F, 50.0F)
