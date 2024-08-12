@@ -103,7 +103,7 @@ Namespace Data.Analysis
         End Sub
 
         Public Sub New(other As SuccessFullyCroppedImagesSet)
-            MyBase.New(other.Name, other.type, other.colorOfSet, other._datafile, other.ListID, other.Visible)
+            MyBase.New(other.Name, other.Type, other.ColorOfSet, other._datafile, other.ListID, other.Visible)
             _cropMarginBase      = other._cropMarginBase
             _cropMarginFactor    = other._cropMarginFactor
             _cropBgThreshold     = other._cropBgThreshold
@@ -142,7 +142,7 @@ Namespace Data.Analysis
         End Sub
 
 
-        Public Overrides Property datafile As CytoSense.Data.DataFileWrapper
+        Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
             Get
                 Return _datafile
             End Get
@@ -169,8 +169,8 @@ Namespace Data.Analysis
             End If
 
             Dim foundCropNotReady As Boolean = False
-            Dim allParticles = datafile.SplittedParticles
-            Dim IIFparticleIndices = datafile.SplittedParticlesWithImagesIndices
+            Dim allParticles = Datafile.SplittedParticles
+            Dim IIFparticleIndices = Datafile.SplittedParticlesWithImagesIndices
             Dim indices = New List(Of Integer)
 
             For i = 0 To IIFparticleIndices.Length - 1

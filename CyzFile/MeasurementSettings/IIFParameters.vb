@@ -70,7 +70,7 @@ Namespace MeasurementSettings
         Public Sub New(cytosets As CytoSettings.CytoSenseSetting, selset As CytoSense.Data.Analysis.CytoSet)
             _cytosettings = cytosets
             'Do some checks on the validity of the set
-            If Not selset.type = Data.Analysis.cytoSetType.gateBased Then
+            If Not selset.Type = Data.Analysis.cytoSetType.gateBased Then
                 Throw New InvalidIIFParametersException("Only single gatebased sets can be used in hardware.")
             End If
             Dim gbset = TryCast(selset, CytoSense.Data.Analysis.gateBasedSet)

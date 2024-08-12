@@ -29,7 +29,7 @@ Namespace Data.Analysis
         End Sub
 
         Public Sub New(other As AllImagesSet)
-            MyBase.New(other.Name, other.type, other.colorOfSet, other._datafile, other.ListID, other.Visible)
+            MyBase.New(other.Name, other.Type, other.ColorOfSet, other._datafile, other.ListID, other.Visible)
 
             RecalculateParticleIndices()
         End Sub
@@ -40,7 +40,7 @@ Namespace Data.Analysis
             End Get
         End Property
 
-        Public Overrides Property datafile As CytoSense.Data.DataFileWrapper
+        Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
             Get
                 Return _datafile
             End Get
@@ -134,14 +134,14 @@ Namespace Data.Analysis
         Public Sub New(other As ImageFocusSet)
             Me.New(other._focus, other._datafile, other._ratioMin, other._ratioMax)
 
-            colorOfSet = other.colorOfSet
+            ColorOfSet = other.ColorOfSet
             ListID = other.ListID
         End Sub
 
         Public Sub New(other As ImageFocusSet, datafile As DataFileWrapper)
             Me.New(other.Focus, datafile, other._ratioMin, other._ratioMax)
 
-            colorOfSet = other.colorOfSet
+            ColorOfSet = other.ColorOfSet
             ListID = other.ListID
         End Sub
 
@@ -210,13 +210,13 @@ Namespace Data.Analysis
         End Property
 
         Public Sub InitAxes(settings As CytoSense.CytoSettings.CytoSenseSetting)
-            Dim x_channel = settings.getChannellistItemByType(CytoSettings.ChannelTypesEnum.FWSL)
-            Dim y_channel = settings.getChannellistItemByType(CytoSettings.ChannelTypesEnum.FWSR)
+            Dim x_channel = settings.GetChannellistItemByType(CytoSettings.ChannelTypesEnum.FWSL)
+            Dim y_channel = settings.GetChannellistItemByType(CytoSettings.ChannelTypesEnum.FWSR)
 
             If x_channel Is Nothing OrElse y_channel Is Nothing Then
                 _log.Warn("You're trying to build an imageFocus plot for non-curvature machine!")
                 ' Only happens when mixing new and old files of an instrument where this changed, so very rare.
-                x_channel = settings.getChannellistItemByType(CytoSettings.ChannelTypesEnum.FWS)
+                x_channel = settings.GetChannellistItemByType(CytoSettings.ChannelTypesEnum.FWS)
                 y_channel = x_channel
             End If
 
@@ -243,25 +243,25 @@ Namespace Data.Analysis
         End Function
 
         Public Overrides Sub RecalculateParticleIndices()
-            If Not _Invalid OrElse datafile Is Nothing Then
+            If Not _Invalid OrElse Datafile Is Nothing Then
                 Return
             End If
 
             Debug.WriteLine("ImageFocusSet.RecalculateParticleIndices for Set: {0}", Me)
 
-            If datafile.numberOfPictures = 0 OrElse datafile.SplittedParticlesWithImages.Length = 0 Then
+            If Datafile.numberOfPictures = 0 OrElse Datafile.SplittedParticlesWithImages.Length = 0 Then
                 _ParticleIndices = {}
             Else
                 If x_axis Is Nothing Then 'Still need to initialize the axis.
-                    InitAxes(datafile.CytoSettings)
+                    InitAxes(Datafile.CytoSettings)
                 End If
 
                 Dim yx_ratio As Single
                 Dim indices = New List(Of Integer)
 
-                Dim particles = datafile.SplittedParticles
-                Dim x_values = x_axis.GetValues(datafile)
-                Dim y_values = y_axis.GetValues(datafile)
+                Dim particles = Datafile.SplittedParticles
+                Dim x_values = x_axis.GetValues(Datafile)
+                Dim y_values = y_axis.GetValues(Datafile)
 
                 For i = 0 To particles.Length - 1
                     If particles(i).hasImage Then

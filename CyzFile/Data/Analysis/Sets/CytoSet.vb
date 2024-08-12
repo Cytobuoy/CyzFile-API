@@ -172,7 +172,7 @@ Namespace Data.Analysis
 
         Protected _myColor As Color
 
-        Public Property colorOfSet() As Color
+        Public Property ColorOfSet() As Color
             Get
                 Return _myColor
             End Get
@@ -181,7 +181,7 @@ Namespace Data.Analysis
             End Set
         End Property
 
-        Public ReadOnly Property contrastingColor() As Color
+        Public ReadOnly Property ContrastingColor() As Color
             Get
                 'Transform to hsv for easy manipulation
                 Dim h = _myColor.GetHue
@@ -248,7 +248,7 @@ Namespace Data.Analysis
             End Get
         End Property
 
-        Public ReadOnly Property type As cytoSetType
+        Public ReadOnly Property Type As cytoSetType
             Get
                 Return _myType
             End Get
@@ -284,7 +284,7 @@ Namespace Data.Analysis
 
 #End Region
 
-        Public MustOverride Property datafile As CytoSense.Data.DataFileWrapper
+        Public MustOverride Property Datafile As CytoSense.Data.DataFileWrapper
 
         Public MustOverride Sub RecalculateParticleIndices()
 
@@ -348,13 +348,13 @@ Namespace Data.Analysis
         Public Shared colorList As Color() = {Color.Blue, Color.Red, Color.Green, Color.Orange, Color.CornflowerBlue, Color.Purple, Color.Chartreuse, Color.Yellow}
         Public Shared colorIndex As Integer = 0
 
-        Public Shared Function getNextColor() As Color
-            Dim col As Color = getcolor(colorIndex)
+        Public Shared Function GetNextColor() As Color
+            Dim col As Color = Getcolor(colorIndex)
             colorIndex += 1
             Return col
         End Function
 
-        Public Shared Function getcolor(ByVal index As Integer) As Color
+        Public Shared Function Getcolor(ByVal index As Integer) As Color
             If index < colorList.Length Then
                 Return colorList(index)
             Else
@@ -375,11 +375,11 @@ Namespace Data.Analysis
             End If
         End Function
 
-        Public Overloads Shared Sub resetCounter()
+        Public Overloads Shared Sub ResetCounter()
             colorIndex = 0
         End Sub
 
-        Public Overloads Shared Sub resetCounter(startIndex As Integer)
+        Public Overloads Shared Sub ResetCounter(startIndex As Integer)
             colorIndex = startIndex
         End Sub
     End Class
@@ -405,7 +405,7 @@ Namespace Data.Analysis
             End Get
         End Property
 
-        Public Overrides Property datafile As DataFileWrapper
+        Public Overrides Property Datafile As DataFileWrapper
             Get
                 Throw New NotImplementedException()
             End Get

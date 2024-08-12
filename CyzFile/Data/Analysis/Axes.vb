@@ -76,7 +76,7 @@ Namespace Data.Analysis
         ''' <summary>
         ''' Can determine for an axis whether it is prudent to plot it on a log scale or not.
         ''' </summary>
-        Protected Shared Function isLogScale(ByVal chantype As CytoSettings.ChannelTypesEnum, ByVal par As ChannelData.ParameterSelector) As Boolean
+        Protected Shared Function IsLogScale(ByVal chantype As CytoSettings.ChannelTypesEnum, ByVal par As ChannelData.ParameterSelector) As Boolean
             Dim log As Boolean = False
 
             Select Case par
@@ -205,7 +205,7 @@ Namespace Data.Analysis
             _channelName = channel.ChannelInfo.name
             _cytoSettings = cytosettings
             _parameter = parameter
-            isLog = isLogScale(Me.Channel.Channeltype, Me.Parameter)
+            isLog = IsLogScale(Me.Channel.Channeltype, Me.Parameter)
         End Sub
 
         <OnDeserialized()>
@@ -226,7 +226,7 @@ Namespace Data.Analysis
                         _channel = _cytoSettings.getChannellistItem(_channelName)
                         Return _channel
                     Else
-                        _channel = _cytoSettings.getChannellistItemByType(_channelType)
+                        _channel = _cytoSettings.GetChannellistItemByType(_channelType)
                         Return _channel
                     End If
                 End If

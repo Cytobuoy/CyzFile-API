@@ -19,7 +19,7 @@ Namespace Data.Analysis
         Public Sub New()
         End Sub
 
-        Public Sub add(ByRef thisgate As IGate)
+        Public Sub Add(ByRef thisgate As IGate)
             _gates.Add(thisgate)
         End Sub
 
@@ -30,7 +30,7 @@ Namespace Data.Analysis
         ''' <param name="yAxis"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function delete(xAxis As CytoSense.Data.Analysis.Axis, yAxis As CytoSense.Data.Analysis.Axis) As Boolean
+        Public Function Delete(xAxis As CytoSense.Data.Analysis.Axis, yAxis As CytoSense.Data.Analysis.Axis) As Boolean
             Dim removed = _gates.RemoveAll(Function(g As IGate) g.HasAxis(xAxis, yAxis))
             Return removed > 0
         End Function
@@ -41,7 +41,7 @@ Namespace Data.Analysis
         ''' <param name="gate">The "gate" to delete, the parameter specifies the axis to delete.</param>
         ''' <returns>True if one or more gates were deleted, false if none were deleted.</returns>
         ''' <remarks></remarks>
-        Public Function delete(gate As IGate) As Boolean
+        Public Function Delete(gate As IGate) As Boolean
             Dim removed = _gates.RemoveAll(Function(g As IGate) g.HasAxis(gate))
             Return removed > 0
         End Function

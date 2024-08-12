@@ -37,7 +37,7 @@ Namespace Data.Analysis
         End Sub
 
         Public Sub New(other As UnassignedParticlesSet)
-            MyBase.New(other.Name, other.type, other.colorOfSet, other.datafile, other.ListID, other.Visible)
+            MyBase.New(other.Name, other.Type, other.ColorOfSet, other.Datafile, other.ListID, other.Visible)
             _allsets = other._allsets
         End Sub
 
@@ -74,7 +74,7 @@ Namespace Data.Analysis
             Return True
         End Function
 
-        Public WriteOnly Property allSets() As SetsList
+        Public WriteOnly Property AllSets() As SetsList
             Set(value As SetsList)
                 _allsets = value
             End Set
@@ -84,7 +84,7 @@ Namespace Data.Analysis
             Return New UnassignedParticlesSet(Me)
         End Function
 
-        Public Overrides Property datafile As DataFileWrapper
+        Public Overrides Property Datafile As DataFileWrapper
             Get
                 Return _datafile
             End Get

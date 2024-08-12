@@ -1733,11 +1733,11 @@ Namespace CytoSettings
                                            End If
                                        End Function)
             If res Is Nothing And _channelListMode = ChannelAccessMode.Normal Then 'Special check for FWS L or FWS R
-                Dim t = getChannellistItemByType(ChannelTypesEnum.FWSL)
+                Dim t = GetChannellistItemByType(ChannelTypesEnum.FWSL)
                 If t.ToString = channelname Then
                     res = t
                 Else
-                    t = getChannellistItemByType(ChannelTypesEnum.FWSR)
+                    t = GetChannellistItemByType(ChannelTypesEnum.FWSR)
                     If t.ToString = channelname Then
                         res = t
                     End If
@@ -1750,7 +1750,7 @@ Namespace CytoSettings
         ''' ONLY use when getChannellistItem cannot be used and HS/LS does not matter. Returns a channel list item by type. May return nothing if the channel is not present or if the visualization mode is not suitable.
         ''' Strange the way that it differentiates between visualization modes.
         ''' </summary>
-        Public Function getChannellistItemByType(ByVal channeltype As ChannelTypesEnum) As ChannelWrapper
+        Public Function GetChannellistItemByType(ByVal channeltype As ChannelTypesEnum) As ChannelWrapper
             UpdateLocalChannelVisualisationMode()
             If _channelListMode = ChannelAccessMode.Normal And (channeltype = ChannelTypesEnum.FWSL Or channeltype = ChannelTypesEnum.FWSR) Then
                 For i = 0 To channels.Length - 1

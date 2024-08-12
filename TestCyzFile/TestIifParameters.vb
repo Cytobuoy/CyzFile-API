@@ -29,7 +29,7 @@ Public Class TestIifParameters
         Dim swsMaxAxis = New SingleAxis(cytoSettings.ChannelList(1),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Total, cytoSettings)
         Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim rangeGate As Gate = New RangeGate(swsMaxAxis, 15.0,   5471.12) 
-        gbSet.addGate(rangeGate)
+        gbSet.AddGate(rangeGate)
 
         Dim iifParams As New CytoSense.MeasurementSettings.IIFParameters(cytoSettings, gbSet)
 
@@ -64,7 +64,7 @@ Public Class TestIifParameters
         Dim swsMaxAxis = New SingleAxis(cytoSettings.ChannelList(1),CytoSense.Data.ParticleHandling.Channel.ChannelData.ParameterSelector.Total, cytoSettings)
         Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim rangeGate As Gate = New RangeGate(swsMaxAxis, 16.0F,   15.0F) 
-        gbSet.addGate(rangeGate)
+        gbSet.AddGate(rangeGate)
 
         Dim iifParams As New CytoSense.MeasurementSettings.IIFParameters(cytoSettings, gbSet)
 
@@ -101,8 +101,8 @@ Public Class TestIifParameters
         Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim swsRangeGate As Gate    = New RangeGate(swsTotalAxis, 15.0,   5471.12) 
         Dim yellowRangeGate As Gate = New RangeGate(flYellowHsMaxAxis, 50.0F,   100.0F) 
-        gbSet.addGate(swsRangeGate)
-        gbSet.addGate(yellowRangeGate)
+        gbSet.AddGate(swsRangeGate)
+        gbSet.AddGate(yellowRangeGate)
 
         Dim iifParams As New CytoSense.MeasurementSettings.IIFParameters(cytoSettings, gbSet)
 
@@ -159,7 +159,7 @@ Public Class TestIifParameters
 
         Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim rectGate As Gate = New RectangleGate(swsMaxAxis, flYellowHsMaxAxis, 15.0F,   5471.12F, 50.0F,   100.0F)
-        gbSet.addGate(rectGate)
+        gbSet.AddGate(rectGate)
         Dim iifParams As New CytoSense.MeasurementSettings.IIFParameters(cytoSettings, gbSet)
 
         Assert.AreEqual(9, iifParams.Channels.Length)
@@ -212,9 +212,9 @@ Public Class TestIifParameters
 
         Dim gbSet As New gateBasedSet("TestSet1", System.Drawing.Color.Red)
         Dim rectGate As Gate = New RectangleGate(swsTotalAxis, flYellowHsMaxAxis, 15.0F,   5471.12F, 50.0F,   100.0F)
-        gbSet.addGate(rectGate)
+        gbSet.AddGate(rectGate)
         Dim rangeGate As Gate = New RangeGate(swsLengthxAxis, 10.0F, 50.0F)
-        gbSet.addGate(rangeGate)
+        gbSet.AddGate(rangeGate)
 
         Dim iifParams As New CytoSense.MeasurementSettings.IIFParameters(cytoSettings, gbSet)
 

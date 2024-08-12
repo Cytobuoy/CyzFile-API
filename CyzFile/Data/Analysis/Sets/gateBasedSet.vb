@@ -45,17 +45,17 @@ Namespace Data.Analysis
         ''' </summary>
         ''' <param name="other"></param>
         Public Sub New(other As gateBasedSet)
-            Me.New(other.Name, other.colorOfSet, other.datafile)
+            Me.New(other.Name, other.ColorOfSet, other.Datafile)
             For Each cgate As IGate In other.allGates
-                addGate(cgate.CreateWorkfileCopy(other.datafile))
+                AddGate(cgate.CreateWorkfileCopy(other.Datafile))
             Next
         End Sub
 
         Public Sub New(dfw As DataFileWrapper, other As gateBasedSet)
-            Me.New(other.Name, other.colorOfSet, dfw, other.ListID, other.Visible)
+            Me.New(other.Name, other.ColorOfSet, dfw, other.ListID, other.Visible)
 
             For Each gate As IGate In other.allGates
-                addGate(gate)
+                AddGate(gate)
             Next
         End Sub
 
@@ -167,7 +167,7 @@ Namespace Data.Analysis
 
 #End Region
 
-        Public Overrides Property datafile As CytoSense.Data.DataFileWrapper
+        Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
             Get
                 Return _datafile
             End Get
@@ -200,8 +200,8 @@ Namespace Data.Analysis
             End Set
         End Property
 
-        Public Sub addGate(ByRef thisGate As IGate)
-            myGates.add(thisGate.CreateWorkfileCopy(_datafile))
+        Public Sub AddGate(ByRef thisGate As IGate)
+            myGates.Add(thisGate.CreateWorkfileCopy(_datafile))
 
             _Invalid = True
         End Sub
@@ -235,8 +235,8 @@ Namespace Data.Analysis
         ''' <summary>
         ''' Deletes the gate if any is present in the specified axis dimension. If there is no gate, nothing changes.
         ''' </summary>
-        Public Sub deleteGate(ByRef xAxis As CytoSense.Data.Analysis.Axis, ByRef yAxis As CytoSense.Data.Analysis.Axis)
-            If myGates.delete(xAxis, yAxis) Then 'Returns true if something was actually changed
+        Public Sub DeleteGate(ByRef xAxis As CytoSense.Data.Analysis.Axis, ByRef yAxis As CytoSense.Data.Analysis.Axis)
+            If myGates.Delete(xAxis, yAxis) Then 'Returns true if something was actually changed
                 _Invalid = True
             End If
         End Sub
@@ -247,11 +247,11 @@ Namespace Data.Analysis
         ''' </summary>
         ''' <param name="gate"></param>
         Public Sub updateGateDefinition(gate As Gate)
-            myGates.delete(gate)
+            myGates.Delete(gate)
             Dim newIGate As IGate = gate.Clone()
             Dim newGate As Gate = DirectCast(newIGate,Gate)
             newGate.DataFile = _datafile
-            myGates.add(newIGate)
+            myGates.Add(newIGate)
             _Invalid = True
         End Sub
 
@@ -274,7 +274,7 @@ Namespace Data.Analysis
         ''' Determines if this set has a gate in the given dimension
         ''' </summary>
         ''' <remarks></remarks>
-        Public Function hasGateInDimension(x As Axis, y As Axis) As Boolean
+        Public Function HasGateInDimension(x As Axis, y As Axis) As Boolean
             For i As Integer = 0 To myGates.Count - 1
                 If myGates(i).HasAxis(x, y) Then
                     Return True

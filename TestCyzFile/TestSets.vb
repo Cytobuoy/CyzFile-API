@@ -297,8 +297,8 @@ Public Class TestSets
         Dim testSetList = SetsList.XmlDeSerialize(dfw.CytoSettings, setXml)
 
         For i = 0 To testSetList.Count - 1
-            testSetList(i).datafile = dfw
-            If testSetList(i).type = cytoSetType.gateBased Then
+            testSetList(i).Datafile = dfw
+            If testSetList(i).Type = cytoSetType.gateBased Then
                 Dim gbSet = CType(testSetList(i), gateBasedSet)
                 For gIdx = 0 To gbSet.allGates.Count - 1
                     Dim gate = CType(gbSet.allGates(gIdx),Gate)
@@ -729,8 +729,8 @@ Public Class TestSets
         Dim testSetList = SetsList.XmlDeSerialize(dfw.CytoSettings, setXml)
 
         For i = 0 To testSetList.Count - 1
-            testSetList(i).datafile = dfw
-            If testSetList(i).type = cytoSetType.gateBased Then
+            testSetList(i).Datafile = dfw
+            If testSetList(i).Type = cytoSetType.gateBased Then
                 Dim gbSet = CType(testSetList(i), gateBasedSet)
                 For gIdx = 0 To gbSet.allGates.Count - 1
                     Dim gate = CType(gbSet.allGates(gIdx),Gate)
@@ -797,7 +797,7 @@ Public Class TestSets
         ' update gatebased sets without taking into account exclusive set mode
         Parallel.ForEach(Sets,
             Sub(currentSet As CytoSet)
-                If currentSet.type = cytoSetType.gateBased Then
+                If currentSet.Type = cytoSetType.gateBased Then
                     currentSet.RecalculateParticleIndices()
                 End If
             End Sub)
@@ -819,7 +819,7 @@ Public Class TestSets
         ' update combined sets, OrSets and unassigned particles set
 
         For Each currentSet As CytoSet In Sets
-            Select Case currentSet.type
+            Select Case currentSet.Type
                 Case cytoSetType.combined
                     currentSet.RecalculateParticleIndices()
 
@@ -840,8 +840,8 @@ Public Class TestSets
         Dim testSetList = SetsList.XmlDeSerialize(dfw.CytoSettings, setXmlFile)
 
         For i = 0 To testSetList.Count - 1
-            testSetList(i).datafile = dfw
-            If testSetList(i).type = cytoSetType.gateBased Then
+            testSetList(i).Datafile = dfw
+            If testSetList(i).Type = cytoSetType.gateBased Then
                 Dim gbSet = CType(testSetList(i), gateBasedSet)
                 For gIdx = 0 To gbSet.allGates.Count - 1
                     Dim gate = CType(gbSet.allGates(gIdx),Gate)

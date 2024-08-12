@@ -92,7 +92,7 @@ Namespace Data.Analysis
         ''' </summary>
         ''' <param name="s"></param>
         Public Sub AddBasicSetInfo(s As CytoSet, dfw As DataFileWrapper)
-            If s.type = cytoSetType.allImages Then
+            If s.Type = cytoSetType.allImages Then
                 Dim imageFocusSet As ImageFocusSet = TryCast(s, ImageFocusSet)
 
                 If imageFocusSet IsNot Nothing Then
@@ -100,31 +100,31 @@ Namespace Data.Analysis
                 Else
                     Add(New AllImagesSet(dfw, s.ListID, s.Visible))
                 End If
-            ElseIf s.type = cytoSetType.SuccessFullyCroppedImages Then
+            ElseIf s.Type = cytoSetType.SuccessFullyCroppedImages Then
                 Dim sfcImgSet = DirectCast(s, SuccessFullyCroppedImagesSet)
                 Add(New SuccessFullyCroppedImagesSet(dfw, s.ListID, s.Visible, sfcImgSet.CropMarginBase, sfcImgSet.CropMarginFactor, sfcImgSet.CropBgThreshold, sfcImgSet.CropErosionDilation))
-            ElseIf s.type = cytoSetType.CropFailedImages Then
+            ElseIf s.Type = cytoSetType.CropFailedImages Then
                 Dim usfcImgSet = DirectCast(s, FailedCropImagesSet)
                 Add(New FailedCropImagesSet(dfw, s.ListID, s.Visible, usfcImgSet.CropMarginBase, usfcImgSet.CropMarginFactor, usfcImgSet.CropBgThreshold, usfcImgSet.CropErosionDilation))
-            ElseIf s.type = cytoSetType.unassignedParticles Then
-                Add(New UnassignedParticlesSet(Me, s.colorOfSet, dfw, s.ListID, s.Visible))
-            ElseIf s.type = cytoSetType.DefaultAll Then
+            ElseIf s.Type = cytoSetType.unassignedParticles Then
+                Add(New UnassignedParticlesSet(Me, s.ColorOfSet, dfw, s.ListID, s.Visible))
+            ElseIf s.Type = cytoSetType.DefaultAll Then
 				'Setlist now always has a defaultSet, so adding it makes no sense anymore. Still perform all actions that happen when normally creating a set with these paramaters
-                _list(0).colorOfSet = s.colorOfSet
+                _list(0).ColorOfSet = s.ColorOfSet
 				_list(0).Visible = s.Visible
-				_list(0).datafile = dfw
+				_list(0).Datafile = dfw
 				If dfw IsNot Nothing Then
 					_list(0).RecalculateParticleIndices()
 				End If	
-            ElseIf s.type = cytoSetType.gateBased Then
+            ElseIf s.Type = cytoSetType.gateBased Then
                 Add(New gateBasedSet(dfw, DirectCast(s,gateBasedSet)))
-            ElseIf s.type = cytoSetType.combined Then ' Subsets may not be present, we finalize later.
+            ElseIf s.Type = cytoSetType.combined Then ' Subsets may not be present, we finalize later.
                 Dim combSet As combinedSet = CType(s, combinedSet)
-                Add(New combinedSet(combSet.Name, combSet.colorOfSet, Nothing, Nothing, combSet.GateCombination, dfw, s.ListID, s.Visible))
-            ElseIf s.type = cytoSetType.OrSet Then ' Subsets may not be present, we finalize later.
+                Add(New combinedSet(combSet.Name, combSet.ColorOfSet, Nothing, Nothing, combSet.GateCombination, dfw, s.ListID, s.Visible))
+            ElseIf s.Type = cytoSetType.OrSet Then ' Subsets may not be present, we finalize later.
                 Dim incOrSet = DirectCast(s, OrSet)
-                Add(New OrSet(incOrSet.Name, incOrSet.colorOfSet, New List(Of CytoSet)(), dfw, incOrSet.AutoSet, s.ListID, s.Visible))
-            ElseIf s.type = cytoSetType.indexBased Then
+                Add(New OrSet(incOrSet.Name, incOrSet.ColorOfSet, New List(Of CytoSet)(), dfw, incOrSet.AutoSet, s.ListID, s.Visible))
+            ElseIf s.Type = cytoSetType.indexBased Then
                 Throw New NotImplementedException("Index based sets currently not supported")
             Else
                 Throw New NotImplementedException("Gate type unknown")
@@ -132,31 +132,31 @@ Namespace Data.Analysis
         End Sub
 
     Public Sub CompleteAddSet(srcSet As CytoSet)
-        If srcSet.type = cytoSetType.allImages Then
+        If srcSet.Type = cytoSetType.allImages Then
             ' Nothing to do, completely added in Add BasicSetInfo
-        ElseIf srcSet.type = cytoSetType.SuccessFullyCroppedImages Then
+        ElseIf srcSet.Type = cytoSetType.SuccessFullyCroppedImages Then
             ' Nothing to do, completely added in Add BasicSetInfo
-        ElseIf srcSet.type = cytoSetType.CropFailedImages Then
+        ElseIf srcSet.Type = cytoSetType.CropFailedImages Then
             ' Nothing to do, completely added in Add BasicSetInfo
-        ElseIf srcSet.type = cytoSetType.unassignedParticles Then
+        ElseIf srcSet.Type = cytoSetType.unassignedParticles Then
             ' Nothing to do, completely added in Add BasicSetInfo
-        ElseIf srcSet.type = cytoSetType.DefaultAll Then
+        ElseIf srcSet.Type = cytoSetType.DefaultAll Then
             ' Nothing to do, completely added in Add BasicSetInfo
-        ElseIf srcSet.type = cytoSetType.gateBased Then
+        ElseIf srcSet.Type = cytoSetType.gateBased Then
             ' Nothing to do, completely added in Add BasicSetInfo
-        ElseIf srcSet.type = cytoSetType.combined Then
+        ElseIf srcSet.Type = cytoSetType.combined Then
             Dim combSrcSet As combinedSet = CType(srcSet, combinedSet)
             Dim destSet As combinedSet = CType(FindSetById(combSrcSet.ListID), combinedSet)
             'find the sets that are combined
             Dim destSet1 As CytoSet = FindSetById(combSrcSet.Set1.ListID)
             Dim destSet2 As CytoSet = FindSetById(combSrcSet.Set2.ListID)
             destSet.UpdateSubSets(destSet1, destSet2)
-        ElseIf srcSet.type = cytoSetType.OrSet Then
+        ElseIf srcSet.Type = cytoSetType.OrSet Then
             Dim incOrSet = DirectCast(srcSet, OrSet)
             Dim incomingSetsList = incOrSet.SetList
             Dim destOrSet = CType(FindSetById(incOrSet.ListID), OrSet)
             destOrSet.UpdateSets(incomingSetsList.Select(Function(incSet) FindSetById(incSet.ListID)).ToList())
-        ElseIf srcSet.type = cytoSetType.indexBased Then
+        ElseIf srcSet.Type = cytoSetType.indexBased Then
             Throw New NotImplementedException("Index based sets currently not supported")
         Else
             Throw New NotImplementedException("Gate type unknown")
@@ -182,8 +182,8 @@ Namespace Data.Analysis
         ''' <remarks></remarks>
         Public Sub Remove(ByRef item As CytoSet)
 
-			If item.type = cytoSetType.DefaultAll Then
-                If _list.Find(Function(cytoSet As CytoSet) cytoSet.type = cytoSetType.DefaultAll) IsNot Nothing Then
+			If item.Type = cytoSetType.DefaultAll Then
+                If _list.Find(Function(cytoSet As CytoSet) cytoSet.Type = cytoSetType.DefaultAll) IsNot Nothing Then
 					Debug.Assert(False, "Removing the default set is kinda illegal")
                     Return
                 End If
@@ -228,15 +228,15 @@ Namespace Data.Analysis
         Public Sub Add(item As CytoSet)
             ' check to prevent adding singleton CytoSets 
 
-            If item.type = cytoSetType.DefaultAll Then
-                If _list.Find(Function(cytoSet As CytoSet) cytoSet.type = cytoSetType.DefaultAll) IsNot Nothing Then
+            If item.Type = cytoSetType.DefaultAll Then
+                If _list.Find(Function(cytoSet As CytoSet) cytoSet.Type = cytoSetType.DefaultAll) IsNot Nothing Then
 					Debug.Assert(False, "Adding defaultSet when it already exists")
                     Return
                 End If
             End If
 
-            If item.type = cytoSetType.unassignedParticles Then
-                If _list.Find(Function(cytoSet As CytoSet) cytoSet.type = cytoSetType.unassignedParticles) IsNot Nothing Then
+            If item.Type = cytoSetType.unassignedParticles Then
+                If _list.Find(Function(cytoSet As CytoSet) cytoSet.Type = cytoSetType.unassignedParticles) IsNot Nothing Then
                     Return
                 End If
             End If
@@ -279,7 +279,7 @@ Namespace Data.Analysis
         End Function
 
         'RVDH - NOT USED ANYMORE BUT STILL NEEDED FOR DESERIALIZATION OF GATEBASEDSETS
-        Private Sub indexesChangedEventHandler(listId As Integer)
+        Private Sub IndexesChangedEventHandler(listId As Integer)
             Throw New Exception("SetsList.indexesChangedEventHandler called, THIS SHOULD NOT HAPPEN!")
         End Sub
 
@@ -335,7 +335,7 @@ Namespace Data.Analysis
         End Sub
 
         <System.Diagnostics.DebuggerStepThrough()>
-        Public Function indexOf(ByRef item As CytoSet) As Integer
+        Public Function IndexOf(ByRef item As CytoSet) As Integer
             Return _list.IndexOf(item)
         End Function
 
@@ -352,7 +352,7 @@ Namespace Data.Analysis
         ''' level 0 at the moment, so all can be moved for the set. except the default set,
         ''' and possibly the unassigned set which should be last.
         ''' </summary>
-        Public Sub moveSet(ByRef selset As CytoSet, ByRef up As Boolean)
+        Public Sub MoveSet(ByRef selset As CytoSet, ByRef up As Boolean)
             Dim orgIdx = _list.IndexOf(selset)
 
             If up And orgIdx > 1 Then
@@ -597,7 +597,7 @@ Namespace Data.Analysis
             Return Nothing
         End Function
 
-        Public Sub updateGateDefinition(selectedSet As gateBasedSet, gate As Gate)
+        Public Sub UpdateGateDefinition(selectedSet As gateBasedSet, gate As Gate)
             Dim setInList As CytoSet = FindSetByName(selectedSet.Name)
 
             If setInList IsNot Nothing Then
@@ -605,11 +605,11 @@ Namespace Data.Analysis
             End If
         End Sub
 
-        Public Sub deleteGate(selectedSet As gateBasedSet, xAxis As Axis, yAxis As Axis)
+        Public Sub DeleteGate(selectedSet As gateBasedSet, xAxis As Axis, yAxis As Axis)
             Dim setInList As CytoSet = FindSetByName(selectedSet.Name)
 
             If setInList IsNot Nothing Then
-                DirectCast(setInList, gateBasedSet).deleteGate(xAxis, yAxis)
+                DirectCast(setInList, gateBasedSet).DeleteGate(xAxis, yAxis)
             End If
         End Sub
     End Class

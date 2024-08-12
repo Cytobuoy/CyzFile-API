@@ -24,7 +24,7 @@ Namespace Data.Analysis
             Throw New NotImplementedException()
         End Sub
 
-        Public Overrides Property datafile As CytoSense.Data.DataFileWrapper
+        Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
             Get
                 Return _datafile
             End Get
@@ -42,7 +42,7 @@ Namespace Data.Analysis
         End Property
 
         Public Overrides Function Clone() As CytoSet
-            Dim myclone As New indexBasedSet(Me.Name, Me.colorOfSet, Me.ParticleIDs, Me.datafile)
+            Dim myclone As New indexBasedSet(Me.Name, Me.ColorOfSet, Me.ParticleIDs, Me.Datafile)
             Return myclone
         End Function
 
@@ -85,9 +85,9 @@ Namespace Data.Analysis
         End Sub
 
         Public Sub New(other As DefaultSet)
-            MyBase.New(other.Name, other.type, other.colorOfSet, other.datafile, other.ListID, other.Visible)
+            MyBase.New(other.Name, other.Type, other.ColorOfSet, other.Datafile, other.ListID, other.Visible)
             ListID = 0
-            If datafile IsNot Nothing Then
+            If Datafile IsNot Nothing Then
                 RecalculateParticleIndices()
             End If
         End Sub
@@ -115,7 +115,7 @@ Namespace Data.Analysis
                 Return False
             End Get
         End Property
-        Public Overrides Property datafile As CytoSense.Data.DataFileWrapper
+        Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
             Get
                 Return _datafile
             End Get

@@ -38,13 +38,13 @@ Namespace Data.Analysis
             _myGateCombi = combiType
         End Sub
 
-        Public Overrides Property datafile As CytoSense.Data.DataFileWrapper
+        Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
             Get
                 Return _datafile
             End Get
             Set(ByVal value As CytoSense.Data.DataFileWrapper)
-                _set1.datafile = value
-                _set2.datafile = value
+                _set1.Datafile = value
+                _set2.Datafile = value
                 _datafile = value
 
                 RecalculateParticleIndices()
@@ -112,9 +112,9 @@ Namespace Data.Analysis
 
         Public Overrides Function Clone() As CytoSet
             If _datafile Is Nothing Then
-                Return New combinedSet(Name, colorOfSet, _set1, _set2, _myGateCombi)
+                Return New combinedSet(Name, ColorOfSet, _set1, _set2, _myGateCombi)
             Else
-                Return New combinedSet(Name, colorOfSet, _set1, _set2, _myGateCombi, _datafile, ListID, Visible)
+                Return New combinedSet(Name, ColorOfSet, _set1, _set2, _myGateCombi, _datafile, ListID, Visible)
             End If
 
         End Function

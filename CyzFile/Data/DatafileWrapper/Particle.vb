@@ -389,7 +389,7 @@ Namespace Data.ParticleHandling
                             _curChannelAccessMode = _CytoSettings.getChannelVisualisationMode
                             Dim tmpChannelData = GenerateChannelData()
                             ' Set SWS channel ID for the SWS Covariance parameter...
-                            Dim id As Integer = _CytoSettings.getChannellistItemByType(CytoSense.CytoSettings.ChannelTypesEnum.SWS).HW_channel_id
+                            Dim id As Integer = _CytoSettings.GetChannellistItemByType(CytoSense.CytoSettings.ChannelTypesEnum.SWS).HW_channel_id
                             For i = 0 To tmpChannelData.Length - 1
                                 tmpChannelData(i).sws = _channelData_hardware(id)
                             Next

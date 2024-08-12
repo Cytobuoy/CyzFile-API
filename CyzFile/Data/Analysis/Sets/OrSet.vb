@@ -74,7 +74,7 @@ Namespace Data.Analysis
         ''' </summary>
         ''' <param name="other"></param>
         Public Sub New(other As OrSet)
-            MyBase.New(other.Name, cytoSetType.OrSet, other.colorOfSet, other.datafile, other.ListID, other.Visible) ' Use fully transparent color ?!? Unfortunately there is no INVALID color
+            MyBase.New(other.Name, cytoSetType.OrSet, other.ColorOfSet, other.Datafile, other.ListID, other.Visible) ' Use fully transparent color ?!? Unfortunately there is no INVALID color
 
             _setList = other.SetList.Select(Function(s) s.Clone()).ToList()
             _autoSet = other._autoSet
@@ -92,14 +92,14 @@ Namespace Data.Analysis
             Me.New(GenerateName(sets), Drawing.Color.FromArgb(0, 0, 0, 0), sets, dfw, autoSet) ' Use fully transparent color ?!? Unfortunately there is no INVALID color
         End Sub
 
-        Public Overrides Property datafile As CytoSense.Data.DataFileWrapper
+        Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
             Get
                 Return _datafile
             End Get
 
             Set(ByVal value As CytoSense.Data.DataFileWrapper)
                 _datafile = value
-                _setList.ForEach(Sub(s) s.datafile = value)
+                _setList.ForEach(Sub(s) s.Datafile = value)
                 RecalculateParticleIndices()
             End Set
         End Property
