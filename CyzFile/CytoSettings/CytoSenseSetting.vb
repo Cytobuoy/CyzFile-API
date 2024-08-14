@@ -1703,7 +1703,7 @@ Namespace CytoSettings
             Return False
         End Function
 
-        Private Function getChannelLineType(ByRef thisChan As channel) As LineTypeEnum
+        Public Function getChannelLineType(ByRef thisChan As channel) As LineTypeEnum
             If thisChan.highsensitivity Or thisChan.Channel_Type = ChannelTypesEnum.FWSR Then
                 Return LineTypeEnum.stripe
             Else
