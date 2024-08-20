@@ -597,7 +597,7 @@ Namespace Data.Analysis
             Return Nothing
         End Function
 
-        Public Sub UpdateGateDefinition(selectedSet As gateBasedSet, gate As Gate)
+        Public Sub UpdateGateDefinition(selectedSet As gateBasedSet, gate As IGate)
             Dim setInList As CytoSet = FindSetByName(selectedSet.Name)
 
             If setInList IsNot Nothing Then

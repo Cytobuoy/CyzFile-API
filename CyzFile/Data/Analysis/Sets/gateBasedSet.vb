@@ -246,7 +246,7 @@ Namespace Data.Analysis
         ''' as the gate parameter is replaced with the gate parameter.
         ''' </summary>
         ''' <param name="gate"></param>
-        Public Sub updateGateDefinition(gate As Gate)
+        Public Sub updateGateDefinition(gate As IGate)
             myGates.Delete(gate)
             Dim newIGate As IGate = gate.Clone()
             Dim newGate As Gate = DirectCast(newIGate,Gate)
