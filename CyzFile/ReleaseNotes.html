@@ -50,13 +50,35 @@ tr td:nth-child(2){
               <th>Description</th>
           </tr>
           <tr>
+              <td>1.2.0.0</td>
+              <td>2024-08-21</td>
+              <td>
+                  <h4>Changes</h4>
+                  <ul>
+                      <li>Migrated from .NET Framework 4.7.2 to .NET 7.0</li>
+                      <li>
+                          Exposed the GetChannelLineType function from CytoSenseSettings to enable the Background window to display properly in CytoClus
+                      </li>
+                      <li>Change all uses of the Gate class to IGate to bring it in line with the rest of the code and prevent casting</li>
+                  </ul>
+                  <h4>Bug Fixes</h4>
+                  <ul>
+                      <li>Fix schedules not properly deserializing in .NET 7.0</li>
+                      <li>Fix serialNumber being empty in workspace XML serialization, causing workspaces to not load properly</li>
+                      <li></li>
+                  </ul>
+              </td>
+          </tr>
+          <tr>
               <td>1.1.3.0</td>
               <td>2024-04-12</td>
               <td>
                   <h4>Changes</h4>
                   <ul>
-                      <li>Small changes to setlist and XML serialization to allow CytoClus to use XML serialization
-                          for its workspaces.</li>
+                      <li>
+                          Small changes to setlist and XML serialization to allow CytoClus to use XML serialization
+                          for its workspaces.
+                      </li>
                       <li>A few small project file changes to make nuget package restore happier.</li>
                   </ul>
               </td>
