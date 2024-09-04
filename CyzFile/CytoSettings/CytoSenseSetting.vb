@@ -160,6 +160,73 @@ Namespace CytoSettings
         UdpPort
     End Enum
 
+    Public Enum LaserKind_t
+        None     =   0
+        Matchbox =   1
+        Obis     =   2
+    End Enum
+
+    Public Enum AutoStart_t
+        Invalid =  0
+        [On]    =  1
+        Off     =  2
+    End Enum
+
+    Public enum LaserMode_t
+        Invalid =  0
+        OFF     =  1
+        APC     =  2
+        ACC     =  3
+    End Enum
+
+    ' Info retrieved from the device, there is some overlap with that in the General
+    ' LaserInfoT, that is configured manually. The device info is only available if
+    ' there is a connection to the device.
+    <Serializable()>
+    Public Class LaserDeviceInfo
+        Public Sub New()
+        End Sub
+
+        Public Sub New(fwVer As String, serNum As String, mdl As String, onTime As Single, onCount As Integer)
+            FirmwareVersion = fwVer
+            SerialNumber    = serNum
+            Model           = mdl
+            DiodeOnTime     = onTime
+            DiodeOnCount    = onCount
+        End Sub
+
+        Public FirmwareVersion As String = ""
+        Public SerialNumber    As String = ""
+        Public Model           As String = ""
+        Public DiodeOnTime     As Single  = 0.0
+        Public DiodeOnCount    As Integer = 0
+    End Class
+
+    <Serializable()>
+    Public Class LaserDeviceSettings
+        Public Sub New()
+        End Sub
+
+        Public Sub New(dTmp As Single, dCurr As Single, dac As Integer, optPow As Single, currLim As Single, autoStrt As AutoStart_t, al As Integer)
+            DiodeTemperature   = dTmp
+            DiodeCurrent       = dCurr
+            FeedbackDac        = dac
+            OpticalOutputPower = optPow
+            DiodeCurrentLimit  = currLim
+            AutoStart          = autoStrt
+            AccessLevel        = al
+        End Sub
+
+        Public DiodeTemperature   As Single
+        Public DiodeCurrent       As Single
+        Public FeedbackDac        As Integer
+        Public OpticalOutputPower As Single
+        Public DiodeCurrentLimit  As Single
+        Public AutoStart          As AutoStart_t
+        Public AccessLevel        As Integer
+    End Class
+
+
     ''' <summary>
     ''' Simple class to record some information about the lasers in the instrument.  For older instruments we do not have this.
     ''' For newer we start adding it.  In the future we should fill this information dynamicly with info we load from the
@@ -171,20 +238,21 @@ Namespace CytoSettings
         ''' Parameterless constructor needed for serialization somewhere, I think XML in CC4, not exactly sure how/what/why.
         ''' </summary>
         Public Sub New() 
-            Description     = "Unknown"
-            SerialNumber    = "Unknown"
-            Wavelength      = 0
-            MaxPower        = 0
-            ConfiguredPower = 0
-            BeamWidth       = 0
+            Me.New("Unknown","Unknown",0,0,0,0,0,LaserKind_t.None)
         End Sub
         Public Sub New(desc As String, serial As String, wavelen As Integer, maxPwr As Integer, cfgPwr As Integer, beam As Double) 
+            Me.New(desc,serial,wavelen,maxPwr,cfgPwr,beam,0,LaserKind_t.None)
+        End Sub
+
+        Public Sub New(desc As String, serial As String, wavelen As Integer, maxPwr As Integer, cfgPwr As Integer, beam As Double, urt As Integer, lsrKnd As LaserKind_t) 
             Description     = desc
             SerialNumber    = serial
             Wavelength      = wavelen
             MaxPower        = maxPwr
             ConfiguredPower = cfgPwr
             BeamWidth       = beam
+            Uart            = urt
+            Kind            = lsrKnd
         End Sub
         Public Description As String      ' Simple string such as Coherent 488LX60, or something like that.
         Public SerialNumber As String     ' The serial number of the laser
@@ -192,6 +260,12 @@ Namespace CytoSettings
         Public MaxPower As Integer        ' Max power in milliwatt
         Public ConfiguredPower As Integer ' COnfigured Power in Milliwat.
         Public BeamWidth As Double        ' BeamWidth in nanometer
+
+        Public Uart As Integer     = 0                 ' The number of the STM Uart this laser is connected to.  For now only supported for Matchbox lasers in the XR.
+        Public Kind As LaserKind_t = LaserKind_t.None  ' The kind of laser connected to the uart, it determines the protocol used, for now only matchbox is supported.
+        ' Information loaded from the laser itself if the option is supported, AND the laser is powered.
+        Public DeviceInfo     As LaserDeviceInfo      = Nothing
+        Public DeviceSettings As LaserDeviceSettings  = Nothing
         Public Function FormatDisplayString() As String
             Return String.Format("{0} ({1}) {2}mW", Description, SerialNumber, ConfiguredPower)
         End Function
@@ -199,6 +273,16 @@ Namespace CytoSettings
         Public Overrides Function ToString() As String
             Return FormatDisplayString()
         End Function
+
+        ' Initialize members that were added after the first files were already written. This way they will have safe default values
+        ' When loading older datafiles.
+        <OnDeserializing()>
+        Private Sub OnDesrializing(context As StreamingContext)
+            Uart = 0 ' 0 Means not connected.
+            Kind = LaserKind_t.None  
+            DeviceInfo     = Nothing
+            DeviceSettings = Nothing
+        End Sub
 
     End Class
 
