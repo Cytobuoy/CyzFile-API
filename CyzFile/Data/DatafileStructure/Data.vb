@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Runtime.Serialization
 Imports System.Data
+Imports CytoSense.CytoSettings
 
 Namespace Data
     ''' <summary>
@@ -1009,7 +1010,7 @@ Namespace Data
             Dim Laser1DiodeCurrent     As DataPointList
             Dim Laser1TecLoad          As DataPointList
             Dim Laser1InputVoltage     As DataPointList
-            Dim Laser1Mode             As NewDataPointList(Of CytoSense.CytoSettings.LaserMode_t)
+            Dim Laser1Mode             As LaserModeDataPointList
 
 
 
@@ -1752,8 +1753,13 @@ Namespace Data
         ''' or all the other shit that the old datapointlist is used for.  We just track it, and store it in the file, and later we
         ''' look at it, or display it.  This is also an attempt to resturcutre it a bit, but that is tricky to do for the old
         ''' lists, because we need to stay backwards compatible.
+        ''' 
+        ''' I originally created a template, but that resulted in templates of templates and our mapping code to support
+        ''' binary serialization on .net core and remapping stuff to the CyzFile.dll broke on that.  Because I do not plan
+        ''' to add a lot of these, I am simply making it a non template structure, adn hope we will someday get to the
+        ''' CytoFile format.
         ''' </summary>
-        <Serializable()> Public Class NewDataPointList(Of T)
+        <Serializable()> Public Class LaserModeDataPointList
 
 
             Public Readonly Property Name As String
@@ -1770,12 +1776,12 @@ Namespace Data
 
 
             <Serializable>
-            Public Structure NewDataPoint
-                Public Value As T
+            Public Structure LaserModeDataPoint
+                Public Value As LaserMode_t
                 Public dt As DateTime
             End Structure
 
-            Private _dataPoints As List(Of NewDataPoint) = New List(Of NewDataPoint)()
+            Private _dataPoints As List(Of LaserModeDataPoint) = New List(Of LaserModeDataPoint)()
             Private Readonly _description As String
             Private Readonly _name As String
 
@@ -1794,7 +1800,7 @@ Namespace Data
             ''' <param name="d"></param>
             ''' <remarks>NOTE: Constructor does not need to lock, Me._lock as it is still the only possible thread in this object
             ''' but somebody else could be accessing d, so we need to lock d._lock.</remarks>
-            Public Sub New(other As NewDataPointList(Of T))
+            Public Sub New(other As LaserModeDataPointList)
                 Me.New(other.Description,other.Name)
                 SyncLock other._lock
                     If other._dataPoints.Count > 0 Then
@@ -1811,8 +1817,8 @@ Namespace Data
             ''' </summary>
             ''' <param name="d"></param>
             ''' <returns></returns>
-            Public Shared Function Clone(other As NewDataPointList(Of T) ) As NewDataPointList(Of T)
-                Dim result As NewDataPointList(Of T) = New NewDataPointList(Of T)(other.Description, other.Name)
+            Public Shared Function Clone(other As LaserModeDataPointList ) As LaserModeDataPointList
+                Dim result As LaserModeDataPointList = New LaserModeDataPointList(other.Description, other.Name)
                 SyncLock other._lock
                     For dpIdx = 0 To other._dataPoints.count - 1
                         result._dataPoints.Add(other._dataPoints(dpIdx))
@@ -1831,9 +1837,9 @@ Namespace Data
             ''' Adds value
             ''' </summary>
             ''' <param name="var"></param>
-            Public Sub Add(val As T, time As DateTime)
+            Public Sub Add(val As LaserMode_t, time As DateTime)
                 SyncLock _lock
-                    _dataPoints.Add(New NewDataPoint() With { .Value = val, .dt = time})
+                    _dataPoints.Add(New LaserModeDataPoint() With { .Value = val, .dt = time})
                 End SyncLock
             End Sub
 
@@ -1841,13 +1847,13 @@ Namespace Data
             '''' Adds value
             '''' </summary>
             '''' <param name="var"></param>
-            Public Sub Add(val As T)
+            Public Sub Add(val As LaserMode_t)
                 SyncLock _lock
-                    _dataPoints.Add(New NewDataPoint() With { .Value = val, .dt = DateTime.Now})
+                    _dataPoints.Add(New LaserModeDataPoint() With { .Value = val, .dt = DateTime.Now})
                 End SyncLock
             End Sub
 
-            Public Function GetLast() As T
+            Public Function GetLast() As LaserMode_t
                 SyncLock _lock
                     If _dataPoints.Count > 0 Then
                         Return _dataPoints(_dataPoints.Count-1).Value
