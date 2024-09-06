@@ -369,6 +369,133 @@ Namespace CytoSettings
             End Get
         End Property
 
+
+        <Category("Laser Data"), DisplayName("Laser Model"), DescriptionAttribute(""), ComponentModel.Browsable(True)>
+        Public ReadOnly Property Laser1Model As String
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceInfo IsNot Nothing Then
+                    Return _laserInfo(0).DeviceInfo.Model
+                Else
+                    Return ""
+                End If
+            End Get
+        End Property
+        <Category("Laser Data"), DisplayName("Laser Firmware"), DescriptionAttribute(""), ComponentModel.Browsable(True)>
+        Public ReadOnly Property Laser1Firmware As String
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceInfo IsNot Nothing Then
+                    Return _laserInfo(0).DeviceInfo.FirmwareVersion
+                Else
+                    Return ""
+                End If
+            End Get
+        End Property
+
+        <Category("Laser Data"), DisplayName("Laser Serial Number"), DescriptionAttribute(""), ComponentModel.Browsable(True)>
+        Public ReadOnly Property Laser1SerialNumber As String
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceInfo IsNot Nothing Then
+                    Return _laserInfo(0).DeviceInfo.SerialNumber
+                Else
+                    Return ""
+                End If
+            End Get
+        End Property
+
+        <Category("Laser Data"), DisplayName("Laser On Time"), DescriptionAttribute(""), ComponentModel.Browsable(True), Data.DataBase.Attributes.Format("#0.0 hour")>
+        Public ReadOnly Property Laser1OnTime As Single
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceInfo IsNot Nothing Then
+                    Return _laserInfo(0).DeviceInfo.DiodeOnTime
+                Else
+                    Return Single.NaN
+                End If
+            End Get
+        End Property
+
+        <Category("Laser Data"), DisplayName("Laser On Count"), DescriptionAttribute(""), ComponentModel.Browsable(True)>
+        Public ReadOnly Property Laser1OnCount As Integer
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceInfo IsNot Nothing Then
+                    Return _laserInfo(0).DeviceInfo.DiodeOnCount
+                Else
+                    Return 0
+                End If
+            End Get
+        End Property
+
+        <Category("Laser Data"), DisplayName("Set Diode Temperature"), DescriptionAttribute(""), ComponentModel.Browsable(True),CytoSense.Data.DataBase.Attributes.Format("#0.00 \°C")>
+        Public ReadOnly Property Laser1SetDiodeTemperature As Single
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceSettings IsNot Nothing Then
+                    Return _laserInfo(0).DeviceSettings.DiodeTemperature
+                Else
+                    Return Single.NaN
+                End If
+            End Get
+        End Property
+
+        <Category("Laser Data"), DisplayName("Set Diode Current"), DescriptionAttribute(""), ComponentModel.Browsable(True),CytoSense.Data.DataBase.Attributes.Format("#0.00 mA")>
+        Public ReadOnly Property Laser1SetDiodeCurrent As Single
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceSettings IsNot Nothing Then
+                    Return _laserInfo(0).DeviceSettings.DiodeCurrent
+                Else
+                    Return 0
+                End If
+            End Get
+        End Property
+
+        <Category("Laser Data"), DisplayName("Feedback DAC"), DescriptionAttribute(""), ComponentModel.Browsable(True)>
+        Public ReadOnly Property Laser1FeedbackDAC As Integer
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceSettings IsNot Nothing Then
+                    Return _laserInfo(0).DeviceSettings.FeedbackDac
+                Else
+                    Return 0
+                End If
+            End Get
+        End Property
+
+        <Category("Laser Data"), DisplayName("Output Power"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.00 mW")>
+        Public ReadOnly Property Laser1OpticalOutputPower As Single
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceSettings IsNot Nothing Then
+                    Return _laserInfo(0).DeviceSettings.OpticalOutputPower
+                Else
+                    Return 0.0
+                End If
+            End Get
+        End Property
+
+        <Category("Laser Data"), DisplayName("Diode Current Limit"), DescriptionAttribute(""), ComponentModel.Browsable(True),CytoSense.Data.DataBase.Attributes.Format("#0.00 mA")>
+        Public ReadOnly Property Laser1SetDiodeCurrentLimit As Single
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceSettings IsNot Nothing Then
+                    Return _laserInfo(0).DeviceSettings.DiodeCurrentLimit
+                Else
+                    Return 0
+                End If
+            End Get
+        End Property
+
+        <Category("Laser Data"), DisplayName("Auto Start"), DescriptionAttribute(""), ComponentModel.Browsable(True),CytoSense.Data.DataBase.Attributes.Format("#0.00 mA")>
+        Public ReadOnly Property Laser1AutoStart As String
+            Get
+                If NumberOfLasers > 0 AndAlso _laserInfo(0).Uart <> 0 AndAlso _laserInfo(0).DeviceSettings IsNot Nothing Then
+                    If _laserInfo(0).DeviceSettings.AutoStart = AutoStart_t.On Then
+                        Return "On"
+                    Else If _laserInfo(0).DeviceSettings.AutoStart = AutoStart_t.Off Then
+                        Return "Off"
+                    Else 
+                        Return "???"
+                    End If
+                Else
+                    Return ""
+                End If
+            End Get
+        End Property
+
         Public Softwareversion As Int16    'voor Cytoclus? [b] nee niet gebruikt
         Public hasSheetPumpAdjust As Boolean
 

@@ -498,6 +498,50 @@ Namespace Data
                 End Get
             End Property
 
+            <Category("Laser Data"), DisplayName("Laser Base temperature"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 \°C")>
+            Public ReadOnly Property Laser1BaseTemperature As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1BaseTemperature))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser Diode temperature"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 \°C")>
+            Public ReadOnly Property Laser1DiodeTemperature As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1DiodeTemperature))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser Diode Current"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 mA")>
+            Public ReadOnly Property Laser1DiodeCurrent As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1DiodeCurrent))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser TEC Load"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 \%")>
+            Public ReadOnly Property Laser1TecLoad As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1TecLoad))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser Input Voltage"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.00 V")>
+            Public ReadOnly Property Laser1InputVoltage As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1InputVoltage))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser Mode"), DescriptionAttribute("Laser mode at the end of the measurement."), ComponentModel.Browsable(True)>
+            Public ReadOnly Property Laser1Mode As String
+                Get
+                    Return sensorLogs.Laser1Mode.GetLast().ToString()
+                End Get
+            End Property
+
+
+
             <Category("Auxilary sensors"), DisplayName("System temperature"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 \°C")>
             Public ReadOnly Property SystemTemp As Single
                 Get
