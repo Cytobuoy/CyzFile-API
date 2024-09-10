@@ -536,7 +536,11 @@ Namespace Data
             <Category("Laser Data"), DisplayName("Laser Mode"), DescriptionAttribute("Laser mode at the end of the measurement."), ComponentModel.Browsable(True)>
             Public ReadOnly Property Laser1Mode As String
                 Get
-                    Return sensorLogs.Laser1Mode.GetLast().ToString()
+                        If sensorLogs.Laser1Mode IsNot Nothing AndAlso sensorLogs.Laser1Mode.Length > 0 Then
+                            Return sensorLogs.Laser1Mode.GetLast().ToString()
+                        Else
+                            Return "Invalid"
+                        End If
                 End Get
             End Property
 
