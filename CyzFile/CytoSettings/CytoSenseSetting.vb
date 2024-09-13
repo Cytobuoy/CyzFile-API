@@ -625,6 +625,7 @@ Namespace CytoSettings
         <Obsolete()> _
         Public hasGPS As Boolean
         Public enableGPS As Boolean
+		Public enableAutoCrop As Boolean
         Public baudGPS As Int32
         Public comPortGPS As Int32
         Public GpsSource As GpsSourceType = GpsSourceType.ComPort 'Default to comport
@@ -959,6 +960,13 @@ Namespace CytoSettings
         Public ReadOnly Property GpsEnabled As Boolean
             Get
                 Return enableGPS
+            End Get
+        End Property
+
+		<Category("Measurement instrument settings"), DisplayName("AutoCrop Enabled"), Description("Auto Cropping was enabled during this measurement."), ComponentModel.Browsable(True)>
+        Public ReadOnly Property AutoCropEnabled As Boolean
+            Get
+                Return enableAutoCrop
             End Get
         End Property
 
