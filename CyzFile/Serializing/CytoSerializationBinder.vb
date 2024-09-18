@@ -33,7 +33,10 @@ Namespace Serializing
         Public Overrides Function BindToType(assemblyName As String, typeName As String) As Type
             Debug.Assert(Not (assemblyName.StartsWith("CyzFile") ) , "Serialized datafile contains reference to 'CyzFile' dll.")
             Debug.Assert(Not (assemblyName.StartsWith("CytoUtils") ) , "Serialized datafile contains reference to 'CytoUtils' dll.")
-
+'#If DEBUG
+'            Dim savedAssemblyName As String = assemblyName
+'            Dim savedTypeName As String     = typeName
+'#End If
             If typeName.Contains(".MemoryStream") Then
                 assemblyName = Assembly.GetExecutingAssembly().FullName
                 typeName     = "CytoSense.Serializing.CytoMemoryStream"
@@ -121,6 +124,12 @@ Namespace Serializing
 				assemblyName = Assembly.GetExecutingAssembly().FullName
             End If
 
+'#If DEBUG
+'            Debug.WriteLine("SAVED Typename: {0}", savedTypeName, "Dummy")
+'            Debug.WriteLine("NEW   Typename: {0}", typeName, "Dummy")
+'            Debug.WriteLine("SAVED AssmblyName: {0}", savedAssemblyName, "Dummy")
+'            Debug.WriteLine("NEW   AssmblyName: {0}", assemblyName, "Dummy")
+'#End If
             Return Type.GetType(String.Format("{0}, {1}", typeName, assemblyName))
         End Function
 
@@ -154,6 +163,15 @@ Namespace Serializing
                 assemblyName = CYTOSENSE_DLL_NAME
             Else If serializedType.FullName.StartsWith("System.Collections.Generic.List") Then
                 Dim oldTypeName = serializedType.FullName
+#If DEBUG
+                Dim genLevel = 0
+                Dim genIdx = oldTypeName.IndexOf("[[")
+                While genIdx >=0 
+                    genLevel += 1
+                    genIdx = oldTypeName.IndexOf("[[", genIdx+2)
+                End While
+                Debug.Assert(genLevel=1, "Only a single level of generics is supported!")
+#End If
                 Dim commaIdx As Integer = oldTypeName.IndexOf(",")
                 Dim genericTypeAssemblyName = oldTypeName.Substring(commaIdx+2) ' Assembly name of subtype (and ]] at the end).
                 If genericTypeAssemblyName.StartsWith("CyzFile,") Then

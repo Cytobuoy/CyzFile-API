@@ -70,6 +70,9 @@ Namespace CytoUSBSettings
         Public DisableSparePowerSensor As Boolean      = False
         Public DisableAnalogExtBatteryPowerSensor As Boolean = False
         Public DisableWaterSensor As Boolean                 = False
+        Public DisableLaser1Sensor As Boolean     = False
+        Public DisableLaser2Sensor As Boolean     = False
+
         'pay attention here, when adding fields, to also update AtLeastOneSensorDisabled is necessary!
 
         Public DisableSheathFlowSensor As Boolean            = False
@@ -86,7 +89,8 @@ Namespace CytoUSBSettings
             Return DisableBlower Or DisableExternalBlower Or DisableSheathPump Or DisableSheathPump Or DisableSamplePump Or DisableLaser Or DisableHighVoltage Or DisablePreAmps Or DisableCirculationPump Or DisableValvePower Or DisableDSP Or DisableBypass Or DisableCharger
         End Function
         Public Function AtLeastOneSensorDisabled() As Boolean
-            Return DisableLaserTempSensor Or DisablePMTTempSensor Or DisableSystemTempSensor Or DisableSheathTempSensor Or DisableAbsPressureSensor Or DisableDiffPressureSensor Or DisableExtPressureSensor Or DisableFTDISensorBoard 
+            Return DisableLaserTempSensor Or DisablePMTTempSensor Or DisableSystemTempSensor Or DisableSheathTempSensor Or DisableAbsPressureSensor Or DisableDiffPressureSensor Or DisableExtPressureSensor Or DisableFTDISensorBoard Or DisableLaser1Sensor Or DisableLaser2Sensor 
+
         End Function
 
         Public LowerTabPage As LowerTabpages

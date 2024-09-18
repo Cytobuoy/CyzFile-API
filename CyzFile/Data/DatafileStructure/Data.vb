@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Runtime.Serialization
 Imports System.Data
+Imports CytoSense.CytoSettings
 
 Namespace Data
     ''' <summary>
@@ -496,6 +497,54 @@ Namespace Data
                     Return CSng(MeanOrNaN(sensorLogs.LaserTemp))
                 End Get
             End Property
+
+            <Category("Laser Data"), DisplayName("Laser Base temperature"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 \°C")>
+            Public ReadOnly Property Laser1BaseTemperature As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1BaseTemperature))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser Diode temperature"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 \°C")>
+            Public ReadOnly Property Laser1DiodeTemperature As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1DiodeTemperature))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser Diode Current"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 mA")>
+            Public ReadOnly Property Laser1DiodeCurrent As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1DiodeCurrent))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser TEC Load"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 \%")>
+            Public ReadOnly Property Laser1TecLoad As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1TecLoad))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser Input Voltage"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.00 V")>
+            Public ReadOnly Property Laser1InputVoltage As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Laser1InputVoltage))
+                End Get
+            End Property
+
+            <Category("Laser Data"), DisplayName("Laser Mode"), DescriptionAttribute("Laser mode at the end of the measurement."), ComponentModel.Browsable(True)>
+            Public ReadOnly Property Laser1Mode As String
+                Get
+                        If sensorLogs.Laser1Mode IsNot Nothing AndAlso sensorLogs.Laser1Mode.Length > 0 Then
+                            Return sensorLogs.Laser1Mode.GetLast().ToString()
+                        Else
+                            Return "Invalid"
+                        End If
+                End Get
+            End Property
+
+
 
             <Category("Auxilary sensors"), DisplayName("System temperature"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 \°C")>
             Public ReadOnly Property SystemTemp As Single
@@ -1003,6 +1052,16 @@ Namespace Data
 
             Dim ExternalFiltersPressureData As DataPointList
 
+
+            Dim Laser1DiodeTemperature As DataPointList
+            Dim Laser1BaseTemperature  As DataPointList
+            Dim Laser1DiodeCurrent     As DataPointList
+            Dim Laser1TecLoad          As DataPointList
+            Dim Laser1InputVoltage     As DataPointList
+            Dim Laser1Mode             As LaserModeDataPointList
+
+
+
            <OnDeserializing> _ 
             Private Sub OnDes(sc As StreamingContext)
                 extBatteryVoltage = New CytoSense.Data.DataPointList(DataPointList.SensorLogTypes.FTDI_ExternalBatteryVoltage)
@@ -1201,6 +1260,16 @@ Namespace Data
                             Return "Volt [V]"
                        Case SensorLogTypes.SHEATH_FLOW
                             Return "Milliliter/Minute [ml/min]"
+                        Case SensorLogTypes.LASER_DIODE_TEMPERATURE
+                            Return "Temperature [°C]"
+                        Case SensorLogTypes.LASER_BASE_TEMPERATURE
+                            Return "Temperature [°C]"
+                        Case SensorLogTypes.LASER_DIODE_CURRENT
+                            Return "Current [mA]"
+                        Case SensorLogTypes.LASER_TEC_LOAD
+                            Return "Load [%]"
+                        Case SensorLogTypes.LASER_INPUT_VOLTAGE
+                            Return "Volt [V]"
                         Case SensorLogTypes.Unknown
                             Return _yString
                         Case Else
@@ -1306,8 +1375,17 @@ Namespace Data
                             Return "Concentration"
                         Case SensorLogTypes.FTDI_PreConcentrationCount
                             Return "Pre-concentration"
-
-                       Case SensorLogTypes.Unknown
+                        Case SensorLogTypes.LASER_DIODE_TEMPERATURE
+                            Return "Laser Diode Temperature"
+                        Case SensorLogTypes.LASER_BASE_TEMPERATURE
+                            Return "Laser Base Temperature"
+                        Case SensorLogTypes.LASER_DIODE_CURRENT
+                            Return "Laser Diode Current"
+                        Case SensorLogTypes.LASER_TEC_LOAD
+                            Return "Laser Tec Load"
+                        Case SensorLogTypes.LASER_INPUT_VOLTAGE
+                            Return "Laser Input Voltage"
+                        Case SensorLogTypes.Unknown
                             Return _description
                         Case Else
                             Return ""
@@ -1707,11 +1785,144 @@ Namespace Data
                 SHEATH_FLOW
                 FTDI_ConcentrationCount    ' Added to supports CS-2007-18 instrument, not stored in the sensor logs, just used for handling in CC4.
                 FTDI_PreConcentrationCount ' Added to supports CS-2007-18 instrument, not stored in the sensor logs, just used for handling in CC4.
-
+                LASER_DIODE_TEMPERATURE
+                LASER_BASE_TEMPERATURE
+                LASER_DIODE_CURRENT
+                LASER_TEC_LOAD
+                LASER_INPUT_VOLTAGE
                 'when adding fields, don't forget to add descriptions in Y_axis en X_axis!
             End Enum
 
         End Class
+
+
+        ''' <summary>
+        ''' Track datapoints fo a certain state, stored in an enum, in this case the mode of a laser. So we cannot implement averages,
+        ''' or all the other shit that the old datapointlist is used for.  We just track it, and store it in the file, and later we
+        ''' look at it, or display it.  This is also an attempt to resturcutre it a bit, but that is tricky to do for the old
+        ''' lists, because we need to stay backwards compatible.
+        ''' 
+        ''' I originally created a template, but that resulted in templates of templates and our mapping code to support
+        ''' binary serialization on .net core and remapping stuff to the CyzFile.dll broke on that.  Because I do not plan
+        ''' to add a lot of these, I am simply making it a non template structure, adn hope we will someday get to the
+        ''' CytoFile format.
+        ''' </summary>
+        <Serializable()> Public Class LaserModeDataPointList
+
+
+            Public Readonly Property Name As String
+                Get
+                    Return _name
+                End Get
+            End Property
+
+            Public Readonly Property Description As String
+                Get
+                    Return _description
+                End Get
+            End Property
+
+
+            <Serializable>
+            Public Structure LaserModeDataPoint
+                Public Value As LaserMode_t
+                Public dt As DateTime
+            End Structure
+
+            Private _dataPoints As List(Of LaserModeDataPoint) = New List(Of LaserModeDataPoint)()
+            Private Readonly _description As String
+            Private Readonly _name As String
+
+            <NonSerialized> Private _lock As Object ' Used to synchronize access to this object. Not sure we still need it, copied from the previous variant
+
+            Public Sub New( descr As String, name As String)
+                _description = descr
+                _name = name
+                _lock = New Object()
+            End Sub
+
+            ''' <summary>
+            ''' Creates a new DataPointList, but retains the last value d. Makes for a smooth transition in CytoUSB when the lists are cleared for a new measurement
+            ''' </summary>
+            ''' <param name="t"></param>
+            ''' <param name="d"></param>
+            ''' <remarks>NOTE: Constructor does not need to lock, Me._lock as it is still the only possible thread in this object
+            ''' but somebody else could be accessing d, so we need to lock d._lock.</remarks>
+            Public Sub New(other As LaserModeDataPointList)
+                Me.New(other.Description,other.Name)
+                SyncLock other._lock
+                    If other._dataPoints.Count > 0 Then
+                        _dataPoints.Add(other._dataPoints(other._dataPoints.Count-1))
+                    End If
+                End SyncLock
+            End Sub
+
+            ''' <summary>
+            ''' Create a copy, like a copy constructor, but to avoid confusion
+            ''' with the other constructor that only copies the last data item, I create
+            ''' a shared function. Kind of weird, and not sure we need it. Should probably make a special
+            ''' function to do the copy only one value, and have the CTOR make a clone. To late for that now.
+            ''' </summary>
+            ''' <param name="d"></param>
+            ''' <returns></returns>
+            Public Shared Function Clone(other As LaserModeDataPointList ) As LaserModeDataPointList
+                Dim result As LaserModeDataPointList = New LaserModeDataPointList(other.Description, other.Name)
+                SyncLock other._lock
+                    For dpIdx = 0 To other._dataPoints.count - 1
+                        result._dataPoints.Add(other._dataPoints(dpIdx))
+                    Next
+                End SyncLock
+                Return result
+            End Function
+
+            ' When de-serializing make sure that the lock object is initialized.
+            <OnDeserialized()> _
+            Private Sub OnDeserializedMethod(context As StreamingContext )
+                _lock = New Object() 
+            End Sub
+
+            ''' <summary>
+            ''' Adds value
+            ''' </summary>
+            ''' <param name="var"></param>
+            Public Sub Add(val As LaserMode_t, time As DateTime)
+                SyncLock _lock
+                    _dataPoints.Add(New LaserModeDataPoint() With { .Value = val, .dt = time})
+                End SyncLock
+            End Sub
+
+            '''' <summary>
+            '''' Adds value
+            '''' </summary>
+            '''' <param name="var"></param>
+            Public Sub Add(val As LaserMode_t)
+                SyncLock _lock
+                    _dataPoints.Add(New LaserModeDataPoint() With { .Value = val, .dt = DateTime.Now})
+                End SyncLock
+            End Sub
+
+            Public Function GetLast() As LaserMode_t
+                SyncLock _lock
+                    If _dataPoints.Count > 0 Then
+                        Return _dataPoints(_dataPoints.Count-1).Value
+                    Else
+                        Return Nothing ' Will this work for enums, the internet seems to think it will return the 0 value.
+                    End If
+                End SyncLock
+            End Function
+
+            Public Function Length() As Integer
+                SyncLock _lock
+                    Return _dataPoints.Count
+                End SyncLock
+            End Function
+
+            ' I deleted most of the stuff copied from the original datapointlist that stores doubles.
+            ' Will have to add stuff again later, if I need it.
+
+        End Class
+
+
         <Serializable()> Public Class MeasurementLog
 
             Dim tasklog As New List(Of LogItem)
