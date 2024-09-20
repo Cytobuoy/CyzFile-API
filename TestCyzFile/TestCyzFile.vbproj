@@ -3,12 +3,13 @@
   <Import Project="..\..\packages\MSTest.TestAdapter.2.2.7\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\..\packages\MSTest.TestAdapter.2.2.7\build\net45\MSTest.TestAdapter.props')" />
   <PropertyGroup>
     <RootNamespace>TestCyzFile</RootNamespace>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
 
     <OutputPath>$(BaseOutputPath)\$(Platform)\$(Configuration)</OutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Platform)\$(Configuration)</IntermediateOutputPath>
 
     <IsPackable>false</IsPackable>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
 
     <Configurations>Debug;Release;ReleaseErnie;ReleaseWebsite</Configurations>
     <Platforms>AnyCPU;x64</Platforms>
@@ -221,18 +222,19 @@
 	  <PackageReference Include="Castle.Core" version="4.4.0" />
 	  <PackageReference Include="Crc32.NET" Version="1.2.0" />
 	  <PackageReference Include="log4net" Version="2.0.15" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" version="17.0.0" />
-	  <PackageReference Include="MSTest.TestAdapter" version="2.2.8" />
-	  <PackageReference Include="MSTest.TestFramework" version="2.2.8" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" version="17.11.1" />
+	  <PackageReference Include="Microsoft.TestPlatform" Version="17.11.1" />
+	  <PackageReference Include="MSTest.TestAdapter" version="3.6.0" />
+	  <PackageReference Include="MSTest.TestFramework" version="3.6.0" />
 	  <PackageReference Include="NSubstitute" version="4.2.2" />
-	  <PackageReference Include="OpenCvSharp4" version="4.5.0.20201013" />
-	  <PackageReference Include="OpenCvSharp4.runtime.win" version="4.5.0.20201013" />
-	  <PackageReference Include="OpenCvSharp4.Windows" version="4.5.0.20201013" />
+	  <PackageReference Include="OpenCvSharp4" version="4.10.0.20240616" />
+	  <PackageReference Include="OpenCvSharp4.runtime.win" version="4.10.0.20240616" />
+	  <PackageReference Include="OpenCvSharp4.Windows" version="4.10.0.20240616" />
 	  <PackageReference Include="System.Buffers" version="4.5.1" />
-	  <PackageReference Include="System.Drawing.Common" version="7.0.0" />
+	  <PackageReference Include="System.Drawing.Common" version="8.0.8" />
 	  <PackageReference Include="System.Memory" version="4.5.5" />
 	  <PackageReference Include="System.Numerics.Vectors" version="4.5.0" />
-	  <PackageReference Include="System.Runtime.CompilerServices.Unsafe" version="5.0.0" />
+	  <PackageReference Include="System.Runtime.CompilerServices.Unsafe" version="6.0.0" />
 	  <PackageReference Include="System.Threading.Tasks.Extensions" version="4.5.4" />	
 	
   </ItemGroup>
