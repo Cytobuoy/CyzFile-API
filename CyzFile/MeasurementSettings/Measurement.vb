@@ -2158,7 +2158,7 @@ Namespace MeasurementSettings
                     End If 
     #Enable Warning BC40008 ' Type or member is obsolete
                 End If
-                If _TriggerChannelArray.Length < _cytosettings.channels.Length Then
+                If _TriggerChannelArray.Length <> _cytosettings.channels.Length Then
                     ReDim Preserve _TriggerChannelArray(_cytosettings.channels.Length-1)
                 End If
             End Set
