@@ -740,5 +740,89 @@ End Sub
         
     End Sub
 
+    ''' <summary>
+    ''' Test accessing the database properties for all the files. Sometimes when adding new properties we 
+    ''' mess up handling old data files that do not have them. This should hopefully pick that up.
+    ''' We will not know if we get a sane default, but we at least know if it crashes or not.
+    ''' 
+    ''' The code for this is basically copied from CytoUtils.CyzDb.GetAllFileColumns. Except we do not store the
+    ''' data in columns, we just access the properties.
+    ''' 
+    ''' </summary>
+    ''' <param name="filename"></param>
+    ''' <remarks>
+    ''' Files below are not included in this test because they have other problems.
+    '''     DataFiles/Measurement 2012-06-20 14u01.cyz ==> Sectioned datafiles are not supported
+    '''     DataFiles/nano_cend16_20 2020-10-06 05u00.cyz ==> Concentration mismatch
+    '''     DataFiles/nano_cend16_20 2020-10-07 04u00.cyz ==> Concentration mismatch
+    ''' </remarks>
+
+    <DataTestMethod>
+    <DataRow("DataFiles/1 2011-12-14 13u50.cyz")>
+    <DataRow("DataFiles/1 2011-12-14 13u51.cyz")>
+    <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz")>
+    <DataRow("DataFiles/1p6umbeads 2011-05-19 13u06.cyz")>
+    <DataRow("DataFiles/1umFLYbeads 2011-02-21 10u51.cyz")>
+    <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz")>
+    <DataRow("DataFiles/algjes 2011-01-07 14u59.cyz")>
+    <DataRow("DataFiles/algjes machteld 2010-11-22 11u33.cyz")>
+    <DataRow("DataFiles/beads 2010-12-08 15u00.cyz")>
+    <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz")>
+    <DataRow("DataFiles/beads reservoir measurement 2021-10-04 15h00.cyz")>
+    <DataRow("DataFiles/beads1.6u.cyz-2010-06-16 13-10.cyz")>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz")>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz")>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10.cyz")>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz")>
+    <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz")>
+    <DataRow("DataFiles/dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz")>
+    <DataRow("DataFiles/FunctionalTest_measurement#1 2019-01-22 08h52.cyz")>
+    <DataRow("DataFiles/LW_2017_protocol_1 2017-04-20 12h00.cyz")>
+    <DataRow("DataFiles/Maaswater gevoeliger 256K 2012-10-10 12u03.cyz")>
+    <DataRow("DataFiles/pollen 2011-05-19 16u19.cyz")>
+    <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz")>
+    <DataRow("DataFiles/ruistest_1 2023-07-18 14h46_2.cyz")>
+    <DataRow("DataFiles/scenedesmus 230410 gemengd in kraanwater 2010-12-03 15u17.cyz")>
+    <DataRow("DataFiles/Segmented 2014-09-30 15u13.cyz")>
+    Public Sub TestDbProperties(filename As String)
+        Dim dfw = New DataFileWrapper(filename)
+
+        Dim pdc = System.ComponentModel.TypeDescriptor.GetProperties(GetType(DataFileWrapper))
+        For Each prop As System.ComponentModel.PropertyDescriptor In pdc
+            If prop.IsBrowsable Then
+                Dim p = prop.GetValue(dfw)
+            End If
+        Next
+
+        Dim pdc1 As System.ComponentModel.PropertyDescriptorCollection = System.ComponentModel.TypeDescriptor.GetProperties(GetType(MeasurementInfo))
+        For Each prop As System.ComponentModel.PropertyDescriptor In pdc1
+            If prop.IsBrowsable Then
+                Dim p = prop.GetValue(dfw.MeasurementInfo)
+            End If
+        Next
+
+        Dim pdc2 = System.ComponentModel.TypeDescriptor.GetProperties(GetType(CytoSense.MeasurementSettings.Measurement))
+        For Each prop As System.ComponentModel.PropertyDescriptor In pdc2
+            If prop.IsBrowsable Then
+                Dim p = prop.GetValue(dfw.MeasurementSettings)
+            End If
+        Next
+
+        Dim pdc3 = System.ComponentModel.TypeDescriptor.GetProperties(GetType(CytoSense.CytoSettings.CytoSenseSetting))
+        For Each prop As System.ComponentModel.PropertyDescriptor In pdc3
+            If prop.IsBrowsable Then
+                Dim p = prop.GetValue(dfw.CytoSettings)
+            End If
+        Next
+    End Sub
+
+    Private Sub TouchAllBrowsableProperties( pdc As System.ComponentModel.PropertyDescriptorCollection, o As Object )
+        For Each prop As System.ComponentModel.PropertyDescriptor In pdc
+            If prop.IsBrowsable Then
+                Dim p = prop.GetValue(o)
+            End If
+        Next
+    End Sub
+
 
 End Class
