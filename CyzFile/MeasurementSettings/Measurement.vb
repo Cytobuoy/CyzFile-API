@@ -375,7 +375,7 @@ Namespace MeasurementSettings
 
            If _subfolder Is Nothing Then
                 _subfolder = ""
-            End If
+           End If
         End Sub
 
         <NonSerialized()> Private _status As String = ""
@@ -2119,6 +2119,9 @@ Namespace MeasurementSettings
         ''' Some old files do not have this setting on deserialization, and therefor we cannot set the
         ''' LogConversion Type array for these files.  The value gets set immediately after deserialization,
         ''' so we set the value when this property is set.
+        ''' 
+        ''' And for some we also need to update the actual number of entries in the Trigger Channel array.
+        ''' I found this for some old NIOZ files in our test data set.
         ''' </summary>
         ''' <returns></returns>
         <Category("Other"),
@@ -2154,6 +2157,9 @@ Namespace MeasurementSettings
                         _configuredMinimalSamplePumpSpeedSetting = _minimumAutoSpeed
                     End If 
     #Enable Warning BC40008 ' Type or member is obsolete
+                End If
+                If _TriggerChannelArray.Length < _cytosettings.channels.Length Then
+                    ReDim Preserve _TriggerChannelArray(_cytosettings.channels.Length-1)
                 End If
             End Set
         End Property
