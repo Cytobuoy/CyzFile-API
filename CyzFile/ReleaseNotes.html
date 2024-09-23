@@ -50,13 +50,28 @@ tr td:nth-child(2){
               <th>Description</th>
           </tr>
           <tr>
+              <td>1.1.4.1</td>
+              <td>2024-09-23</td>
+              <td>
+                  <h4>Bug Fixes</h4>
+                  <ul>
+                      <li>Fixed new laser information attributes for old instruments. For some older instruments accessing the properties would
+                      crash because the code did not correctly check for there presence.</li>
+                      <li>Fixed a problem loading some old (From 2011) data files.  These files were saved incorrectly, and this caused problems
+                      when trying to access the TriggerChannel property.  Now we fix the problem in the datafile after loading it.</li>
+                  </ul>
+              </td>
+          </tr>
+          <tr>
               <td>1.1.4.0</td>
               <td>2024-09-12</td>
               <td>
                   <h4>Changes</h4>
                   <ul>
-                      <li>Add support for storing sensor data directly read from the laser.  This feature was added for newer
-                      CytoSense XR instruments. The sensor data includes diode temperatures, cooling system load, diode hours used, etc.</li>
+                      <li>
+                          Add support for storing sensor data directly read from the laser.  This feature was added for newer
+                          CytoSense XR instruments. The sensor data includes diode temperatures, cooling system load, diode hours used, etc.
+                      </li>
                       <li>Add support for two new External Sampling Chamber options: enable/disable the pinchvalve and a minimum sample chamber refresh time</li>
                   </ul>
                   <h4>Bug Fixes</h4>
