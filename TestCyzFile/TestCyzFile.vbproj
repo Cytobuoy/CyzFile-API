@@ -219,14 +219,18 @@
 
   <ItemGroup>
 	  <PackageReference Include="coverlet.collector" Version="3.0.2" />
-	  <PackageReference Include="Castle.Core" version="4.4.0" />
+	  <PackageReference Include="Castle.Core" version="5.1.1" />
 	  <PackageReference Include="Crc32.NET" Version="1.2.0" />
 	  <PackageReference Include="log4net" Version="3.0.1" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" version="17.11.1" />
 	  <PackageReference Include="Microsoft.TestPlatform" Version="17.11.1" />
 	  <PackageReference Include="MSTest.TestAdapter" version="3.6.0" />
 	  <PackageReference Include="MSTest.TestFramework" version="3.6.0" />
-	  <PackageReference Include="NSubstitute" version="4.2.2" />
+	  <PackageReference Include="NSubstitute" version="5.1.0" />
+	  <PackageReference Include="NSubstitute.Analyzers.VisualBasic" Version="1.0.17">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	  <PackageReference Include="OpenCvSharp4" version="4.10.0.20240616" />
 	  <PackageReference Include="OpenCvSharp4.runtime.win" version="4.10.0.20240616" />
 	  <PackageReference Include="OpenCvSharp4.Windows" version="4.10.0.20240616" />
