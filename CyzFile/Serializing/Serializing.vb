@@ -46,12 +46,13 @@ Namespace Serializing
         ''' we do not need to create specific datafile serialization code.
         ''' </summary>
         ''' <returns></returns>
+#Disable Warning SYSLIB0011
         Public Function CreateBinaryFormatter() As BinaryFormatter
             Return New BinaryFormatter With {
                 .Binder = New CytoSerializationBinder()
             }
         End Function
-
+#Enable Warning SYSLIB0011
 
 
         ''' <summary>
@@ -66,11 +67,11 @@ Namespace Serializing
 
 
         Public Function loadFromFile(ByVal filename As String) As Object
-
+#Disable Warning SYSLIB0011
             Dim BF As BinaryFormatter = CreateBinaryFormatter()
             Dim ms As New System.IO.FileStream(filename, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.Read)
             Try
-#Disable Warning SYSLIB0011
+
                 Dim resFromFile As Object = BF.Deserialize(ms)
 #Enable Warning SYSLIB0011
                 ms.Close()
@@ -115,8 +116,9 @@ Namespace Serializing
             File.Delete(backupName) ' backup file from previous save.
 
             Using tmpStream As New FileStream(tmpName, FileMode.CreateNew)
-                Dim formatter As BinaryFormatter = CreateBinaryFormatter()
 #Disable Warning SYSLIB0011
+                Dim formatter As BinaryFormatter = CreateBinaryFormatter()
+
                 formatter.Serialize(tmpStream,o)
 #Enable Warning SYSLIB0011
                 tmpStream.Flush(flushToDisk:=True) ' Force writing all data to disk before continuing. This can in theory prevent corrupted datafiles when there is a power failure.
@@ -131,8 +133,8 @@ Namespace Serializing
 
 
         Public Function deserializeStream(Of T)( s As Stream ) As T
-            Dim BF As BinaryFormatter = CreateBinaryFormatter()
 #Disable Warning SYSLIB0011
+            Dim BF As BinaryFormatter = CreateBinaryFormatter()
             Return CType(BF.Deserialize(s), T)
 #Enable Warning SYSLIB0011
         End Function
@@ -140,8 +142,8 @@ Namespace Serializing
 
         Public Function deserializeStream(buf() As Byte) As Object
             Dim MS As New IO.MemoryStream(buf)
-            Dim BF As BinaryFormatter = CreateBinaryFormatter()
 #Disable Warning SYSLIB0011
+            Dim BF As BinaryFormatter = CreateBinaryFormatter()
             Dim resFromFile As Object = BF.Deserialize(MS)
 #Enable Warning SYSLIB0011
             Return resFromFile
@@ -149,8 +151,8 @@ Namespace Serializing
 
         Public Function serializeToStream(ByVal C As Object) As Byte()
             Dim MS As New System.IO.MemoryStream()
-            Dim BF As BinaryFormatter = CreateBinaryFormatter()
 #Disable Warning SYSLIB0011
+            Dim BF As BinaryFormatter = CreateBinaryFormatter()
             BF.Serialize(MS, C)
 #Enable Warning SYSLIB0011
             MS.Seek(0, IO.SeekOrigin.Begin)

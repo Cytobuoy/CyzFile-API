@@ -165,7 +165,7 @@ Namespace Data.ParticleHandling
                 Else
                     SyncLock _imageStream
                         Dim img = ImageUtil.LoadOpenCvImage(sourceStream)
-                        If Not IsNothing(croppedRect) AndAlso Not croppedRect = OpenCvSharp.Rect.Empty Then
+                        If Not IsNothing(croppedRect) AndAlso Not croppedRect = OpenCvSharp.Rect.FromLTRB(0,0,0,0) Then
                             bgImg = New OpenCvSharp.Mat(bgImg, croppedRect)
                         End If
                         Dim unsortedCountours = ImageUtil.DetectObjects(img, bgImg, bgThreshold, erosionDilation)

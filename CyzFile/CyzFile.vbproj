@@ -6,7 +6,7 @@
 	<ProductName>CyzFile</ProductName>
 	<ProjectName>CyzFile</ProjectName>
 	
-	<TargetFrameworks>net7.0</TargetFrameworks>
+	<TargetFrameworks>net8.0</TargetFrameworks>
     <OutputPath>$(BaseOutputPath)\$(Platform)\$(Configuration)</OutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Platform)\$(Configuration)</IntermediateOutputPath>
     <Configurations>Debug;Release;ReleaseErnie;ReleaseWebsite</Configurations>
@@ -22,19 +22,20 @@
   <ItemGroup>
 	  <PackageReference Include="log4net" Version="2.0.15" />
 	  <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-	  <PackageReference Include="OpenCvSharp4" version="4.5.0.20201013" />
-	  <PackageReference Include="OpenCvSharp4.runtime.win" version="4.5.0.20201013" />
-	  <PackageReference Include="OpenCvSharp4.Windows" version="4.5.0.20201013" />
-	  <PackageReference Include="OpenCvSharp4.WpfExtensions" version="4.5.0.20201013" />
+	  <PackageReference Include="OpenCvSharp4" version="4.10.0.20240616" />
+	  <PackageReference Include="OpenCvSharp4.Extensions" Version="4.10.0.20240616" />
+	  <PackageReference Include="OpenCvSharp4.runtime.win" version="4.10.0.20240616" />
+	  <PackageReference Include="OpenCvSharp4.Windows" version="4.10.0.20240616" />
+	  <PackageReference Include="OpenCvSharp4.WpfExtensions" version="4.10.0.20240616" />
 	  <PackageReference Include="System.Buffers" version="4.5.1" />
-	  <PackageReference Include="System.Drawing.Common" version="7.0.0" />
+	  <PackageReference Include="System.Drawing.Common" version="8.0.8" />
 	  <PackageReference Include="System.Globalization" version="4.3.0" />
-	  <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+	  <PackageReference Include="System.IO.Ports" Version="8.0.0" />
 	  <PackageReference Include="System.Memory" version="4.5.5" />
 	  <PackageReference Include="System.Numerics.Vectors" version="4.5.0" />
 	  <PackageReference Include="System.Resources.ResourceManager" version="4.3.0" />
 	  <PackageReference Include="System.Runtime" version="4.3.1" />
-	  <PackageReference Include="System.Runtime.CompilerServices.Unsafe" version="5.0.0" />
+	  <PackageReference Include="System.Runtime.CompilerServices.Unsafe" version="6.0.0" />
 	  <PackageReference Include="System.Runtime.Extensions" version="4.3.1" />
 	  <PackageReference Include="System.ValueTuple" version="4.5.0" />
   </ItemGroup>
