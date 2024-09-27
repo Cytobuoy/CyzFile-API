@@ -15,7 +15,9 @@ Public Class CytoCollection
 		_items = CType(info.GetValue("Values", GetType(Object())), Object()).ToList()
 	End Sub
 
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
 	Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
 		info.AddValue("Values", _items.ToArray())
 	End Sub
 
@@ -118,7 +120,9 @@ Public Class CytoCultureInfo
 	Protected Sub New(info As SerializationInfo, context As StreamingContext)
 	End Sub
 
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
 	Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
 	End Sub
 End Class
 
@@ -129,7 +133,9 @@ Public Class CytoTextInfo
 	Protected Sub New(info As SerializationInfo, context As StreamingContext)
 	End Sub
 
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
 	Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
 	End Sub
 End Class
 
@@ -140,7 +146,9 @@ Public Class CytoNumberFormatInfo
 	Protected Sub New(info As SerializationInfo, context As StreamingContext)
 	End Sub
 
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
 	Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
 	End Sub
 End Class
 
@@ -151,7 +159,9 @@ Public Class CytoDateTimeFormatInfo
 	Protected Sub New(info As SerializationInfo, context As StreamingContext)
 	End Sub
 
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
 	Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
 	End Sub
 End Class
 
@@ -162,7 +172,9 @@ Public Class CytoCalendar
 	Protected Sub New(info As SerializationInfo, context As StreamingContext)
 	End Sub
 
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
 	Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
 	End Sub
 End Class
 #End Region

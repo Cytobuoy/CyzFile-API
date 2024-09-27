@@ -213,7 +213,9 @@ Namespace Data.Analysis
             End If
         End Sub
 
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
         Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
             info.AddValue("CytoSet+_name", _name)
             info.AddValue("CytoSet+_myType", _myType, GetType(cytoSetType))
             info.AddValue("CytoSet+_listID", _listID)

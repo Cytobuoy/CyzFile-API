@@ -42,7 +42,9 @@ Implements ISerializable
             _data = CType(info.GetValue("Data", GetType(Byte())),Byte())
         End Sub
 
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
         Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
                 info.AddValue("Data", _data, GetType(byte())) ' Compatible with the original bitmap serialization. (Assuming the user stored a JPEG stream in the byte array.)
         End Sub
 

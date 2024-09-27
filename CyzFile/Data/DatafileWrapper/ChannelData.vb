@@ -13,7 +13,10 @@ Namespace Data.ParticleHandling.Channel
         ' situation.  We will never use these objects, but we need to be able to de-serialize them correctly or the whole deserialization
         ' will fail.  Since we no longer save these kind of objects to disk, I will only support loading, and writing will
         ' immediately fail.
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
         Public Overridable Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
+
             Throw New NotImplementedException()
         End Sub
 

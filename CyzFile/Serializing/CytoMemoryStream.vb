@@ -65,7 +65,9 @@ Namespace Serializing
         ''' </summary>
         ''' <param name="info"></param>
         ''' <param name="context"></param>
+#Disable Warning SYSLIB0050 ' Serialization is obsolete
         Public Sub GetObjectData(info As SerializationInfo, context As StreamingContext) Implements ISerializable.GetObjectData
+#Enable Warning SYSLIB0050 ' Serialization is obsolete
                 If info Is Nothing Then
                 throw New System.ArgumentNullException("info")
                 End If
