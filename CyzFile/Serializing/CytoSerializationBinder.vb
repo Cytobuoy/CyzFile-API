@@ -30,8 +30,13 @@ Namespace Serializing
         ''' <param name="assemblyName"></param>
         ''' <param name="typeName"></param>
         ''' <returns></returns>
+        ''' <remarks>We are having a problem with the serialization binder and array types.  On serialization
+        ''' there is no call to BindToName, and this results in not remapping a CalibrationPoint[] for the old stepper motor
+        ''' sample pumps.  This will trigger an assert on loading this file.  I disabled the assert for this specific type.
+        ''' I created a bug report for .Net, but until it is fixed we will have to live with backwards incompatible files.
+        ''' </remarks>
         Public Overrides Function BindToType(assemblyName As String, typeName As String) As Type
-            Debug.Assert(Not (assemblyName.StartsWith("CyzFile") ) , "Serialized datafile contains reference to 'CyzFile' dll.")
+            Debug.Assert(Not (assemblyName.StartsWith("CyzFile") AndAlso Not typename.Contains("CalibrationPoint[]")) , "Serialized datafile contains reference to 'CyzFile' dll.")
             Debug.Assert(Not (assemblyName.StartsWith("CytoUtils") ) , "Serialized datafile contains reference to 'CytoUtils' dll.")
 '#If DEBUG
 '            Dim savedAssemblyName As String = assemblyName

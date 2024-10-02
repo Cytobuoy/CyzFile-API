@@ -29,6 +29,7 @@ Public Class TestSerializationBinder
     <DataRow("System.IO.Ports.Handshake, System",                                          "System.IO.Ports.Handshake",                                          "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")>
     <DataRow("CytoSense.Calibration.SamplePump.DCSamplePump, CyzFile",                     "CytoSense.Calibration.SamplePump.DCSamplePump",                      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.Calibration.SamplePump.DCSamplePumpHallMeasurements, CyzFile",     "CytoSense.Calibration.SamplePump.DCSamplePumpHallMeasurements",      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
+    <DataRow("CytoSense.Calibration.SamplePump.CalibrationPoint[], CyzFile",               "CytoSense.Calibration.SamplePump.CalibrationPoint[]",                "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CAutomaticInjectorSettings, CyzFile",                              "CytoSense.CAutomaticInjectorSettings",                               "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSelectorTray, CyzFile",                                        "CytoSense.CytoSelectorTray",                                         "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.BackflushTimeModeType, CyzFile",                      "CytoSense.CytoSettings.BackflushTimeModeType",                       "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
@@ -111,6 +112,7 @@ Public Class TestSerializationBinder
     <DataRow("System.IO.Ports.Handshake, System",                                          Nothing,                                                              Nothing)>
     <DataRow("CytoSense.Calibration.SamplePump.DCSamplePump, CyzFile",                     Nothing,                      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.Calibration.SamplePump.DCSamplePumpHallMeasurements, CyzFile",     Nothing,      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
+    <DataRow("CytoSense.Calibration.SamplePump.CalibrationPoint[], CyzFile",               Nothing,      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CAutomaticInjectorSettings, CyzFile",                              Nothing,                               "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSelectorTray, CyzFile",                                        Nothing,                                         "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.BackflushTimeModeType, CyzFile",                      Nothing,                       "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
