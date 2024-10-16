@@ -253,7 +253,7 @@ Public Class SheathCleaningTask
         End Sub
 
         Public Sub Started(ByVal d As Date)
-            _done_at.Add(Now)
+            _done_at.Add(d)
         End Sub
 
         Public Property InjectChlorine As Boolean

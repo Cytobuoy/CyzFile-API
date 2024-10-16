@@ -4,7 +4,7 @@ Namespace Scheduling
     <Serializable()> Public Class ExternalTriggerTask
         Inherits MeasurementTask
 
-        Private _done_at As New Microsoft.VisualBasic.Collection
+        Private _done_at As New CytoCollection()
 
         Private _name As String
         Public Overrides Property Name() As String
