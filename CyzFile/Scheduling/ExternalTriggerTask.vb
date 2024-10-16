@@ -50,10 +50,10 @@ Namespace Scheduling
 
         Public Overrides Property Done() As Boolean
             Get
-                Return False
+                Return DateTime.Now > Finish()
             End Get
             Set(ByVal value As Boolean)
-
+                Debug.Assert(False)
             End Set
         End Property
 

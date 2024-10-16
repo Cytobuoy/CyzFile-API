@@ -24,15 +24,6 @@ Namespace Scheduling
             Return True
         End Function
 
-        Public Overrides Property Done() As Boolean
-            Get
-                Return False
-            End Get
-            Set(ByVal value As Boolean)
-
-            End Set
-        End Property
-
 
         Public Overrides Function isIntervalMeasurement() As Boolean
             Return True
