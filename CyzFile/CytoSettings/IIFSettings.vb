@@ -250,6 +250,12 @@ Namespace CytoSettings
                 Return _openCvBackgroundMean
         End Get
         End Property
+
+        Public Property EnableAutoCrop As Boolean
+        Public Property CropBGThreshold As Integer
+        Public Property CropErodeDilateSteps As Integer
+        Public Property CropMarginBase As Integer
+        Public Property CropMarginFactor As Double
          
 
         Dim ExposureTime As Single

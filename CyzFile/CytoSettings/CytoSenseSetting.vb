@@ -704,6 +704,42 @@ Namespace CytoSettings
             End Get
         End Property
 
+        <Category("Image in Flow"), DisplayName("AutoCrop Enabled"), Description("Auto Cropping was enabled during this measurement."), ComponentModel.Browsable(True)>
+        Public ReadOnly Property AutoCropEnabled As Boolean
+            Get
+                Return enableAutoCrop OrElse iif.EnableAutoCrop ''Check both for now, transition from in this file to the iif struct. Don't want to break old ones
+                                                                ''Should be able to completely change this to the iif version later when everyone's settings updated
+            End Get
+        End Property
+
+        <Category("Image in Flow"), DisplayName("AutoCrop Background Threshold"), Description("Background threshold used in autocrop (if enabled)."), ComponentModel.Browsable(True)>
+        Public ReadOnly Property CropBGThreshold As Integer
+            Get
+                Return iif.CropBGThreshold
+            End Get
+        End Property
+
+        <Category("Image in Flow"), DisplayName("AutoCrop erode/dilate steps"), Description("Amount of erosion and dilation steps used in autocrop (if enabled)."), ComponentModel.Browsable(True)>
+        Public ReadOnly Property CropErodeDilateSteps As Integer
+            Get
+                Return iif.CropErodeDilateSteps
+            End Get
+        End Property
+
+        <Category("Image in Flow"), DisplayName("AutoCrop base margin"), Description("Base margin used in autocrop (if enabled)."), ComponentModel.Browsable(True)>
+        Public ReadOnly Property CropMarginBase As Integer
+            Get
+                Return iif.CropMarginBase
+            End Get
+        End Property
+
+        <Category("Image in Flow"), DisplayName("AutoCrop margin factor"), Description("factor applied to base margin used in autocrop (if enabled)."), ComponentModel.Browsable(True)>
+        Public ReadOnly Property CropMarginFactor As Double
+            Get
+                Return iif.CropMarginFactor
+            End Get
+        End Property
+
         Public iif As IIFSettings
         Public DSPRecognizeString As String
         Public DSPRS232FTDICode As String
@@ -837,6 +873,7 @@ Namespace CytoSettings
         <Obsolete()> _
         Public hasGPS As Boolean
         Public enableGPS As Boolean
+        <Obsolete>
 		Public enableAutoCrop As Boolean
         Public baudGPS As Int32
         Public comPortGPS As Int32
@@ -1176,12 +1213,7 @@ Namespace CytoSettings
             End Get
         End Property
 
-		<Category("Measurement instrument settings"), DisplayName("AutoCrop Enabled"), Description("Auto Cropping was enabled during this measurement."), ComponentModel.Browsable(True)>
-        Public ReadOnly Property AutoCropEnabled As Boolean
-            Get
-                Return enableAutoCrop
-            End Get
-        End Property
+
 
 
         ''' <summary>
