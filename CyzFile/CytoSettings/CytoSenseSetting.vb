@@ -707,8 +707,10 @@ Namespace CytoSettings
         <Category("Image in Flow"), DisplayName("AutoCrop Enabled"), Description("Auto Cropping was enabled during this measurement."), ComponentModel.Browsable(True)>
         Public ReadOnly Property AutoCropEnabled As Boolean
             Get
+                #Disable Warning BC40008
                 Return enableAutoCrop OrElse iif.EnableAutoCrop ''Check both for now, transition from in this file to the iif struct. Don't want to break old ones
                                                                 ''Should be able to completely change this to the iif version later when everyone's settings updated
+                #Enable Warning BC40008
             End Get
         End Property
 
