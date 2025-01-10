@@ -8,21 +8,25 @@
 		<UpperDirProperties>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</UpperDirProperties>
   </PropertyGroup>
 
+
+
+
   <Import Project="$(UpperDirProperties)" Condition=" '$(UpperDirProperties)'!=''"  />
-
-  <!-- Put our package files with the other build intermediates and products.  -->
-  <PropertyGroup>
-	<RestorePackagesPath Condition=" '$(RestorePackagesPath)'==''" >$(MSBuildThisFileDirectory)\..\build\packages</RestorePackagesPath>
-    <RunSettingsFilePath Condition=" '$(RunSettingsFilePath)'== ''" >$(MSBuildThisFileDirectory)\CyzFile-API.runsettings</RunSettingsFilePath>
-  </PropertyGroup>
-  
-  <PropertyGroup>
-	<BaseIntermediateOutputPath Condition=" '$(BaseIntermediateOutputPath)' == '' ">$(MSBuildThisFileDirectory)..\build\obj</BaseIntermediateOutputPath>
-    <BaseOutputPath Condition=" '$(BaseOutputPath)' == '' " >$(MSBuildThisFileDirectory)..\build\bin</BaseOutputPath>
-
+  <!-- If we are the top level property dir thingy then we need to setup all the paths, if there is a higher level one
+       all we have to do is import that one.
+	   -->
+  <PropertyGroup Condition="'$(UpperDirProperties)'==''">
+	<!-- Determine relative project location for output. -->
+	<CurrentProjectFolder>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectFullPath)))</CurrentProjectFolder>
+	<ThisFolderLength>$(MSBuildThisFileDirectory.Length)</ThisFolderLength>
+	<RelativeProjectFolder>$(CurrentProjectFolder.SubString( $(ThisFolderLength) ))</RelativeProjectFolder>
+	
+	<RestorePackagesPath>$(MSBuildThisFileDirectory)\..\build\packages</RestorePackagesPath>
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\CyzFile-API.runsettings</RunSettingsFilePath>
+	
 	<ThisFolder>CyzFile-API</ThisFolder>
-    <BaseIntermediateOutputPath>$(BaseIntermediateOutputPath)\$(ThisFolder)</BaseIntermediateOutputPath>
-    <BaseOutputPath>$(BaseOutputPath)\$(ThisFolder)</BaseOutputPath>
+	<BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\build\obj\$(RelativeProjectFolder)</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory)..\build\bin\$(RelativeProjectFolder)</BaseOutputPath>
   </PropertyGroup>
   
 </Project>
