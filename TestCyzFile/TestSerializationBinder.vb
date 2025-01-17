@@ -109,7 +109,7 @@ Public Class TestSerializationBinder
     <DataTestMethod()>
     <DataRow("System.Drawing.Color, System.Drawing",                                       Nothing,                                                              Nothing)>
     <DataRow("System.Drawing.Point, System.Drawing",                                       Nothing,                                                              Nothing)>
-    <DataRow("System.IO.Ports.Handshake, System",                                          Nothing,                                                              Nothing)>
+    <DataRow("System.IO.Ports.Handshake, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",                                             Nothing, "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")>
     <DataRow("CytoSense.Calibration.SamplePump.DCSamplePump, CyzFile",                     Nothing,                      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.Calibration.SamplePump.DCSamplePumpHallMeasurements, CyzFile",     Nothing,      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.Calibration.SamplePump.CalibrationPoint[], CyzFile",               Nothing,      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>

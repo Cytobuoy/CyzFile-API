@@ -167,6 +167,7 @@ Namespace Serializing
                 typeName = Nothing
                 assemblyName = CYTOSENSE_DLL_NAME
             Else If serializedType.FullName.Contains("Ports.Handshake") Then
+                typeName = Nothing
                 assemblyName = "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
             Else If serializedType.FullName.StartsWith("System.Collections.Generic.List") Then
                 Dim oldTypeName = serializedType.FullName
