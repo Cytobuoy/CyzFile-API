@@ -39,7 +39,8 @@ Namespace Serializing
         ''' <param name="info"></param>
         ''' <param name="context"></param>
         Public Sub New(info As SerializationInfo, context As StreamingContext)
-            MyBase.New( ResizeArray(DirectCast(info.GetValue("_buffer",GetType(Byte())), Byte()),info.GetInt32("_length")))
+            MyBase.New( ResizeArray(DirectCast(info.GetValue("_buffer",GetType(Byte())), Byte()),info.GetInt32("_length")), 0, info.GetInt32("_length"), False, True)
+            
         End Sub
 
 
