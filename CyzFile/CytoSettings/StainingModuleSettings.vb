@@ -132,7 +132,7 @@ Namespace CytoSettings
 
 
         Public Model As StainingModuleModel_t
-
+        Public InUse As Boolean = False              '  Is the staining module used for this instrument or not.
         ''' <summary>
         ''' Initialize the Model to an invalid value before deserializing so we can be
         ''' detect if it was loaded afterwards.
@@ -141,6 +141,8 @@ Namespace CytoSettings
         <OnDeserializing()>
         Private Sub OnDeserializing(context As StreamingContext)
             Model = StainingModuleModel_t.Invalid
+            InUse = True ' Initialize to True. If we have a serialized structure, without the member then it should be true.
+                         ' Newer structures have the member and there it can be false.
         End Sub
 
         ''' <summary>
