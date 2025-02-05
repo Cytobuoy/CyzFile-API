@@ -1,4 +1,5 @@
 ﻿Imports System.Globalization
+Imports System.Runtime.Serialization
 
 Namespace CytoSettings
 
@@ -57,6 +58,15 @@ Namespace CytoSettings
         Public Offset As Single
         Public Slope As Single
     End Structure
+
+
+    <Serializable()>
+    Public Enum StainingModuleModel_t
+        Invalid = 0
+        BsmV1
+        BsmV2
+    End Enum
+
 
     ''' <summary>
     ''' Configuration of and settings for the bacterial staining module!
@@ -119,6 +129,32 @@ Namespace CytoSettings
         Public DyeUnit2TargetTemperature As Double   = 4.0
         Public DyeUnit2PrimeCircuit As TimeSpan      = TimeSpan.FromMinutes(10) ' Prime time for the DyeCircuit 
         Public DyeUnit2PrimeDispense As TimeSpan     = TimeSpan.FromMinutes(5) ' Prime time for the dispense part of the DyeCircuit 
+
+
+        Public Model As StainingModuleModel_t
+
+        ''' <summary>
+        ''' Initialize the Model to an invalid value before deserializing so we can be
+        ''' detect if it was loaded afterwards.
+        ''' </summary>
+        ''' <param name="context"></param>
+        <OnDeserializing()>
+        Private Sub OnDeserializing(context As StreamingContext)
+            Model = StainingModuleModel_t.Invalid
+        End Sub
+
+        ''' <summary>
+        ''' After deserialization check the value of the model, and if it is set
+        ''' to Invalid then it must be an older version, so we set it to
+        ''' BsmV1
+        ''' </summary>
+        ''' <param name="context"></param>
+        <OnDeserialized()>
+        Private Sub OnDeserializied(context As StreamingContext)
+            If Model = StainingModuleModel_t.Invalid Then
+                Model = StainingModuleModel_t.BsmV1
+            End If
+        End Sub
 
     End Class
 
