@@ -153,8 +153,10 @@ Namespace Data
 
             <ComponentModel.Browsable(False)>
             Public Property GPSData As List(Of GPS.GPSCoordinate)
-            <OptionalField> _
+            <OptionalField>
             Private _numberOfPictures As Integer
+            <OptionalField>
+            Private _numberOfCropFailures As Integer
             <OptionalField>
             Public MeasurementCounters As MeasurementCountersT
 
@@ -301,30 +303,30 @@ Namespace Data
                 End Get
             End Property
    
-        Private Function GetAutomaticNumberOfCountedParticles() As Int64
-            Dim numDbl As Double = -1
-            If sensorLogs.PICConcentration IsNot Nothing AndAlso sensorLogs.PICConcentration.DataList.Length > 0 Then
-                Dim sum As Double = 0
-                For i = 0 To sensorLogs.PICConcentration.DataList.Length - 1
-                    sum += sensorLogs.PICConcentration.DataList(i).data
-                Next
+            Private Function GetAutomaticNumberOfCountedParticles() As Int64
+                Dim numDbl As Double = -1
+                If sensorLogs.PICConcentration IsNot Nothing AndAlso sensorLogs.PICConcentration.DataList.Length > 0 Then
+                    Dim sum As Double = 0
+                    For i = 0 To sensorLogs.PICConcentration.DataList.Length - 1
+                        sum += sensorLogs.PICConcentration.DataList(i).data
+                    Next
                 
-                numDbl = ActualMeasureTime * (sum / sensorLogs.PICConcentration.DataList.Length)
-            Else If Me.ConcentrationClass IsNot Nothing Then 'if PIC count is not available, check if FTDI count is available:
-                Debug.Assert(_dfw IsNot Nothing, "We need a reference to the enclosing DataFileWrapper to get the correct concentration mode." )
+                    numDbl = ActualMeasureTime * (sum / sensorLogs.PICConcentration.DataList.Length)
+                Else If Me.ConcentrationClass IsNot Nothing Then 'if PIC count is not available, check if FTDI count is available:
+                    Debug.Assert(_dfw IsNot Nothing, "We need a reference to the enclosing DataFileWrapper to get the correct concentration mode." )
                 
-                Dim concentration = _dfw.Concentration()
-                ' We have concentration instead of particle rate, so we need pumped volume to calculate the total.
-                Dim pumpedVolume = ActualMeasureTime * _measurementSettings.SamplePompSpeed
-                numDbl = (concentration * pumpedVolume)
-            End If 
-            Try
-                Dim num As Long = CLng(numDbl)
-                Return num
-            Catch ex As Exception 'Probably a conversion error because of a NaN or something.
-                Return -1
-            End Try
-        End Function
+                    Dim concentration = _dfw.Concentration()
+                    ' We have concentration instead of particle rate, so we need pumped volume to calculate the total.
+                    Dim pumpedVolume = ActualMeasureTime * _measurementSettings.SamplePompSpeed
+                    numDbl = (concentration * pumpedVolume)
+                End If 
+                Try
+                    Dim num As Long = CLng(numDbl)
+                    Return num
+                Catch ex As Exception 'Probably a conversion error because of a NaN or something.
+                    Return -1
+                End Try
+            End Function
 
 
             ''' <summary>
@@ -671,6 +673,22 @@ Namespace Data
                 End Get
                 Set(value As Integer)
                     _numberOfPictures = value
+                End Set
+            End Property
+
+
+            ''' <summary>
+            ''' The number of times during autocrop that no particles could be found in an image that was taken.
+            ''' If this happens (no crop can be found), the image is thrown away.
+            ''' </summary>
+            ''' <returns></returns>
+            <Category("Measurement results"), DisplayName("Crop failures"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("F0")>
+            Public Property NumberOfCropFailures As Integer
+                Get
+                    Return _numberOfCropFailures
+                End Get
+                Set(value As Integer)
+                    _numberOfCropFailures = value
                 End Set
             End Property
 
