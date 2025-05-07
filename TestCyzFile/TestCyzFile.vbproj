@@ -224,7 +224,7 @@
 	  </PackageReference>
 	  <PackageReference Include="Castle.Core" version="5.1.1" />
 	  <PackageReference Include="Crc32.NET" Version="1.2.0" />
-	  <PackageReference Include="log4net" Version="3.0.1" />
+	  <PackageReference Include="log4net" Version="3.0.3" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" version="17.11.1" />
 	  <PackageReference Include="Microsoft.TestPlatform" Version="17.11.1" />
 	  <PackageReference Include="MSTest.TestAdapter" version="3.6.0" />
