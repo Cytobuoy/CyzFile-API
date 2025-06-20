@@ -45,7 +45,7 @@ Namespace Data.Analysis
         ''' </summary>
         ''' <param name="other"></param>
         Public Sub New(other As gateBasedSet)
-            Me.New(other.Name, other.ColorOfSet, other.Datafile)
+            Me.New(other.Name, other.ColorOfSet, other.Datafile, other.ListID, other.Visible)
             For Each cgate As IGate In other.allGates
                 AddGate(cgate.CreateWorkfileCopy(other.Datafile))
             Next

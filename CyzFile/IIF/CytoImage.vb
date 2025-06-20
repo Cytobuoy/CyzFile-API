@@ -84,7 +84,11 @@ Namespace Data.ParticleHandling
                 Return Nothing
             Else
                 SyncLock _imageStream
-                    Return AutoCropOpenCV(_imageStream, _cytoSettings.iif.OpenCvBackground, _cytoSettings.iif.OpenCvBackgroundMean, marginBase, marginFactor, bgThreshold, erosionDilation, brightFieldCorrection, extendObjectDetection, _croppedRect)
+                    Try
+                        Return AutoCropOpenCV(_imageStream, _cytoSettings.iif.OpenCvBackground, _cytoSettings.iif.OpenCvBackgroundMean, marginBase, marginFactor, bgThreshold, erosionDilation, brightFieldCorrection, extendObjectDetection, _croppedRect)
+                    Catch ex As Exception
+                        Throw New Exception(ex.ToString())
+                    End Try
                 End SyncLock
             End IF
         End Function
