@@ -14,7 +14,7 @@
     <OptionExplicit>On</OptionExplicit>
     <OptionStrict>On</OptionStrict>
 	
-    <FileVersion>1.4.0.0</FileVersion>
+    <FileVersion>1.4.0.1</FileVersion>
     <AssemblyVersion>$(FileVersion)</AssemblyVersion>
   </PropertyGroup>
 
