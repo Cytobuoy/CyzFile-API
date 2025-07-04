@@ -83,160 +83,193 @@
               <th>Description</th>
           </tr>
           <tr>
+              <td>1.4.0.1</td>
+              <td>2025-07-04</td>
+              <td>
+                  <h4>Changes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Updated logging framework to latest version.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  The log4net framework was updated to version 3.0.3
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <h4>Bug Fixes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fix display of CytoUSB version</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>The CytoUSB version that was recorded in the datafile had a slightly different format then
+                              the display code expected.  As a result the actual version was not displayed in CytoClus.  After this fix
+                              the correct version of CytoUSB used to record a data file will be displayed.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+              </td>
+          </tr>
+          <tr>
               <td>1.4.0.0</td>
               <td>2024-08-21</td>
               <td>
-                <h4>Changes</h4>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Migrated from .NET Framework 4.7.2 to .Net 8.0</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        .NET 8 is the latest Long Term Support (LTS) version, so we should be able to stay on this one for a while.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Implemented</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Exposed the GetChannelLineType function</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        Exposed the GetChannelLineType function from CytoSenseSettings to enable the Background window to display properly in CytoClus.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Implemented</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Change all uses of the Gate class to IGate</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        Bring it in line with the rest of the code and prevent casting.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Implemented</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Added the autocrop settings to the saved cytosettings</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        Added the settings that were used for autocropping in CytoUSB (including if it was enabled) to the IIFSettings object.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Implemented</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Updated various nuget packages</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        Updated the log4net package and various other packages.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Implemented</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Added ListID and visible property to the Copy constructor of GateBasedSet</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        These properties are neccesary for certain functionality to work, but were sometimes lost when cloning or copying these sets.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Implemented</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Add Crop Failures as property to measurementInfo</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        This property gives insight in the amount of pictures that were discarded during autocrop because no particle could be found in the image.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Implemented</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Make CytoImage throw the complete exception</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        Exceptions that occur in CytoImage are most likely OpenCV error. The inner exception of these is lost most of the times, giving no insight in what actually went wrong.
-                        We now always throw the entire exception as string to make sure we keep the inner exception.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Implemented</td></tr>
-                  </table>
-                </p>
-                <h4>Bug Fixes</h4>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Fix schedules not properly deserializing in .NET 7.0</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        Saved schedules would not be able to be fully added in again due to a deserialization error.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Fixed</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Fix serialNumber being empty in workspace XML</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        The serialNumber property was added to better link workspaces to machines, but it was sometimes not added to the xml.
-                        This caused issues with workspace loading.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Fixed</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Fix trigger channel array issue in old files</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        There was a problem with the stored trigger channel array on some old
-                        (2011) datafiles.  This corrects the length of the array after
-                        loading the datafile.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Fixed</td></tr>
-                  </table>
-                </p>
-                <p>
-                  <table class="item">
-                    <tr><th>Subject:</th><th>Fix CytoMemoryStream buffer being inaccesable</th></tr>
-                    <tr>
-                      <th>Summary:</th>
-                      <td>
-                        Depending on the constructor that was being used the MemoryStream variable that allows the memoryStream to be retrieved to be reused would not be set.
-                        The TryGetBuffer function would always fail. Changed it so we now always set is so the buffer is accesible.
-                      </td>
-                    </tr>
-                    <tr><th>Status:</th><td>Fixed</td></tr>
-                  </table>
-                </p>
+                  <h4>Changes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Migrated from .NET Framework 4.7.2 to .Net 8.0</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  .NET 8 is the latest Long Term Support (LTS) version, so we should be able to stay on this one for a while.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Exposed the GetChannelLineType function</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  Exposed the GetChannelLineType function from CytoSenseSettings to enable the Background window to display properly in CytoClus.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Change all uses of the Gate class to IGate</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  Bring it in line with the rest of the code and prevent casting.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Added the autocrop settings to the saved cytosettings</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  Added the settings that were used for autocropping in CytoUSB (including if it was enabled) to the IIFSettings object.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Updated various nuget packages</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  Updated the log4net package and various other packages.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Added ListID and visible property to the Copy constructor of GateBasedSet</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  These properties are neccesary for certain functionality to work, but were sometimes lost when cloning or copying these sets.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Add Crop Failures as property to measurementInfo</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  This property gives insight in the amount of pictures that were discarded during autocrop because no particle could be found in the image.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Make CytoImage throw the complete exception</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  Exceptions that occur in CytoImage are most likely OpenCV error. The inner exception of these is lost most of the times, giving no insight in what actually went wrong.
+                                  We now always throw the entire exception as string to make sure we keep the inner exception.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <h4>Bug Fixes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fix schedules not properly deserializing in .NET 7.0</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  Saved schedules would not be able to be fully added in again due to a deserialization error.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fix serialNumber being empty in workspace XML</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  The serialNumber property was added to better link workspaces to machines, but it was sometimes not added to the xml.
+                                  This caused issues with workspace loading.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fix trigger channel array issue in old files</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  There was a problem with the stored trigger channel array on some old
+                                  (2011) datafiles.  This corrects the length of the array after
+                                  loading the datafile.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fix CytoMemoryStream buffer being inaccesable</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  Depending on the constructor that was being used the MemoryStream variable that allows the memoryStream to be retrieved to be reused would not be set.
+                                  The TryGetBuffer function would always fail. Changed it so we now always set is so the buffer is accesible.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
 
               </td>
           </tr>
