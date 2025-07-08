@@ -1015,17 +1015,6 @@ Namespace MeasurementSettings
             End Set
         End Property
 
-		Private _IsBackgroundOnly As Boolean = False
-
-		Public Property IsBackgroundOnly As Boolean
-			Get
-				Return _IsBackgroundOnly
-			End Get
-		    Set(value As Boolean)
-				_IsBackgroundOnly = value
-		    End Set
-		End Property
-
         Private _IIFCheck As Boolean = False
 
         <Category("Image in Flow"),
@@ -1888,6 +1877,38 @@ Namespace MeasurementSettings
             Get
                 Return _cytoSelectorEnabledTraysIDs
             End Get
+        End Property
+
+        Private _injectorFocus As Double
+
+        <Category("Measurement instrument settings"),
+            DisplayName("Injector focus"),
+            DescriptionAttribute(""),
+            ComponentModel.Browsable(True)>
+        Public Property InjectorFocus As Double
+            Get
+                Return _injectorFocus
+            End Get
+
+            Set(value As Double)
+                _injectorFocus = value
+            End Set
+        End Property
+
+        Private _injectorPosition As Double
+
+        <Category("Measurement instrument settings"),
+            DisplayName("Injector position"),
+            DescriptionAttribute(""),
+            ComponentModel.Browsable(True)>
+        Public Property InjectorPosition As Double
+            Get
+                Return _injectorPosition
+            End Get
+
+            Set(value As Double)
+                _injectorPosition = value
+            End Set
         End Property
 
 #Region "Staining Module Settings"
