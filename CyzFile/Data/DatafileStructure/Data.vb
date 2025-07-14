@@ -642,6 +642,16 @@ Namespace Data
                 End Get
             End Property
 
+
+            <Category("Auxilary sensors"), DisplayName("Filter pressure"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0 \mB")>
+            Public ReadOnly Property FilterPressure As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.ExternalFiltersPressureData))
+                End Get
+            End Property
+
+
+
             <Category("Auxilary sensors"), DisplayName("Internal voltage"), DescriptionAttribute(""), ComponentModel.Browsable(True), CytoSense.Data.DataBase.Attributes.Format("#0.0 \V")>
             Public ReadOnly Property intVoltage As Single
                 Get
