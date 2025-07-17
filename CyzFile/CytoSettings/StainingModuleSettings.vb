@@ -59,12 +59,14 @@ Namespace CytoSettings
         Public Slope As Single
     End Structure
 
-
-    <Serializable()>
+    ''' <summary>
+    ''' Which type of staining module.  To keep files backwards compatible, we serialize this as an integer
+    ''' so the numeric values assigned to the labels are important!
+    ''' </summary>
     Public Enum StainingModuleModel_t
         Invalid = 0
-        BsmV1
-        BsmV2
+        BsmV1   = 1
+        BsmV2   = 2
     End Enum
 
 
@@ -130,8 +132,24 @@ Namespace CytoSettings
         Public DyeUnit2PrimeCircuit As TimeSpan      = TimeSpan.FromMinutes(10) ' Prime time for the DyeCircuit 
         Public DyeUnit2PrimeDispense As TimeSpan     = TimeSpan.FromMinutes(5) ' Prime time for the dispense part of the DyeCircuit 
 
+        ''' <summary>
+        ''' What kind of staining module is in use, the V1 or the V2, and maybe other models will be added later.
+        ''' To keep the datafiles loadable, we store the enum as an integer because older code does not know the enum
+        ''' and cannot load the files.  When stored as an enum, they can load the files. But they do not use
+        ''' the model, so they cannot see which model is used, but they can load and process the rest of the file
+        ''' and this property is interesting but not required to analyze the data.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property Model As StainingModuleModel_t
+            Get
+                Return CType(_modelNumber, StainingModuleModel_t)
+            End Get
+            Set(value As StainingModuleModel_t)
+                _modelNumber = Convert.ToInt32(value)
+            End Set
+        End Property
+        Private _modelNumber As Integer
 
-        Public Model As StainingModuleModel_t
         Public InUse As Boolean = False              '  Is the staining module used for this instrument or not.
         ''' <summary>
         ''' Initialize the Model to an invalid value before deserializing so we can be
@@ -140,7 +158,7 @@ Namespace CytoSettings
         ''' <param name="context"></param>
         <OnDeserializing()>
         Private Sub OnDeserializing(context As StreamingContext)
-            Model = StainingModuleModel_t.Invalid
+            _modelNumber = 0
             InUse = True ' Initialize to True. If we have a serialized structure, without the member then it should be true.
                          ' Newer structures have the member and there it can be false.
         End Sub
