@@ -100,11 +100,16 @@ Namespace Data.Analysis
             End Get
         End Property
 
+        Private _previousPercentage As Integer
+
 		Public ReadOnly Property ReducedParticleIndices As Integer()
 			Get
 				If _datafile.PercentageOfParticlesShown = 100 Then
 					Return ParticleIndices
 				End If
+                If _datafile.PercentageOfParticlesShown = _previousPercentage Then
+                    Return _reducedParticleIndices 'Percentage hasn't changed, no need to recalculate
+                End If
 				Dim indices = ParticleIndices
 				Dim stepsize = 100/_datafile.percentageOfParticlesShown
 				Dim reducedIndices = new List(Of Integer)
@@ -116,6 +121,7 @@ Namespace Data.Analysis
 					End If
 				Next
 				_reducedParticleIndices = reducedIndices.ToArray()
+                _previousPercentage = _datafile.PercentageOfParticlesShown
 				Return _reducedParticleIndices
 			End Get
 		End Property
@@ -128,9 +134,9 @@ Namespace Data.Analysis
 				Dim indices = ParticleIndices
 				dim reducedIndices = ReducedParticleIndices
                 Dim allParticles = _datafile.SplittedParticles
-				Dim reducedSetParticles() = New ParticleHandling.Particle(reducedIndices.Count - 1) {}
+				Dim reducedSetParticles() = New Particle(reducedIndices.Length - 1) {}
 
-                For i = 0 To reducedIndices.Count - 1
+                For i = 0 To reducedIndices.Length - 1
                     reducedSetParticles(i) = allParticles(reducedIndices(i))
                 Next
 
@@ -159,11 +165,26 @@ Namespace Data.Analysis
             End Get
         End Property
 
+        #If DEBUG
+        Private Function IsSorted(arr As Integer()) As Boolean
+            For i As Integer = 1 To arr.Length
+                If arr(i - 1) > arr(i) Then
+                    Return False
+                End If
+            Next
+            Return True
+        End Function
+        #End If
+
         Public Overridable ReadOnly Property ParticleIndices As Integer()
             Get
                 If _ParticleIndices Is Nothing Then
                     'Return New Integer() {}
                     RecalculateParticleIndices()
+
+                    #If DEBUG
+                    Debug.Assert(IsSorted(_ParticleIndices))
+                    #End If
                 End If
 
                 Return _ParticleIndices
