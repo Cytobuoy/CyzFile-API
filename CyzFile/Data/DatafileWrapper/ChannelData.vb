@@ -864,6 +864,13 @@ End Function
 #End If
             VariableLength
 
+            X
+            Y
+            Width
+            Height
+            Area
+            SharpnessScore
+
         End Enum
 
         Public Overrides Function ToString() As String

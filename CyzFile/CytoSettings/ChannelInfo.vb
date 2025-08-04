@@ -1,4 +1,5 @@
 Imports System.Drawing
+Imports CytoSense.Data.SegmentedData
 
 Namespace CytoSettings
     ''' <summary>
@@ -731,6 +732,7 @@ Namespace CytoSettings
             DualFocusRight
             HF_plus_LF_Summed   'SSL system
             LF_Filtered     'SSL system
+            ParticleData 'It belongs here, but still feels dirty. Really need to overhaul chnanel classes (channelwrapper, channel, channeldata)
         End Enum
 
         Public MustOverride Overrides ReadOnly Property Description As String
@@ -994,6 +996,20 @@ Namespace CytoSettings
         Public Overrides ReadOnly Property Description As String
             Get
                 Return "Curvature"
+            End Get
+        End Property
+    End Class
+
+    Public Class VirtualParticleDataChannelInfo
+        Inherits VirtualChannelInfo
+
+        Public Sub New()
+            MyBase.New("Particle Data", color.Aquamarine, VirtualChannelType.ParticleData)
+        End Sub
+
+        Public Overrides ReadOnly Property Description As String
+            Get
+                Return "Particle Data"
             End Get
         End Property
     End Class

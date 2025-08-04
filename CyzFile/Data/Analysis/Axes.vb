@@ -247,13 +247,22 @@ Namespace Data.Analysis
                 ELse
                     chName = Channel.ToString()
                 End If
-                Return ChannelData.ParameterNames(_parameter) & " " & ChannelData.ParameterUnits(_parameter) & " " & chName
+                If Channel.VirtualChannelType = VirtualChannelInfo.VirtualChannelType.ParticleData Then
+                    Return _parameter.ToString() & " " & chName
+                Else
+                    Return ChannelData.ParameterNames(_parameter) & " " & ChannelData.ParameterUnits(_parameter) & " " & chName
+                End If
+                
             End Get
         End Property
 
         Public Overrides ReadOnly Property ShortName As String
             Get
-                Return ChannelData.ParameterNames(_parameter) & " " & Channel.ToString
+                If Channel.VirtualChannelType = VirtualChannelInfo.VirtualChannelType.ParticleData Then
+                    Return _parameter.ToString() & " " & Channel.ToString
+                Else
+                    Return ChannelData.ParameterNames(_parameter) & " " & Channel.ToString
+                End If
             End Get
         End Property
 
@@ -270,64 +279,84 @@ Namespace Data.Analysis
         End Property
 
         Public Overrides Function GetValue(particle As ParticleHandling.Particle) As Single
+            If Not Channel.VirtualChannelType = VirtualChannelInfo.VirtualChannelType.ParticleData Then
             ' this function is (also) called from Gate.TestSingleParticle
             ' In batch exports particles are processed one by one, so the _values array is not present
 
-            If _channelIdx < 0 Then
-                Dim res = particle.GetChannelIndexByName(Channel.ChannelInfo.name)
-                _channelIdxInHardware = res.Item1
-                _channelIdx = res.Item2
-            End If
+                If _channelIdx < 0 Then
+                    Dim res = particle.GetChannelIndexByName(Channel.ChannelInfo.name)
+                    _channelIdxInHardware = res.Item1
+                    _channelIdx = res.Item2
+                End If
 
-            If _channelIdxInHardware Then
-                ' Only for FWS_L, FWS_R channels, these channels are only used by the GUI and not by batch export
-                Return particle.ChannelData_Hardware(_channelIdx).Parameter(Parameter)
+                If _channelIdxInHardware Then
+                    ' Only for FWS_L, FWS_R channels, these channels are only used by the GUI and not by batch export
+                    Return particle.ChannelData_Hardware(_channelIdx).Parameter(Parameter)
+                Else
+                    Return particle.ChannelData(_channelIdx).Parameter(Parameter)
+                End If
             Else
-                Return particle.ChannelData(_channelIdx).Parameter(Parameter)
+                If particle.hasImage Then
+                    Return DirectCast(particle, ImagedParticle).ImageHandling.ParticleData.Parameter(Parameter)
+                Else
+                    Return Single.NaN
+                End If
             End If
         End Function
 
         Public Overrides Function GetValues(datafile As DataFileWrapper) As Single()
-            Dim particles = datafile.SplittedParticles
-            Dim valuesCache = datafile._axisValuesCache
+            If Not Channel.VirtualChannelType = VirtualChannelInfo.VirtualChannelType.ParticleData Then
+                Dim particles = datafile.SplittedParticles
+                Dim valuesCache = datafile._axisValuesCache
 
-            If particles Is Nothing OrElse particles.Length = 0 Then
-                Return Nothing
-            End If
-
-			If CytoSettings Is Nothing
-				CytoSettings = datafile.CytoSettings
-			End If
-
-            Dim cacheEntry = valuesCache.GetEntry(Name)
-
-            SyncLock cacheEntry
-                ' Should the values be calculated?
-
-                If cacheEntry.axisValues Is Nothing Then
-                    If _channelIdx < 0 Then
-                        GetValue(particles(0)) ' just to set _channelIdx and _channelIdxInHardware fields
-                    End If
-
-                    cacheEntry.axisValues = New Single(particles.Length - 1) {}
-
-                    If _channelIdxInHardware Then
-                        Parallel.For(0, particles.Length,
-                                Sub(i As Integer)
-                                    cacheEntry.axisValues(i) = particles(i).ChannelData_Hardware(_channelIdx).Parameter(Parameter)
-                                End Sub)
-                    Else
-                        Parallel.For(0, particles.Length,
-                                Sub(i As Integer)
-                                    cacheEntry.axisValues(i) = particles(i).ChannelData(_channelIdx).Parameter(Parameter)
-                                End Sub)
-                    End If
-
-                    Debug.WriteLine(String.Format("Calculated AxisValuesCacheEntry {0}", Name))
+                If particles Is Nothing OrElse particles.Length = 0 Then
+                    Return Nothing
                 End If
-            End SyncLock
 
-            Return cacheEntry.axisValues
+		        If CytoSettings Is Nothing
+			        CytoSettings = datafile.CytoSettings
+		        End If
+
+                Dim cacheEntry = valuesCache.GetEntry(Name)
+
+                SyncLock cacheEntry
+                    ' Should the values be calculated?
+
+                    If cacheEntry.axisValues Is Nothing Then
+                        If _channelIdx < 0 Then
+                            GetValue(particles(0)) ' just to set _channelIdx and _channelIdxInHardware fields
+                        End If
+
+                        cacheEntry.axisValues = New Single(particles.Length - 1) {}
+
+                        If _channelIdxInHardware Then
+                            Parallel.For(0, particles.Length,
+                                    Sub(i As Integer)
+                                        cacheEntry.axisValues(i) = particles(i).ChannelData_Hardware(_channelIdx).Parameter(Parameter)
+                                    End Sub)
+                        Else
+                            Parallel.For(0, particles.Length,
+                                    Sub(i As Integer)
+                                        cacheEntry.axisValues(i) = particles(i).ChannelData(_channelIdx).Parameter(Parameter)
+                                    End Sub)
+                        End If
+
+                        Debug.WriteLine(String.Format("Calculated AxisValuesCacheEntry {0}", Name))
+                    End If
+                End SyncLock
+
+                Return cacheEntry.axisValues
+            Else 'ParticleData
+                Dim data As New List(Of Single)
+                For Each particle In datafile.SplittedParticles
+                    If particle.hasImage Then
+                        data.Add(DirectCast(particle, ImagedParticle).ImageHandling.ParticleData.Parameter(Parameter))
+                    Else
+                        data.Add(Single.NaN)
+                    End If
+                Next
+                Return data.ToArray()
+            End If
         End Function
 
         Public Overrides Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentWrite

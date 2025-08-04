@@ -176,6 +176,35 @@ Namespace Data.ParticleHandling
             Public sharpnessScore As Double
 
             Public hasData As Boolean
+
+            'Don't love this, but easiest way to remember to update it if you are adding something to the struct. Other option is reflection, but thats not great either.
+            Public Shared ReadOnly Property ParameterNames As String()
+                Get
+                    Return {NameOf(x), NameOf(y), NameOf(width), NameOf(height), NameOf(area), NameOf(sharpnessScore)}
+                End Get
+            End Property
+
+            Public ReadOnly Property Parameter(sel As Channel.ChannelData.ParameterSelector) As Single
+                Get
+                    Select sel
+                        Case Channel.ChannelData.ParameterSelector.X
+                            Return x
+                        Case Channel.ChannelData.ParameterSelector.Y
+                            Return y
+                        Case Channel.ChannelData.ParameterSelector.Width
+                            Return CSng(width)
+                        Case Channel.ChannelData.ParameterSelector.Height
+                            Return CSng(height)
+                        Case Channel.ChannelData.ParameterSelector.Area
+                            Return CSng(area)
+                        Case Channel.ChannelData.ParameterSelector.SharpnessScore
+                            Return CSng(sharpnessScore)
+                        Case Else
+                            Return Single.NaN
+                    End Select
+                End Get
+            End Property
+
         End Structure
 
         Public Structure ImageProcessingSettings
