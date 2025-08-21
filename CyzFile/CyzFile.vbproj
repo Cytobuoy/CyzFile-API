@@ -14,13 +14,13 @@
     <OptionExplicit>On</OptionExplicit>
     <OptionStrict>On</OptionStrict>
 	
-    <FileVersion>1.4.0.0</FileVersion>
+    <FileVersion>1.4.0.1</FileVersion>
     <AssemblyVersion>$(FileVersion)</AssemblyVersion>
   </PropertyGroup>
 
 
   <ItemGroup>
-	  <PackageReference Include="log4net" Version="3.0.1" />
+	  <PackageReference Include="log4net" Version="3.0.3" />
 	  <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
 	  <PackageReference Include="OpenCvSharp4" version="4.10.0.20240616" />
 	  <PackageReference Include="OpenCvSharp4.Extensions" Version="4.10.0.20240616" />

@@ -1294,7 +1294,7 @@ Namespace CytoSettings
                     If CytoUSBSettings.CytoUSBVersion.StartsWith("Not") Then
                         Return CytoUSBSettings.CytoUSBVersion
                     Else
-                        Return CytoUSBSettings.CytoUSBVersion.Split(":"c)(1).Trim 'for some reason, the string "CytoUSB version was put into the version string...
+                        Return CytoUSBSettings.CytoUSBVersion.Substring(CytoUSBSettings.CytoUSBVersion.IndexOf(":"c) + 1) 'for some reason, the string "CytoUSB version:" was put into the version string...
                     End If
                 Else
                     Return ""
