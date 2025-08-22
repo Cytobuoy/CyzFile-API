@@ -104,6 +104,18 @@ Namespace Data.Analysis
                     log = True
                 Case ChannelData.ParameterSelector.TimeOfArrival
                     log = False
+                Case ChannelData.ParameterSelector.X
+                    log = False
+                Case ChannelData.ParameterSelector.Y
+                    log = False
+                Case ChannelData.ParameterSelector.Width
+                    log = True
+                Case ChannelData.ParameterSelector.Height
+                    log = True
+                Case ChannelData.ParameterSelector.Area
+                    log = True
+                Case ChannelData.ParameterSelector.SharpnessScore
+                    log = True
                 Case Else
                     log = True
             End Select
@@ -221,7 +233,11 @@ Namespace Data.Analysis
                 Else
                     'Channel is unavailable. If this is due to serializing (we have a name), reinstate. 
                     If _channelType = CytoSense.CytoSettings.ChannelTypesEnum.Unknown Then
-                        Return Nothing
+                        If _channelName IsNot Nothing And _channelName.Equals("Particle Data") Then
+                            Return New CytoSense.CytoSettings.ChannelWrapper(New VirtualParticleDataChannelInfo, 99, LineTypeEnum.line)
+                        Else
+                            Return Nothing
+                        End If
                     ElseIf _channelName IsNot Nothing And _channelName <> "" Then 'in old (but beta) CC4 workspaces, only the channel type may be serialized
                         _channel = _cytoSettings.getChannellistItem(_channelName)
                         Return _channel
@@ -297,7 +313,7 @@ Namespace Data.Analysis
                 End If
             Else
                 If particle.hasImage Then
-                    Return DirectCast(particle, ImagedParticle).ImageHandling.ParticleData.Parameter(Parameter)
+                    Return DirectCast(particle, ImagedParticle).ImageHandling.ImageParticleData.Parameter(Parameter)
                 Else
                     Return Single.NaN
                 End If
@@ -305,6 +321,9 @@ Namespace Data.Analysis
         End Function
 
         Public Overrides Function GetValues(datafile As DataFileWrapper) As Single()
+            If CytoSettings Is Nothing
+			    CytoSettings = datafile.CytoSettings
+		    End If
             If Not Channel.VirtualChannelType = VirtualChannelInfo.VirtualChannelType.ParticleData Then
                 Dim particles = datafile.SplittedParticles
                 Dim valuesCache = datafile._axisValuesCache
@@ -312,10 +331,6 @@ Namespace Data.Analysis
                 If particles Is Nothing OrElse particles.Length = 0 Then
                     Return Nothing
                 End If
-
-		        If CytoSettings Is Nothing
-			        CytoSettings = datafile.CytoSettings
-		        End If
 
                 Dim cacheEntry = valuesCache.GetEntry(Name)
 
@@ -350,7 +365,11 @@ Namespace Data.Analysis
                 Dim data As New List(Of Single)
                 For Each particle In datafile.SplittedParticles
                     If particle.hasImage Then
-                        data.Add(DirectCast(particle, ImagedParticle).ImageHandling.ParticleData.Parameter(Parameter))
+                        dim imgpart = DirectCast(particle, ImagedParticle)
+                        If Not imgpart.IsProcessed Then
+                            imgpart.ImageHandling.ProcessImageWithoutSettingsParameter()
+                        End If
+                        data.Add(imgpart.ImageHandling.ImageParticleData.Parameter(Parameter))
                     Else
                         data.Add(Single.NaN)
                     End If

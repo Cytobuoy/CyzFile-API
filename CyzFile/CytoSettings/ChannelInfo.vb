@@ -732,7 +732,7 @@ Namespace CytoSettings
             DualFocusRight
             HF_plus_LF_Summed   'SSL system
             LF_Filtered     'SSL system
-            ParticleData 'It belongs here, but still feels dirty. Really need to overhaul chnanel classes (channelwrapper, channel, channeldata)
+            ParticleData 'It belongs here, but still feels dirty. Really need to overhaul channel classes (channelwrapper, channel, channeldata)
         End Enum
 
         Public MustOverride Overrides ReadOnly Property Description As String
@@ -1104,7 +1104,7 @@ Namespace CytoSettings
         ''' <remarks></remarks>
         Public ReadOnly Property VirtualChannelType As VirtualChannelInfo.VirtualChannelType
             Get
-                If Not IsHWChannel Then
+                If Not IsHWChannel AndAlso TryCast(_channel, VirtualChannelInfo) IsNot Nothing Then
                     Return CType(_channel, VirtualChannelInfo).VirtualType
                 Else
                     Return Nothing

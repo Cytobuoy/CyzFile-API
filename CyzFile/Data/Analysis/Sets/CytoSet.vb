@@ -167,7 +167,7 @@ Namespace Data.Analysis
 
         #If DEBUG
         Private Function IsSorted(arr As Integer()) As Boolean
-            For i As Integer = 1 To arr.Length
+            For i As Integer = 1 To arr.Length - 1
                 If arr(i - 1) > arr(i) Then
                     Return False
                 End If

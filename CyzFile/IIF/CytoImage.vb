@@ -27,8 +27,8 @@ Namespace Data.ParticleHandling
         <NonSerialized>
         Private _imageMat As Mat
         Private _imageStream As IO.MemoryStream
-        <nonSerialized>
-        Private _imageParticleData As particleDataStruct
+        <NonSerialized>
+        Private _imageParticleData As ImageParticleDataStruct
         Private _croppedRect As Rect
         
         Private _cytoSettings As CytoSettings.CytoSenseSetting 'is used only for background image currently
@@ -57,7 +57,24 @@ Namespace Data.ParticleHandling
         Public Sub ProcessImage(imgProcSettings As ImageProcessingSettings)
             _processingSettings = imgProcSettings
             GetCroppedImage(imgProcSettings)
-            CalculateParticleData()
+            CalculateParticleData(False)
+        End Sub
+
+        ''' <summary>
+        ''' Should only be used in cases where you have no way to get access to the settings of the application.
+        ''' If that is the case, be sure to set the settings through SetImageProcessingSettings somewhere before this call is made.
+        ''' </summary>
+        Public Sub ProcessImageWithoutSettingsParameter()
+            If Not _processingSettings.Equals(New ImageProcessingSettings()) Then
+                GetCroppedImage(_processingSettings)
+                CalculateParticleData(False)
+            Else
+                Throw New Exception("Tried to process image when no image processing settings where available")
+            End If
+        End Sub
+
+        Public Sub SetImageProcessingSettings(imgProcSettings As ImageProcessingSettings)
+            _processingSettings = imgProcSettings
         End Sub
 
         ''' <summary>
@@ -121,7 +138,7 @@ Namespace Data.ParticleHandling
             End Set
         End Property
 
-        Public ReadOnly Property ParticleData As ParticleDataStruct
+        Public ReadOnly Property ImageParticleData As ImageParticleDataStruct
             Get
                 Return _imageParticleData
             End Get
@@ -167,7 +184,7 @@ Namespace Data.ParticleHandling
 
         Public Const IMG_STEP_SIZE As Integer = 80
 
-        Public Structure ParticleDataStruct
+        Public Structure ImageParticleDataStruct
             Public x As Integer
             Public y As Integer
             Public width As Double
@@ -280,7 +297,7 @@ Namespace Data.ParticleHandling
             End If
         End Function
 
-        Public Sub CalculateParticleData()
+        Public Sub CalculateParticleData(cancelOnMultipleContours As Boolean)
             Dim bgImg = _cytoSettings.iif.OpenCvBackground
             Dim fittedBg As Mat
             If IsCropped Then
@@ -292,9 +309,13 @@ Namespace Data.ParticleHandling
             Dim objContours = unsortedCountours.OrderByDescending(Function(cnt As OpenCvSharp.Point()) Cv2.ContourArea(cnt)).ToList()
 
             If objContours.Count > 0 Then
+                If cancelOnMultipleContours AndAlso objContours.Count > 1
+                    _imageParticleData = New ImageParticleDataStruct() 'HasData = false
+                    Return
+                End If
                 Dim contour = objContours(0)
                 Dim muPerPixel = _cytoSettings.iif.ImageScaleMuPerPixelP
-                Dim data As new ParticleDataStruct With
+                Dim data As new ImageParticleDataStruct With
                 {
                     .hasData = true 'We got here, so that means we have a valid contour to get data from
                 }
@@ -303,8 +324,8 @@ Namespace Data.ParticleHandling
 
                 Dim m As Moments = Cv2.Moments(isolatedContour)
 			    Dim p As Point = New Point(m.M10 / m.M00, m.M01 / m.M00)
-			    data.x = CropRect.X + bbox.X + p.X
-			    data.y = CropRect.Y + bbox.Y + p.Y
+			    data.x = CInt((CropRect.X + bbox.X + p.X - (bgImg.Width / 2)) * muPerPixel)
+			    data.y = -CInt((CropRect.Y + bbox.Y + p.Y - (bgImg.Height / 2)) * muPerPixel) 'picture y0 is at the top, so invert it so get accurate graph position
 
                 data.width = bbox.Width * muPerPixel
                 data.height = bbox.Height * muPerPixel
@@ -313,7 +334,7 @@ Namespace Data.ParticleHandling
 			
                 _imageParticleData = data
             Else 'No particle or contour to calculate data over
-                _imageParticleData = New ParticleDataStruct() 'HasData = false
+                _imageParticleData = New ImageParticleDataStruct() 'HasData = false
             End If
             
         End Sub
