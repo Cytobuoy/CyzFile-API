@@ -20,13 +20,13 @@
 	<CurrentProjectFolder>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectFullPath)))</CurrentProjectFolder>
 	<ThisFolderLength>$(MSBuildThisFileDirectory.Length)</ThisFolderLength>
 	<RelativeProjectFolder>$(CurrentProjectFolder.SubString( $(ThisFolderLength) ))</RelativeProjectFolder>
-	
-	<RestorePackagesPath>$(MSBuildThisFileDirectory)\..\build\packages</RestorePackagesPath>
-    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\CyzFile-API.runsettings</RunSettingsFilePath>
-	
+
+    <RestorePackagesPath>$(MSBuildThisFileDirectory)build\packages</RestorePackagesPath>
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)CyzFile-API.runsettings</RunSettingsFilePath>
+
 	<ThisFolder>CyzFile-API</ThisFolder>
-	<BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\build\obj\$(RelativeProjectFolder)</BaseIntermediateOutputPath>
-    <BaseOutputPath>$(MSBuildThisFileDirectory)..\build\bin\$(RelativeProjectFolder)</BaseOutputPath>
+	<BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)build\obj\$(RelativeProjectFolder)</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory)build\bin\$(RelativeProjectFolder)</BaseOutputPath>
   </PropertyGroup>
   
 </Project>
