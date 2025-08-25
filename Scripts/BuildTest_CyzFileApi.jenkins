@@ -1,0 +1,47 @@
+/*
+	Build CyzFile-API and run related tests.
+	This is a jenkins pipeline script. 
+ */
+pipeline {
+    agent any
+
+    stages {
+        stage('Cleanup') {
+            steps {
+                bat 'del /S /Q /F build > nul'
+            }
+        }
+        stage('Restore') {
+            steps {
+                dotnetRestore project: 'CyzFile-API.sln'
+            }
+        }
+		
+        stage('Build CyzFile DLL') {
+            steps {
+                dotnetBuild project: 'CyzFile/CyzFile.vbproj', noRestore: 'true'
+            }
+        }
+        stage('Build CyzFileDump Example') {
+            steps {
+                dotnetBuild project: 'CyzFileDump/CyzFileDump.csproj', noRestore: 'true'
+            }
+        }
+        stage('Build Test CyzFile') {
+            steps {
+                dotnetBuild project: 'TestCyzFile/TestCyzFile.vbproj', noRestore: 'true'
+            }
+        }
+		
+        stage('Test CyzFile') {
+            steps {
+                dotnetTest project: 'TestCyzFile/TestCyzFile.vbproj',  noRestore: 'true', noBuild: 'true', logger: 'trx', collect: 'Code Coverage', continueOnError : 'true'
+            }
+        }
+    }
+    post { 
+        always { 
+            mstest testResultsFile:"**/*.trx", keepLongStdio: true                
+        }
+    }    
+}
