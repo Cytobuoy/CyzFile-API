@@ -422,11 +422,17 @@ Namespace Data
             <ComponentModel.Browsable(False)>
             Public ReadOnly Property endAcquireTime As Integer
                 Get
-                    If Not Object.Equals(log, Nothing) Then
-                        Return CInt(DateDiff(DateInterval.Second, MeasurementStart, log.getAcquireEnd))
-                    Else
-                        Return CInt(DateDiff(DateInterval.Second, MeasurementStart, BlockInfo.DataList(BlockInfo.Length - 1).time))
-                    End If
+                    Try
+                        If Not Object.Equals(log, Nothing) Then
+                            Return CInt(DateDiff(DateInterval.Second, MeasurementStart, log.getAcquireEnd))
+                        Else
+                            Return CInt(DateDiff(DateInterval.Second, MeasurementStart, BlockInfo.DataList(BlockInfo.Length - 1).time))
+                        End If
+                    Catch ex As Exception 
+                        ' In some old rare files, we do not have a BlockInfo list, in this case I use the same fallback as we did
+                        ' for the ActualmeasuremeTime, use an older less precise version.
+                        return CInt(startAcquireTime + ActualMeasureTime)
+                    End Try
                 End Get
             End Property
 
