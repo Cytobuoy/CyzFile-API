@@ -1132,10 +1132,10 @@ Namespace Data
         Private Sub getConcentration()
             getActualConcentration()
             _concentration = _actualConcentration
-            _concentration = _concentration * (_dataFile.MeasurementInfo.NumberofSavedParticles  / _dataFile.MeasurementInfo.NumberofDownloadedParticles)
-
-            If _concentration <= 0 Then _concentration = -1 'If a -1 got scrambled in the compensations
-
+            If _dataFile.MeasurementInfo.NumberofDownloadedParticles > 0  Then
+                _concentration = _concentration * (_dataFile.MeasurementInfo.NumberofSavedParticles  / _dataFile.MeasurementInfo.NumberofDownloadedParticles)
+                If _concentration < 0 Then _concentration = -1 'If a -1 got scrambled in the compensations
+            End If ' Else no downloaded particles, so we cannot compensate for any smarttriggering.
         End Sub
 
 
