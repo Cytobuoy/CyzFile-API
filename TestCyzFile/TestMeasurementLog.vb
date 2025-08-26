@@ -2,6 +2,7 @@
 Imports System.Globalization
 Imports System.Linq.Expressions
 Imports CytoSense.Data
+Imports CytoSense.Data.Data
 Imports Force.Crc32
 Imports log4net
 
@@ -410,5 +411,280 @@ Imports log4net
         Assert.AreEqual(expected, actual)
     End Sub
 
+
+    ' Add some more checks for derived values, just to make sure that I have not missed something. In theory there would be
+    ' no need to add this as we have these tests alread. In real life.
+
+
+
+    <DataTestMethod()>
+    <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                            30.68)>
+    <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                            30.68)>
+    <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                               10.85)>
+    <DataRow("DataFiles/1p6umbeads 2011-05-19 13u06.cyz",                                    9.87)>
+    <DataRow("DataFiles/1umFLYbeads 2011-02-21 10u51.cyz",                                  97.65)>
+    <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                   110.04)>
+    <DataRow("DataFiles/algjes 2011-01-07 14u59.cyz",                                       43.71)>
+    <DataRow("DataFiles/algjes machteld 2010-11-22 11u33.cyz",                              39.20)>
+    <DataRow("DataFiles/beads 2010-12-08 15u00.cyz",                                       100.24)>
+    <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",      898.20)>
+    <DataRow("DataFiles/beads reservoir measurement 2021-10-04 15h00.cyz",                  70.61)>
+    <DataRow("DataFiles/beads1.6u.cyz-2010-06-16 13-10.CYZ",                                15.12)>  
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                             63.00)>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz",                       63.00)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10.cyz",                                    399.60)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz",                               399.60)>
+    <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz",                                6049.95)>
+    <DataRow("DataFiles/dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz",  474.88)>
+    <DataRow("DataFiles/FunctionalTest_measurement#1 2019-01-22 08h52.cyz",                369.60)>
+    <DataRow("DataFiles/LW_2017_protocol_1 2017-04-20 12h00.cyz",                          734.40)>
+    <DataRow("DataFiles/Maaswater gevoeliger 256K 2012-10-10 12u03.cyz",                  2688.00)>
+    <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                             5118.00)>
+    <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                             5118.00)>
+    <DataRow("DataFiles/pollen 2011-05-19 16u19.cyz",                                      212.94)>
+    <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz",       734.40)>
+    <DataRow("DataFiles/ruistest_1 2023-07-18 14h46_2.cyz",                                 20.20)>
+    <DataRow("DataFiles/scenedesmus 230410 gemengd in kraanwater 2010-12-03 15u17.cyz",    751.80)>
+    <DataRow("DataFiles/Segmented 2014-09-30 15u13.cyz",                                    63.00)>
+    Public Sub Test_PumpedVolume( filename As String, expected As Double)
+
+        Dim dfw = New DataFileWrapper(filename)
+
+        Dim actual = dfw.pumpedVolume
+
+        Assert.AreEqual(expected, actual, 0.001)
+
+    End Sub
+
+
+    <DataTestMethod()>
+    <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                              9.318)>
+    <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                              9.624)>
+    <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                                 0)> ' Analyzed is 0, no downloaded particles.
+    <DataRow("DataFiles/1p6umbeads 2011-05-19 13u06.cyz",                                     1.98)>
+    <DataRow("DataFiles/1umFLYbeads 2011-02-21 10u51.cyz",                             Double.NaN)>  ' Huh ?!!?!?
+    <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                    88.789)>
+    <DataRow("DataFiles/algjes 2011-01-07 14u59.cyz",                                       12.449)>
+    <DataRow("DataFiles/algjes machteld 2010-11-22 11u33.cyz",                         Double.NaN)> ' Huh ?!!?!?
+    <DataRow("DataFiles/beads 2010-12-08 15u00.cyz",                                        3.377)>
+    <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",     897.653)>
+    <DataRow("DataFiles/beads reservoir measurement 2021-10-04 15h00.cyz",             Double.NaN)> ' Huh ?!!?!? 
+    <DataRow("DataFiles/beads1.6u.cyz-2010-06-16 13-10.CYZ",                                0.467)> 
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                            23.888)>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz",                      23.888)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10.cyz",                                   314.396)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz",                              314.396)>
+    <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz",                                210.976)>
+    <DataRow("DataFiles/dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz",  11.223)>
+    <DataRow("DataFiles/FunctionalTest_measurement#1 2019-01-22 08h52.cyz",               305.354)>
+    <DataRow("DataFiles/LW_2017_protocol_1 2017-04-20 12h00.cyz",                         469.416)>
+    <DataRow("DataFiles/Maaswater gevoeliger 256K 2012-10-10 12u03.cyz",                 1139.273)> 
+    <DataRow("DataFiles/pollen 2011-05-19 16u19.cyz",                                     174.171)>
+    <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz",      469.416)>
+    <DataRow("DataFiles/ruistest_1 2023-07-18 14h46_2.cyz",                                0)> ' Huh, 0 is actually correct, no downloaded particles.
+    <DataRow("DataFiles/scenedesmus 230410 gemengd in kraanwater 2010-12-03 15u17.cyz",    Double.PositiveInfinity)> ' Huh, was actually infinite, Recorded concentration is 0, which leads to infinite analyzed volume.  Bad datafile, correct code.
+    <DataRow("DataFiles/Segmented 2014-09-30 15u13.cyz",                                    6.354)>
+    Public Sub Test_AnalyzedVolume( filename As String, expected As Double)
+
+        Dim dfw = New DataFileWrapper(filename)
+
+        Dim actual = dfw.analyzedVolume
+
+        If Double.IsNaN(expected) Then ' Cannot compare NaN so we have to do it like this.
+            Assert.IsTrue(Double.IsNaN(actual))
+        Else
+            Assert.AreEqual(expected, actual, 0.001)
+        End If
+    End Sub
+
+    <DataTestMethod()>
+    <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz")> ' Mismatch error exception.
+    <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz")> ' Mismatch error exception.
+    Public Sub Test_AnalyzedVolume_ConcentrationMismatch( filename As String)
+
+        Dim dfw = New DataFileWrapper(filename)
+
+        Try
+            Dim actual = dfw.analyzedVolume
+            Assert.Fail("Statement above should throw an exception.")
+        Catch ex As Exception
+            If TypeOf ex IsNot CytoSense.ConcentrationMisMatchException  Then
+                    throw new AssertFailedException(String.Format(
+                        CultureInfo.InvariantCulture,
+                        "ExceptionAssert.Throws failed. Expected exception type: {0}. Actual exception type: {1}. Exception message: {2}",
+                        "CytoSense.ConcentrationMisMatchException",
+                        ex.GetType().FullName,
+                        ex.Message))
+            End If
+        End Try
+
+
+
+
+    End Sub
+
+
+
+
+    <DataTestMethod()>
+    <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                          3143.412)>
+    <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                          2726.299)>
+    <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              675.119)>
+    <DataRow("DataFiles/1p6umbeads 2011-05-19 13u06.cyz",                                 15275.359)>
+    <DataRow("DataFiles/1umFLYbeads 2011-02-21 10u51.cyz",                                Double.NaN)>
+    <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                  1359.751)>
+    <DataRow("DataFiles/algjes 2011-01-07 14u59.cyz",                                      485.003)>
+    <DataRow("DataFiles/algjes machteld 2010-11-22 11u33.cyz",                            Double.NaN)> 
+    <DataRow("DataFiles/beads 2010-12-08 15u00.cyz",                                      9882.527)>
+    <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",       51.170)>
+    <DataRow("DataFiles/beads reservoir measurement 2021-10-04 15h00.cyz",                   0.0)> 
+    <DataRow("DataFiles/beads1.6u.cyz-2010-06-16 13-10.CYZ",                              7682.153)>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                           1542.680)>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz",                     22.397)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10.cyz",                                   22.271)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz",                              22.271)>
+    <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz",                                144.088)>
+    <DataRow("DataFiles/dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz", 461.387)>
+    <DataRow("DataFiles/FunctionalTest_measurement#1 2019-01-22 08h52.cyz",                20.026)>
+    <DataRow("DataFiles/LW_2017_protocol_1 2017-04-20 12h00.cyz",                         173.758)>
+    <DataRow("DataFiles/Maaswater gevoeliger 256K 2012-10-10 12u03.cyz",                    3.104)> 
+    <DataRow("DataFiles/pollen 2011-05-19 16u19.cyz",                                      17.833)>
+    <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz",       34.911)>
+    <DataRow("DataFiles/ruistest_1 2023-07-18 14h46_2.cyz",                                 0.050)> 
+    <DataRow("DataFiles/scenedesmus 230410 gemengd in kraanwater 2010-12-03 15u17.cyz",       0.0)>  
+    <DataRow("DataFiles/Segmented 2014-09-30 15u13.cyz",                                  5232.862)>
+    Public Sub Test_Concentration( filename As String, expected As Double)
+
+        Dim dfw = New DataFileWrapper(filename)
+
+        Dim actual = dfw.Concentration
+
+        If Double.IsNaN(expected) Then ' Cannot compare NaN so we have to do it like this.
+            Assert.IsTrue(Double.IsNaN(actual))
+        Else
+            Assert.AreEqual(expected, actual, 0.001)
+        End If
+    End Sub
+
+    <DataTestMethod()>
+    <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz")> ' Mismatch error exception.
+    <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz")> ' Mismatch error exception.
+    Public Sub Test_Concentration_ConcentrationMismatch( filename As String)
+
+        Dim dfw = New DataFileWrapper(filename)
+
+        Try
+            Dim actual = dfw.Concentration
+            Assert.Fail("Statement above should throw an exception.")
+        Catch ex As Exception
+            If TypeOf ex IsNot CytoSense.ConcentrationMisMatchException  Then
+                    throw new AssertFailedException(String.Format(
+                        CultureInfo.InvariantCulture,
+                        "ExceptionAssert.Throws failed. Expected exception type: {0}. Actual exception type: {1}. Exception message: {2}",
+                        "CytoSense.ConcentrationMisMatchException",
+                        ex.GetType().FullName,
+                        ex.Message))
+            End If
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' We select the preconcentration mode (either for PIC or FTDI) and then do a call to get
+    ''' the actual concentration (this is before compensation for smart triggering).
+    ''' NOTE: For All instruments after 2017-85, the preconcentration is never used internally,
+    ''' and the mode is ignore.  We always return the concentration based on particle counts, NEVER
+    ''' the preconcentration, regardless of the mode.
+    ''' NOTE: A concentration of -1, means that no preconcentration measurements were done.
+    ''' </summary>
+    ''' <param name="filename"></param>
+    ''' <param name="expected"></param>
+    ''' <remarks>
+    ''' Maybe we should add some special code for these, to also check the actual preconcentration
+    ''' calculations are not messed up.</remarks>
+
+    <DataTestMethod()>
+    <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                          2306.754)>
+    <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                          3430.081)>
+    <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                               -1.0)> ' No preconcentration measurent
+    <DataRow("DataFiles/1p6umbeads 2011-05-19 13u06.cyz",                                17463.617)>
+    <DataRow("DataFiles/1umFLYbeads 2011-02-21 10u51.cyz",                                   0.0)>  ' Preconcentration measurement exists, but is empty. So counts as 0
+    <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                     0.0)>  ' Is actually 0, lots of 0 measurements
+    <DataRow("DataFiles/algjes 2011-01-07 14u59.cyz",                                       -1.0)>  ' No preconcentration
+    <DataRow("DataFiles/algjes machteld 2010-11-22 11u33.cyz",                               6.664)> 
+    <DataRow("DataFiles/beads 2010-12-08 15u00.cyz",                                      9892.401)>
+    <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",       51.170)>
+    <DataRow("DataFiles/beads reservoir measurement 2021-10-04 15h00.cyz",                   0.0)> '  Is actually 0
+    <DataRow("DataFiles/beads1.6u.cyz-2010-06-16 13-10.CYZ",                                -1.0)> ' No Preconcentration measurement
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                            429.875)>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz",                      429.875)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10.cyz",                                     21.551)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz",                                21.551)>
+    <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz",                                  -1.0)>  ' No Preconcnetration measurement
+    <DataRow("DataFiles/dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz",  550.493)>  
+    <DataRow("DataFiles/FunctionalTest_measurement#1 2019-01-22 08h52.cyz",                 17.916)>
+    <DataRow("DataFiles/LW_2017_protocol_1 2017-04-20 12h00.cyz",                         1557.981)>
+    <DataRow("DataFiles/Maaswater gevoeliger 256K 2012-10-10 12u03.cyz",                   133.998)> 
+    <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                                0.680)> 
+    <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                                0.513)> 
+    <DataRow("DataFiles/pollen 2011-05-19 16u19.cyz",                                       16.578)>
+    <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz",      1557.981)>
+    <DataRow("DataFiles/ruistest_1 2023-07-18 14h46_2.cyz",                                  0.049)> 
+    <DataRow("DataFiles/scenedesmus 230410 gemengd in kraanwater 2010-12-03 15u17.cyz",      0.0)>   ' Huh, was actually 0, is not actually the preconcentration, but the measurement concentration because of FJ electroncis.
+    <DataRow("DataFiles/Segmented 2014-09-30 15u13.cyz",                                  4971.219)>
+    Public Sub Test_Preconcentration( filename As String, expected As Double)
+
+        Dim dfw = New DataFileWrapper(filename)
+
+        Dim mode = If(dfw.CytoSettings.hasaPIC, ConcentrationModeEnum.Pre_measurement_PIC, ConcentrationModeEnum.Pre_measurement_FTDI)
+
+        Dim actual = dfw.ActualConcentration(mode)
+
+        Assert.AreEqual(expected, actual, 0.001)
+
+    End Sub
+
+    <DataTestMethod()>
+    <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                          3143.412)>
+    <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                          2726.299)>
+    <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              675.119)>
+    <DataRow("DataFiles/1p6umbeads 2011-05-19 13u06.cyz",                                15275.359)>
+    <DataRow("DataFiles/1umFLYbeads 2011-02-21 10u51.cyz",                               Double.NaN)> ' Huh ??
+    <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                  1359.751)>
+    <DataRow("DataFiles/algjes 2011-01-07 14u59.cyz",                                     -1.0)>  ' No centration measurement ?!?!!?
+    <DataRow("DataFiles/algjes machteld 2010-11-22 11u33.cyz",                            Double.NaN)> ' Huh ??
+    <DataRow("DataFiles/beads 2010-12-08 15u00.cyz",                                      9882.527)>
+    <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",       51.170)>
+    <DataRow("DataFiles/beads reservoir measurement 2021-10-04 15h00.cyz",                   0.0)> ' Is actually 0
+    <DataRow("DataFiles/beads1.6u.cyz-2010-06-16 13-10.CYZ",                                -1.0)> ' No concentration available ???
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                           1542.680)>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz",                     1542.680)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10.cyz",                                     22.271)>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz",                                22.271)>
+    <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz",                                 144.088)>
+    <DataRow("DataFiles/dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz",  550.493)>
+    <DataRow("DataFiles/FunctionalTest_measurement#1 2019-01-22 08h52.cyz",                 20.026)>
+    <DataRow("DataFiles/LW_2017_protocol_1 2017-04-20 12h00.cyz",                         1671.594)>
+    <DataRow("DataFiles/Maaswater gevoeliger 256K 2012-10-10 12u03.cyz",                   854.826)> 
+    <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                               19.686)> 
+    <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                               12.400)> 
+    <DataRow("DataFiles/pollen 2011-05-19 16u19.cyz",                                       17.833)>
+    <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz",      1671.594)>
+    <DataRow("DataFiles/ruistest_1 2023-07-18 14h46_2.cyz",                                  0.050)> 
+    <DataRow("DataFiles/scenedesmus 230410 gemengd in kraanwater 2010-12-03 15u17.cyz",      0.0)> ' Huh i sactually 0
+    <DataRow("DataFiles/Segmented 2014-09-30 15u13.cyz",                                  5232.862)>
+    Public Sub Test_MeasurementConcentration( filename As String, expected As Double)
+
+        Dim dfw = New DataFileWrapper(filename)
+
+        Dim mode = If(dfw.CytoSettings.hasaPIC, ConcentrationModeEnum.During_measurement_PIC, ConcentrationModeEnum.During_measurement_FTDI)
+
+        Dim actual = dfw.ActualConcentration(mode)
+
+        If Double.IsNaN(expected) Then ' Cannot compare NaN so we have to do it like this.
+            Assert.IsTrue(Double.IsNaN(actual))
+        Else
+            Assert.AreEqual(expected, actual, 0.001)
+        End If
+    End Sub
 
 End Class
