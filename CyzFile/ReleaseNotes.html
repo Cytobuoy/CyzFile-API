@@ -83,6 +83,42 @@
               <th>Description</th>
           </tr>
           <tr>
+              <td>1.5.0.0</td>
+              <td>2025-08-27</td>
+              <td>
+                  <h3>RELEASE CANDIDATE VERSION</h3>
+                  (Merge these into the final release notes before actual release.)
+                  <h4>Changes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Added support for the new BSM model 2.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  There is a new model of the Bacterial Staining Module, to support this some extra properties are
+                                  needed in the datafile.  This change adds support for this newer model.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Added External Filter Pressure Property.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  This property calculates the average pressure over the external filters during a measurement, similar
+                                  to properties for relative and absolute pressures.  This allows easy checking of the pressures over time
+                                  in the database viewer in CytoClus.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+              </td>
+          </tr>
+          <tr>
               <td>1.4.0.1</td>
               <td>2025-07-04</td>
               <td>
@@ -105,9 +141,10 @@
                           <tr><th>Subject:</th><th>Fix display of CytoUSB version</th></tr>
                           <tr>
                               <th>Summary:</th>
-                              <td>The CytoUSB version that was recorded in the datafile had a slightly different format then
-                              the display code expected.  As a result the actual version was not displayed in CytoClus.  After this fix
-                              the correct version of CytoUSB used to record a data file will be displayed.
+                              <td>
+                                  The CytoUSB version that was recorded in the datafile had a slightly different format then
+                                  the display code expected.  As a result the actual version was not displayed in CytoClus.  After this fix
+                                  the correct version of CytoUSB used to record a data file will be displayed.
                               </td>
                           </tr>
                           <tr><th>Status:</th><td>Fixed</td></tr>
