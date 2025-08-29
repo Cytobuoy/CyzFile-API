@@ -362,37 +362,33 @@ Namespace Data
                 End Get
             End Property
 
+
             ''' <summary>
             ''' The moment (in seconds in the measurement) at which data acquisition starts.
+            ''' The value is always 0, so it is obsolete and should not be used.
             ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
+            ''' <returns>0</returns>
+            ''' <remarks>Obsolete, should nto be used.</remarks>
             <ComponentModel.Browsable(False)>
+            <Obsolete()>
             Public ReadOnly Property startAcquireTime As Integer
                 Get
-                    If Not Object.Equals(log, Nothing) Then
-                        Return CInt(DateDiff(DateInterval.Second, MeasurementStart, log.getAcquireStart))
-                    Else
-                        Return CInt(DateDiff(DateInterval.Second, MeasurementStartTime, MeasurementStart))
-                    End If
-
+                     return 0
                 End Get
             End Property
 
             ''' <summary>
-            ''' The date time at which data acquisition starts.
+            ''' The date time at which data acquisition starts. This is the same as MeasurementStart, use that instead.
             ''' </summary>
             ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
+            ''' <returns>MeasurementStart</returns>
             <ComponentModel.Browsable(False)>
+            <Obsolete()>
             Public ReadOnly Property ActualAcquireStart As DateTime
                 Get
-                    Return MeasurementStart.Add(New TimeSpan(0, 0, startAcquireTime))
+                    Return MeasurementStart
                 End Get
             End Property
-
             ''' <summary>
             ''' The moment (in seconds in the measurement) at which flushing (sucking in of sample) starts.
             ''' </summary>
@@ -424,14 +420,14 @@ Namespace Data
                 Get
                     Try
                         If Not Object.Equals(log, Nothing) Then
-                            Return CInt(DateDiff(DateInterval.Second, MeasurementStart, log.getAcquireEnd))
+                            Return CInt(DateDiff(DateInterval.Second, MeasurementStart, log.getAcquireEnd()))
                         Else
                             Return CInt(DateDiff(DateInterval.Second, MeasurementStart, BlockInfo.DataList(BlockInfo.Length - 1).time))
                         End If
                     Catch ex As Exception 
                         ' In some old rare files, we do not have a BlockInfo list, in this case I use the same fallback as we did
                         ' for the ActualmeasuremeTime, use an older less precise version.
-                        return CInt(startAcquireTime + ActualMeasureTime)
+                        return CInt(ActualMeasureTime)
                     End Try
                 End Get
             End Property
@@ -442,7 +438,7 @@ Namespace Data
                     If Object.Equals(Nothing, log) Then
                         Return MeasurementStartTime
                     Else
-                        Return log.getTask(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining).time
+                        Return log.getAcquireStart()
                     End If
                 End Get
             End Property

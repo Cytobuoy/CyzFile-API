@@ -598,7 +598,7 @@ Namespace Data
                 Next
             End If
 
-            Dim start As DateTime = MeasurementInfo.ActualAcquireStart
+            Dim start As DateTime = MeasurementInfo.MeasurementStart
             For i = 0 To _splittedParticles.Length - 1
                 '_splittedParticles(i).TimeOfArrival = start.Add(New TimeSpan(0, 0, 0, 0, particleArrivalTimes(i) * 1000))
                 _splittedParticles(i).setArrivalTime(particleArrivalTimes(i))
@@ -722,7 +722,7 @@ Namespace Data
             Dim rawIIFParticles = New List(Of RawIIFParticle)
             Dim splittedParticleMatches = New Integer(_splittedParticles.Length - 1) {} ' = New List(Of List(Of Integer)) ' contains a list of particleindices that match on SWS signal
 
-            Dim measurementStart As DateTime = MeasurementInfo.ActualAcquireStart
+            Dim measurementStart As DateTime = MeasurementInfo.MeasurementStart
             Dim comparer As IComparer = New CompareSplittedAndRawIDs()
 
             For segmentIndex = 0 To numImageSegments - 1

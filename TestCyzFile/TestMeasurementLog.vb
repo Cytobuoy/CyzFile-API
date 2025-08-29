@@ -91,46 +91,6 @@ Imports OpenCvSharp
     End Sub
 
 
-
-    <DataTestMethod()>
-    <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                              0)>
-    <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                              0)>
-    <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              0)>
-    <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",      0)>
-    <DataRow("DataFiles/beads reservoir measurement 2021-10-04 15h00.cyz",                 0)>
-    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                            0)>
-    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz",                      0)>
-    <DataRow("DataFiles/dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz",  0)>
-    <DataRow("DataFiles/FunctionalTest_measurement#1 2019-01-22 08h52.cyz",                0)>
-    <DataRow("DataFiles/LW_2017_protocol_1 2017-04-20 12h00.cyz",                          0)>
-    <DataRow("DataFiles/Maaswater gevoeliger 256K 2012-10-10 12u03.cyz",                   0)>
-    <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz",       0)>
-    <DataRow("DataFiles/ruistest_1 2023-07-18 14h46_2.cyz",                                0)>
-    <DataRow("DataFiles/Segmented 2014-09-30 15u13.cyz",                                   0)>
-    <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz",                                 0)>
-    <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                           0)>
-    <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                           0)>
-    <DataRow("DataFiles/1p6umbeads 2011-05-19 13u06.cyz",                                  0)>
-    <DataRow("DataFiles/1umFLYbeads 2011-02-21 10u51.cyz",                                 0)>
-    <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                   0)>
-    <DataRow("DataFiles/algjes 2011-01-07 14u59.cyz",                                      0)>
-    <DataRow("DataFiles/algjes machteld 2010-11-22 11u33.cyz",                             0)>
-    <DataRow("DataFiles/beads 2010-12-08 15u00.cyz",                                       0)>
-    <DataRow("DataFiles/beads1.6u.cyz-2010-06-16 13-10.CYZ",                               0)>
-    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10.cyz",                                    0)>
-    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz",                               0)>
-    <DataRow("DataFiles/pollen 2011-05-19 16u19.cyz",                                      0)>
-    <DataRow("DataFiles/scenedesmus 230410 gemengd in kraanwater 2010-12-03 15u17.cyz",    0)>
-    Public Sub Test_Measurement_startAcquireTime_DataFiles( filename As String, expected As Integer)
-
-        Dim dfw = New DataFileWrapper(filename)
-
-        Dim actual = dfw.MeasurementInfo.startAcquireTime
-
-        Assert.AreEqual(expected, actual)
-
-    End Sub
-
     <DataTestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                              2020, 10,  6,  5,  0, 30, 475,  19,  5)>
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                              2020, 10,  7,  4,  0, 29, 975, 814,  1)>
@@ -160,13 +120,13 @@ Imports OpenCvSharp
     <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz",                               2011,  9, 26, 17, 10, 54, 548, 980,  2)>
     <DataRow("DataFiles/pollen 2011-05-19 16u19.cyz",                                      2011,  5, 19, 16, 19, 54, 804, 930,  8)>
     <DataRow("DataFiles/scenedesmus 230410 gemengd in kraanwater 2010-12-03 15u17.cyz",    2010, 12,  3, 15, 17,  1, 328, 125,  0)>
-    Public Sub Test_Measurement_ActualAcquireStart_DataFiles( filename As String, year As Integer, month As Integer, day As Integer, hour As Integer, minute As Integer, seconds As Integer, milliseconds As Integer, microsecond As Integer, diffTick As Integer)
+    Public Sub Test_Measurement_MeasurementStart_DataFiles( filename As String, year As Integer, month As Integer, day As Integer, hour As Integer, minute As Integer, seconds As Integer, milliseconds As Integer, microsecond As Integer, diffTick As Integer)
 
         Dim expected = New DateTime(year, month, day, hour, minute, seconds, milliseconds, microsecond).AddTicks(diffTick)
         
         Dim dfw = New DataFileWrapper(filename)
 
-        Dim actual = dfw.MeasurementInfo.ActualAcquireStart
+        Dim actual = dfw.MeasurementInfo.MeasurementStart
 
         Dim diff = actual-expected
 

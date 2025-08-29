@@ -34,7 +34,7 @@ Namespace Data
 
             Dim cs = df.CytoSenseSetting
             Dim measurement = df.MeasurementSettings
-            Dim start = df.MeasurementInfo.ActualAcquireStart
+            Dim start = df.MeasurementInfo.MeasurementStart
 
             Dim loadedParticles As New List(Of Particle)()
 
