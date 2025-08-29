@@ -1,6 +1,6 @@
 ﻿Imports System.ComponentModel
-Imports System.Runtime.Serialization
 Imports System.Data
+Imports System.Runtime.Serialization
 Imports CytoSense.CytoSettings
 
 Namespace Data
@@ -2027,35 +2027,50 @@ Namespace Data
             End Enum
 
             ''' <summary>
-            ''' Scan the log of measurement tasks to find the beginning and end of the acquiring pahse, and calculate the duration in seconds.
+            ''' Scan the log of measurement tasks to find the beginning and end of the acquiring phase, and calculate the duration in seconds.
             ''' </summary>
             ''' <exception cref="ItemCannotBeFoundException">When either of Begining or Ending cannot be found and no duraction can be calculated.</exception>
             ''' <returns>The duration in seconds.</returns>
-            ''' <remarks>Original did not do error checking at all, current method is not the best, but we will rewrite this because of the new
-            ''' protocol for sub deep, so it will change.</remarks>
+            ''' <remarks>I do a truncate of the number of seconds instead of a round, this is generate the same data as the original implementation.  That
+            ''' one uses DateDiff for calculation and that truncates.  For some files there is a very small difference in concentrations and analyzed volumes,
+            ''' not really significant, but this way my numbers stay the same and that is easier for validation. (Althuough rounding, or not going to integer would
+            ''' be theoretically more correct)</remarks>
             Public Function getAqcuireDuration() As Integer
-                Dim start As Date
-                Dim ending As Date
-                Dim haveStart As Boolean = False
-                Dim haveEnd As Boolean = False
-                For i = 0 To tasklog.Count - 1
-                    If tasklog(i).task = Tasks.Acquiring Then
-                        If tasklog(i).BeginorEnd = BeginOrEndEnum.Begining Then
-                            start = tasklog(i).time
-                            haveStart = True
-                        Else
-                            ending = tasklog(i).time
-                            haveEnd = True
-                            Exit For
+
+                Dim totalDuration As TimeSpan = New TimeSpan(0)
+
+                Dim currentIntervalStart As DateTime
+                Dim currentIntervalEnd   As DateTime
+                Dim haveAtLeastOneInterval As Boolean = False
+                Dim inAcquireInterval As Boolean = False ' Are we currently in an interval (i.e. after start, before end) or not.
+
+                For logIdx As Integer = 0 To tasklog.Count - 1
+                    If tasklog(logIdx).task = Tasks.Acquiring Then
+                        If Not inAcquireInterval Then ' Looking for the beginning of the interval
+                            If tasklog(logIdx).BeginorEnd = BeginOrEndEnum.Begining Then
+                                currentIntervalStart = tasklog(logIdx).time
+                                inAcquireInterval = True
+                            Else ' Found an end before a beginning.
+                                Throw New ItemCannotBeFoundException()
+                            End If
+                        Else ' Looking for the end of the interval
+                            If tasklog(logIdx).BeginorEnd = BeginOrEndEnum.Ending Then ' 2 starts in a row, could not find end belonging to the first one.
+                                currentIntervalEnd = tasklog(logIdx).time
+                                totalDuration += currentIntervalEnd - currentIntervalStart
+                                inAcquireInterval = False
+                                haveAtLeastOneInterval = True
+                            Else ' Found a start when looing for an end.
+                                Throw New ItemCannotBeFoundException()
+                            End If
                         End If
-                    End If
+                    End If ' Else we do not care about any of the other tasks.
                 Next
 
-                If Not ( haveStart AndAlso haveEnd) Then
+                If Not haveAtLeastOneInterval OrElse inAcquireInterval Then
                     Throw New ItemCannotBeFoundException()
                 End If
 
-                Return CInt(DateDiff(DateInterval.Second, start, ending))
+                Return CInt(Math.Truncate(totalDuration.TotalSeconds))
 
             End Function
 
@@ -2065,20 +2080,30 @@ Namespace Data
             ''' <exception cref="ItemCannotBeFoundException">When the log does not contain an Acruire Beginning</exception>
             ''' <returns>The start moment of the actuisition.</returns>
             ''' <remarks>The original implementation tried to return Nothing in that case, which compiles fine in VB, but DateTime is a struct,
-            ''' so VB silently converted it to 1-1-1 00:00:00 instead.</remarks>
+            ''' so VB silently converted it to 1-1-1 00:00:00 instead.  
+            ''' NOTE: We do not go out of our way to detect every invalid sequence, but the obvious one, finding an end before
+            ''' a start we do report, as a missing start.</remarks>
             Public Function getAcquireStart() As Date
                 For i = 0 To tasklog.Count - 1
-                    If tasklog(i).task = Tasks.Acquiring AndAlso tasklog(i).BeginorEnd = BeginOrEndEnum.Begining Then
-                        Return tasklog(i).time
+                    If tasklog(i).task = Tasks.Acquiring Then
+                        If tasklog(i).BeginorEnd = BeginOrEndEnum.Begining Then
+                            Return tasklog(i).time
+                        Else ' Must be an end before a beginning, i.e. we could nto find the actual start.
+                            Throw New ItemCannotBeFoundException() ' No acquire start in the list
+                        End If
                     End If
                 Next
                 Throw New ItemCannotBeFoundException() ' No acquire start in the list
             End Function
 
             Public Function getAcquireEnd() As Date
-                For i = 0 To tasklog.Count - 1
-                    If tasklog(i).task = Tasks.Acquiring AndAlso tasklog(i).BeginorEnd = BeginOrEndEnum.Ending Then
-                        Return tasklog(i).time
+                For i As Integer = tasklog.Count - 1 To 0 Step -1
+                    If tasklog(i).task = Tasks.Acquiring Then
+                        If tasklog(i).BeginorEnd = BeginOrEndEnum.Ending Then
+                            Return tasklog(i).time
+                        Else ' Must be a start, so we did not find the end that belongs to it, and that we want.
+                            Throw New ItemCannotBeFoundException() ' No acquire start in the list
+                        End If
                     End If
                 Next
                 Throw New ItemCannotBeFoundException() ' No acquire start in the list

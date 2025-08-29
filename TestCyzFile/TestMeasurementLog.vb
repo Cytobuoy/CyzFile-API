@@ -685,7 +685,7 @@ Imports OpenCvSharp
         End If
     End Sub
 
-    ' Some data that has no acquire start in it. Used for testing error cases
+    ' Some data that has no acquire start in it. Used for testing error cases, or no valid start, e.g. an end before a start.
     Public Shared ReadOnly Property MeasurementLogTestData_NoAcquireStart As IEnumerable(Of Object()) 
         Get
             Return { 
@@ -696,6 +696,11 @@ Imports OpenCvSharp
                              New DateTime(2025,1,1,12,23,56)},
                 New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.PreConcentration, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,1,1,12,23,56)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending, New DateTime(2025,1,2,3,3,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)) 
                                     })), 
                              New DateTime(2025,1,1,12,23,56)}
             }
@@ -735,6 +740,11 @@ Imports OpenCvSharp
                              New DateTime(2025,1,1,12,23,56)},
                 New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.PreConcentration, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,1,1,12,23,56)}, ' Invalid last entry, a start after an end.
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,5,5)) 
                                     })), 
                              New DateTime(2025,1,1,12,23,56)}
             }
@@ -779,6 +789,24 @@ Imports OpenCvSharp
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush, MeasurementLog.BeginOrEndEnum.Ending, New DateTime(2025,2,2,3,4,4)),
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,4,5)) 
                                     })), 
+                             New DateTime(2025,2,2,3,4,5)},   '  Now add entries with multiple start, with or with out endings, Only the first one should be reported.
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,5,5))
+                                    })), 
+                             New DateTime(2025,1,2,3,4,5)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending, New DateTime(2025,1,2,3,7,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,8,5))
+                                    })), 
+                             New DateTime(2025,1,2,3,4,5)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,3,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush, MeasurementLog.BeginOrEndEnum.Ending, New DateTime(2025,2,2,3,4,4)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,5,5)) 
+                                    })), 
                              New DateTime(2025,2,2,3,4,5)}
             }
         End Get
@@ -814,6 +842,25 @@ Imports OpenCvSharp
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,4,5)),
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,7,5))
                                     })), 
+                             New DateTime(2025,2,2,3,7,5)}, ' Provide Multiple endings, last one should be used 
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,3,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,1,2,3,4,5)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,3,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,7,5))
+                                    })), 
+                             New DateTime(2025,1,2,3,7,5)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,3,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,3,15)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,4,4)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,4,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,7,5))
+                                    })), 
                              New DateTime(2025,2,2,3,7,5)}
             }
         End Get
@@ -845,7 +892,36 @@ Imports OpenCvSharp
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,4,5)),
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,7,5))
                                     })), 
-                             180}
+                             180}, ' Now multiple intervals, should take combined length.
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,7,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,8,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,9,5))
+                                    })), 
+                             240},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,3,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,4,4)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,4,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,7,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,7,6)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,8,4)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,8,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,9,5))
+                                    })), 
+                             240},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,7,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,8,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,9,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,10,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,12,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,13,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,14,5))
+                                    })), 
+                             420}
             }
         End Get
     End Property
@@ -879,6 +955,27 @@ Imports OpenCvSharp
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,3,5)),
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,4,4)),
                                     New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,7,5))
+                                    })), 
+                             180}, ' Now multiple entries, but at least one invalid interval.
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,7,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,8,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,9,5))
+                                    })), 
+                             180},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,7,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,8,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,9,5))
+                                    })), 
+                             180},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,7,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,8,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,9,5))
                                     })), 
                              180}
             }
