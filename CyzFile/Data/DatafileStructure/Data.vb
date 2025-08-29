@@ -1956,8 +1956,29 @@ Namespace Data
 
         End Class
 
-
+        ''' <summary>
+        ''' A log of the major actions/events during a measurement, such as the start/stop of flushing, the actual start/stop of
+        ''' the measuring, etc.   This is later used to calculate total measurement time, and related things as concentration, etc.
+        ''' 
+        ''' For the new SubDeep protocol with the option of refreshing the high pressure sampling loop during a measurement we will
+        ''' have multiple measurement sections.  This means the start of measurement will be the first beginning of the acquiring, and
+        ''' the end will the ending of last acquire.  When calculating the duration we will have to look at each
+        ''' acquire beginning/ending interval and sum these intervals.  We cannot just use the start and the end because sometimes there
+        ''' will be multiple intervals and we need to take the pauses in the middle into account.
+        ''' </summary>
         <Serializable()> Public Class MeasurementLog
+
+            Public Sub New ()
+            End Sub
+
+            ''' <summary>
+            ''' Contstructor that takes a list of log items. This is used to initialize a log for unit testing,
+            ''' not during normal operation.
+            ''' </summary>
+            ''' <param name="l">Initial log.</param>
+            Public Sub New (l As List(Of LogItem))
+                tasklog = l
+            End Sub
 
             Dim tasklog As New List(Of LogItem)
 
@@ -2005,32 +2026,53 @@ Namespace Data
                 NA
             End Enum
 
-
+            ''' <summary>
+            ''' Scan the log of measurement tasks to find the beginning and end of the acquiring pahse, and calculate the duration in seconds.
+            ''' </summary>
+            ''' <exception cref="ItemCannotBeFoundException">When either of Begining or Ending cannot be found and no duraction can be calculated.</exception>
+            ''' <returns>The duration in seconds.</returns>
+            ''' <remarks>Original did not do error checking at all, current method is not the best, but we will rewrite this because of the new
+            ''' protocol for sub deep, so it will change.</remarks>
             Public Function getAqcuireDuration() As Integer
                 Dim start As Date
                 Dim ending As Date
+                Dim haveStart As Boolean = False
+                Dim haveEnd As Boolean = False
                 For i = 0 To tasklog.Count - 1
                     If tasklog(i).task = Tasks.Acquiring Then
                         If tasklog(i).BeginorEnd = BeginOrEndEnum.Begining Then
                             start = tasklog(i).time
+                            haveStart = True
                         Else
                             ending = tasklog(i).time
+                            haveEnd = True
                             Exit For
                         End If
                     End If
                 Next
 
+                If Not ( haveStart AndAlso haveEnd) Then
+                    Throw New ItemCannotBeFoundException()
+                End If
+
                 Return CInt(DateDiff(DateInterval.Second, start, ending))
 
             End Function
 
+            ''' <summary>
+            ''' Get the start date and time of the acquisition fase.
+            ''' </summary>
+            ''' <exception cref="ItemCannotBeFoundException">When the log does not contain an Acruire Beginning</exception>
+            ''' <returns>The start moment of the actuisition.</returns>
+            ''' <remarks>The original implementation tried to return Nothing in that case, which compiles fine in VB, but DateTime is a struct,
+            ''' so VB silently converted it to 1-1-1 00:00:00 instead.</remarks>
             Public Function getAcquireStart() As Date
                 For i = 0 To tasklog.Count - 1
                     If tasklog(i).task = Tasks.Acquiring AndAlso tasklog(i).BeginorEnd = BeginOrEndEnum.Begining Then
                         Return tasklog(i).time
                     End If
                 Next
-                Return Nothing
+                Throw New ItemCannotBeFoundException() ' No acquire start in the list
             End Function
 
             Public Function getAcquireEnd() As Date
@@ -2039,7 +2081,7 @@ Namespace Data
                         Return tasklog(i).time
                     End If
                 Next
-                Return Nothing
+                Throw New ItemCannotBeFoundException() ' No acquire start in the list
             End Function
 
             Public Function getTask(task As Tasks, b As BeginOrEndEnum) As LogItem

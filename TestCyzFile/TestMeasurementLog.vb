@@ -1,10 +1,8 @@
-﻿Imports System.Drawing.Imaging
-Imports System.Globalization
-Imports System.Linq.Expressions
+﻿Imports System.Globalization
 Imports CytoSense.Data
 Imports CytoSense.Data.Data
-Imports Force.Crc32
-Imports log4net
+Imports CytoSense.Data.MeasurementLog
+Imports OpenCvSharp
 
 ''' <summary>
 ''' Test functions of the measurment log, added when changing the way it is used because of a new SubDeep protocol.
@@ -686,5 +684,225 @@ Imports log4net
             Assert.AreEqual(expected, actual, 0.001)
         End If
     End Sub
+
+    ' Some data that has no acquire start in it. Used for testing error cases
+    Public Shared ReadOnly Property MeasurementLogTestData_NoAcquireStart As IEnumerable(Of Object()) 
+        Get
+            Return { 
+                New Object() {New MeasurementLog(), New DateTime(2025,1,1,12,23,56)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending, New DateTime(2025,1,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,1,1,12,23,56)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.PreConcentration, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,1,1,12,23,56)}
+            }
+        End Get
+    End Property
+
+
+    <TestMethod()>
+    <DynamicData(NameOf(MeasurementLogTestData_NoAcquireStart))>
+    Public Sub Test_MeasurementStartFromLog_NoStart( log As MeasurementLog,  expected As DateTime)
+
+        Try
+            Dim actual = log.getAcquireStart()
+            Assert.Fail("Statement above should throw an InvalidOperationException because there is no start.")
+        Catch ex As System.Exception
+            If TypeOf ex IsNot MeasurementLog.ItemCannotBeFoundException Then
+                    throw new AssertFailedException(String.Format(
+                        CultureInfo.InvariantCulture,
+                        "ExceptionAssert.Throws failed. Expected exception type: {0}. Actual exception type: {1}. Exception message: {2}",
+                        "MeasurementLog.ItemCannotBeFoundException",
+                        ex.GetType().FullName,
+                        ex.Message))
+            End If
+        End Try
+    End Sub
+
+
+
+    ' Some data that has no acquire start in it. Used for testing error cases
+    Public Shared ReadOnly Property MeasurementLogTestData_NoAcquireEnd As IEnumerable(Of Object()) 
+        Get
+            Return { 
+                New Object() {New MeasurementLog(), New DateTime(2025,1,1,12,23,56)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,1,1,12,23,56)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.PreConcentration, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,1,1,12,23,56)}
+            }
+        End Get
+    End Property
+
+
+    <TestMethod()>
+    <DynamicData(NameOf(MeasurementLogTestData_NoAcquireEnd))>
+    Public Sub Test_MeasurementEndFromLog_NoEnd( log As MeasurementLog,  expected As DateTime)
+
+        Try
+            Dim actual = log.getAcquireEnd()
+            Assert.Fail("Statement above should throw an InvalidOperationException because there is no end.")
+        Catch ex As System.Exception
+            If TypeOf ex IsNot MeasurementLog.ItemCannotBeFoundException Then
+                    throw new AssertFailedException(String.Format(
+                        CultureInfo.InvariantCulture,
+                        "ExceptionAssert.Throws failed. Expected exception type: {0}. Actual exception type: {1}. Exception message: {2}",
+                        "MeasurementLog.ItemCannotBeFoundException",
+                        ex.GetType().FullName,
+                        ex.Message))
+            End If
+        End Try
+    End Sub
+
+
+    Public Shared ReadOnly Property MeasurementLogTestData_Start As IEnumerable(Of Object()) 
+        Get
+            Return { 
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,1,2,3,4,5)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending, New DateTime(2025,1,2,3,7,5))
+                                    })), 
+                             New DateTime(2025,1,2,3,4,5)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,3,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush, MeasurementLog.BeginOrEndEnum.Ending, New DateTime(2025,2,2,3,4,4)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,2,2,3,4,5)}
+            }
+        End Get
+    End Property
+
+
+    <TestMethod()>
+    <DynamicData(NameOf(MeasurementLogTestData_Start))>
+    Public Sub Test_MeasurementStartFromLog( log As MeasurementLog,  expected As DateTime)
+
+            Dim actual = log.getAcquireStart()
+
+            Assert.AreEqual(expected,actual)
+
+    End Sub
+
+
+    Public Shared ReadOnly Property MeasurementLogTestData_Ending As IEnumerable(Of Object()) 
+        Get
+            Return { 
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,4,5)) 
+                                    })), 
+                             New DateTime(2025,1,2,3,4,5)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,7,5))
+                                    })), 
+                             New DateTime(2025,1,2,3,7,5)},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,3,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,4,4)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,4,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,7,5))
+                                    })), 
+                             New DateTime(2025,2,2,3,7,5)}
+            }
+        End Get
+    End Property
+
+
+    <TestMethod()>
+    <DynamicData(NameOf(MeasurementLogTestData_Ending))>
+    Public Sub Test_MeasurementEndFromLog( log As MeasurementLog,  expected As DateTime)
+
+            Dim actual = log.getAcquireEnd()
+
+            Assert.AreEqual(expected,actual)
+
+    End Sub
+
+
+    Public Shared ReadOnly Property MeasurementLogTestData_AcquireDuration As IEnumerable(Of Object()) 
+        Get
+            Return { 
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,7,5))
+                                    })), 
+                             180},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,3,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,4,4)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,4,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,7,5))
+                                    })), 
+                             180}
+            }
+        End Get
+    End Property
+
+    <TestMethod()>
+    <DynamicData(NameOf(MeasurementLogTestData_AcquireDuration))>
+    Public Sub Test_AcquireDurationFromLog( log As MeasurementLog,  expected As Integer)
+
+            Dim actual = log.getAqcuireDuration()
+
+            Assert.AreEqual(expected,actual)
+
+    End Sub
+
+    ' Either there is no beginning, or no ending, or both.  So we have no valid interval. 
+
+    Public Shared ReadOnly Property MeasurementLogTestData_AcquireDuration_NoDuration As IEnumerable(Of Object()) 
+        Get
+            Return { 
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,3,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,4,4))
+                                    })), 
+                             180},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,1,2,3,4,5)), 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,1,2,3,7,5))
+                                    })), 
+                             180},
+                New Object() {New MeasurementLog( New List(Of MeasurementLog.LogItem)({ 
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Begining, New DateTime(2025,2,2,3,3,5)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Flush,     MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,4,4)),
+                                    New MeasurementLog.LogItem(MeasurementLog.Tasks.Acquiring, MeasurementLog.BeginOrEndEnum.Ending,   New DateTime(2025,2,2,3,7,5))
+                                    })), 
+                             180}
+            }
+        End Get
+    End Property
+
+    <TestMethod()>
+    <DynamicData(NameOf(MeasurementLogTestData_AcquireDuration_NoDuration))>
+    Public Sub Test_AcquireDurationFromLog_NoDuration( log As MeasurementLog,  expected As Integer)
+        Try
+            Dim actual = log.getAqcuireDuration()
+            Assert.Fail("Statement above should throw an InvalidOperationException because there is no end.")
+        Catch ex As System.Exception
+            If TypeOf ex IsNot MeasurementLog.ItemCannotBeFoundException Then
+                    throw new AssertFailedException(String.Format(
+                        CultureInfo.InvariantCulture,
+                        "ExceptionAssert.Throws failed. Expected exception type: {0}. Actual exception type: {1}. Exception message: {2}",
+                        "MeasurementLog.ItemCannotBeFoundException",
+                        ex.GetType().FullName,
+                        ex.Message))
+            End If
+        End Try
+    End Sub
+
+
 
 End Class
