@@ -286,9 +286,7 @@ Namespace MeasurementSettings
             Me.FlushCheck = False
             Me.TellCheck = False
             Me.IIFCheck = False
-#Disable Warning BC40008
-            Me.GVCheck = False
-#Enable Warning BC40008
+
             ReDim Me.TriggerChannelArray(_cytosettings.channels.Length - 1)
 
             'findout the id of recommended channel for triggering
