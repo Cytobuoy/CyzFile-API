@@ -157,12 +157,6 @@ Namespace MeasurementSettings
                         If tab.SeperateConcentration Then
                             total += CInt(cytosettings.SeperateConcentrationText)
                         End If
-                        If cytosettings.EnableGVModule Then
-                            total += 60
-                            If tab.GVCheck Then
-                                total += 6
-                            End If
-                        End If
                     Else
                         'voor iedere 200seconden meting moet er een keer gereflushed worden in submode:
                         total += CInt((Math.Floor(tab.StopafterTimertext / 200) + 1) * 220 + tab.StopafterTimertext)

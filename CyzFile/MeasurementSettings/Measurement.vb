@@ -123,7 +123,9 @@ Namespace MeasurementSettings
             _TellCheck             = other._TellCheck
             _IIFCheck              = other._IIFCheck
             _IIFFileLocation       = other._IIFFileLocation
+#Disable Warning BC40008
             _GVCheck               = other._GVCheck
+#Enable Warning BC40008
             _BSTCheck              = other._BSTCheck
             _repeat                = other._repeat
             _blockSize             = other._blockSize
@@ -284,7 +286,9 @@ Namespace MeasurementSettings
             Me.FlushCheck = False
             Me.TellCheck = False
             Me.IIFCheck = False
+#Disable Warning BC40008
             Me.GVCheck = False
+#Enable Warning BC40008
             ReDim Me.TriggerChannelArray(_cytosettings.channels.Length - 1)
 
             'findout the id of recommended channel for triggering
@@ -1049,6 +1053,7 @@ Namespace MeasurementSettings
             End Set
         End Property
 
+        <Obsolete()>
         Private _GVCheck As Boolean = False
 
         <Category("Measurement instrument settings"),
@@ -1056,14 +1061,12 @@ Namespace MeasurementSettings
             ComponentModel.ReadOnly(False),
             DescriptionAttribute("Check if the GV module should be enabled for this measurement."),
             ComponentModel.Browsable(False)>
-        Public Property GVCheck() As Boolean
+        Public ReadOnly Property GVCheck() As Boolean
             Get
+#Disable Warning BC40008
                 Return _GVCheck
+#Enable Warning BC40008
             End Get
-
-            Set(ByVal value As Boolean)
-                _GVCheck = value
-            End Set
         End Property
 
         Private _BSTCheck As Boolean = False

@@ -506,6 +506,7 @@ Namespace CytoSettings
         Public hasPressureSensor As Boolean
         Public hasImageAndFlow As Boolean
         Public hasExternalPump As Boolean
+        <Obsolete()>
         Public hasGVModule As Boolean
         Private hasPIC As Boolean 'use hasaPic property instead!
         Public hasContinuMode As Boolean 'deprecated
@@ -780,6 +781,7 @@ Namespace CytoSettings
         Public EnableCompressIIFImages As Boolean
         Public EnableSaveUnmatchedIIFFoto As Boolean
         Public EnableExternalTrigger As Boolean
+        <Obsolete()>
         Public EnableGVModule As Boolean
         Public EnableIIFCamera As Boolean
         Public EnableWaterDetectionAlert As Boolean 'deprecated, moved to cytousbsettings. 
@@ -867,14 +869,21 @@ Namespace CytoSettings
         Public TriggerDepth As Double 'in meters
         Public MaxTimeOut As Double 'in seconds
         Public lowtabs As LowerTabs
-
+        <Obsolete()>
         Public FlushATime As Double
+        <Obsolete()>
         Public FlushBTime As Double
+        <Obsolete()>
         Public CleaningFromSource1 As Double
+        <Obsolete()>
         Public CleaningFromSource2 As Double
+        <Obsolete()>
         Public CleaningFromSource3 As Double
+        <Obsolete()>
         Public FillingLoopTime As Double
+        <Obsolete()>
         Public SampleToInjectorTime As Double
+        <Obsolete()>
         Public PressurizingTime As Double 
         'NOTE: This really is obsolete and should never be used. I assign it in 2 places to make sure the generated data files are 
         '      backwards compatible.
@@ -1116,7 +1125,9 @@ Namespace CytoSettings
         <Category("Modules"), DisplayName("Gas Vacuole module"), DescriptionAttribute(""), ComponentModel.Browsable(True)>
         Public ReadOnly Property GVModule As Boolean
             Get
+#Disable Warning BC40008
                 Return hasGVModule
+#Enable Warning BC40008
             End Get
         End Property
 

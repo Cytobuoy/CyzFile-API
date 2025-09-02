@@ -126,7 +126,6 @@ Public Class TestConfig
             s.EnableCompressIIFImages = True
             s.EnableSaveUnmatchedIIFFoto = False
             s.EnableExternalTrigger = False
-            s.EnableGVModule = False
             s.EnableIIFCamera = True
             's.EnableWaterDetectionAlert = True
             s.EnableSubmode = False
@@ -202,7 +201,6 @@ Public Class TestConfig
             s.hasExternalSupply = True
             s.hasExternalPinchValve = False
             s.hasImageAndFlow = False
-            s.hasGVModule = False
             s.hasExternalPump = False
             s.hasVref = False
             s.hasBypassPinchValve = False
@@ -227,17 +225,6 @@ Public Class TestConfig
             s.enableGPS = False
             s.comPortGPS = 6
             s.baudGPS = 9600
-
-
-
-            s.FlushATime = 10
-            s.FlushBTime = 0.4
-            s.CleaningFromSource1 = 30
-            s.CleaningFromSource2 = 180
-            s.CleaningFromSource3 = 420
-            s.FillingLoopTime = 15
-            s.SampleToInjectorTime = 45
-            s.PressurizingTime = 9 
 
             s.DSPRecognizeString = "Prolific USB-to-Serial Comm Port (COM"
             s.DSPRS232FTDICode = ""
