@@ -185,12 +185,12 @@ Namespace Data.ParticleHandling
         Public Const IMG_STEP_SIZE As Integer = 80
 
         Public Structure ImageParticleDataStruct
-            Public x As Integer
-            Public y As Integer
-            Public width As Double
-            Public height As Double
-            Public area As Double
-            Public sharpnessScore As Double
+            Public X As Integer
+            Public Y As Integer
+            Public Width As Double
+            Public Height As Double
+            Public Area As Double
+            Public SharpnessScore As Double
 
             Public hasData As Boolean
 
