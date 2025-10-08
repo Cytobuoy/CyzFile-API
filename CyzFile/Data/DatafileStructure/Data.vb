@@ -1088,6 +1088,8 @@ Namespace Data
             Dim Laser1InputVoltage     As DataPointList
             Dim Laser1Mode             As LaserModeDataPointList
 
+            Dim CameraTemp             As DataPointList
+            Dim CameraBodyTemp         As DataPointList
 
 
            <OnDeserializing> _ 
@@ -1298,6 +1300,10 @@ Namespace Data
                             Return "Load [%]"
                         Case SensorLogTypes.LASER_INPUT_VOLTAGE
                             Return "Volt [V]"
+                        Case SensorLogTypes.CAMERA_SENSOR_TEMPERATURE
+                            Return "Temperature [°C]"
+                        Case SensorLogTypes.CAMERA_BODY_TEMPERATURE
+                            Return "Temperature [°C]"
                         Case SensorLogTypes.Unknown
                             Return _yString
                         Case Else
@@ -1413,6 +1419,10 @@ Namespace Data
                             Return "Laser Tec Load"
                         Case SensorLogTypes.LASER_INPUT_VOLTAGE
                             Return "Laser Input Voltage"
+                        Case SensorLogTypes.CAMERA_SENSOR_TEMPERATURE
+                            Return "Camera Sensor Temperature"
+                        Case SensorLogTypes.CAMERA_BODY_TEMPERATURE
+                            Return "Camera Body Temperature"
                         Case SensorLogTypes.Unknown
                             Return _description
                         Case Else
@@ -1818,6 +1828,8 @@ Namespace Data
                 LASER_DIODE_CURRENT
                 LASER_TEC_LOAD
                 LASER_INPUT_VOLTAGE
+                CAMERA_SENSOR_TEMPERATURE
+                CAMERA_BODY_TEMPERATURE
                 'when adding fields, don't forget to add descriptions in Y_axis en X_axis!
             End Enum
 

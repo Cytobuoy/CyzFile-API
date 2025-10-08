@@ -28,6 +28,9 @@
         LaserDiodeCurrent     = New SensorLimit(150, 220) 'degC
         LaserTecLoad          = New SensorLimit(0,80) ' percentage
         LaserInputVoltage     = New SensorLimit(4.5,5.3) 'Volt
+
+        CameraSensorTemperature = New SensorLimit(0, 50)
+        CameraBodyTemperature   = New SensorLimit(0, 50)
     End Sub
 
     ''' <summary>
@@ -147,6 +150,9 @@
     Public Property LaserDiodeCurrent     As SensorLimit
     Public Property LaserTecLoad          As SensorLimit
     Public Property LaserInputVoltage     As SensorLimit
+
+    Public Property CameraSensorTemperature As SensorLimit
+    Public Property CameraBodyTemperature   As SensorLimit
 
     <Serializable()> Public Structure SensorLimit
         Public Sub New(minValue As Double, maxValue As Double)

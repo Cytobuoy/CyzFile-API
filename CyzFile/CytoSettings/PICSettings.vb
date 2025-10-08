@@ -198,6 +198,15 @@ Namespace CytoSettings
             InternalBattery_ExternalSupply
         End Enum
 
+        Private hasCamera_Temp As Boolean = False
+        Public Property Camera_Temp As Boolean
+            Get
+                Return hasCamera_Temp
+            End Get
+            Set(value As Boolean)
+                hasCamera_Temp = value
+            End Set
+        End Property
 
         Private hasI2CSamplePump As Boolean = False
         Public Property I2CSamplePump As Boolean
