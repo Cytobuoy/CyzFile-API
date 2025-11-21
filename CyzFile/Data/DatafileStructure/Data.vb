@@ -2071,6 +2071,58 @@ Namespace Data
             End Function
 
             ''' <summary>
+            ''' Get the duration of hte measurement, this one can be called while the acquisition is active, in that case if
+            ''' the last acquisition period is not finished yet, it will use Now as the end time to calculate the duration.
+            ''' The other getAcquireDuration is only used afterwards in CytoClus, and that will return an error when the
+            ''' last Acquiring interval is not closed.
+            ''' </summary>
+            ''' <returns>THe total time of the acquisition, if the last interval is not closed it will use Now as the end time.</returns>
+            ''' <remarks>For backwards compatibility we truncate the number of seconds, it is not that important, but that is what the old
+            ''' implementation did.</remarks>
+            Public Function getAcquireDuration_WhileAcuiring() As Integer
+                Dim totalDuration As TimeSpan = New TimeSpan(0)
+
+                Dim currentIntervalStart As DateTime
+                Dim currentIntervalEnd As DateTime
+                Dim haveAtLeastOneInterval As Boolean = False
+                Dim inAcquireInterval As Boolean = False ' Are we currently in an interval (i.e. after start, before end) or not.
+
+                For logIdx As Integer = 0 To tasklog.Count - 1
+                    If tasklog(logIdx).task = Tasks.Acquiring Then
+                        If Not inAcquireInterval Then ' Looking for the beginning of the interval
+                            If tasklog(logIdx).BeginorEnd = BeginOrEndEnum.Begining Then
+                                currentIntervalStart = tasklog(logIdx).time
+                                inAcquireInterval = True
+                            Else ' Found an end before a beginning.
+                                Throw New ItemCannotBeFoundException()
+                            End If
+                        Else ' Looking for the end of the interval
+                            If tasklog(logIdx).BeginorEnd = BeginOrEndEnum.Ending Then ' 2 starts in a row, could not find end belonging to the first one.
+                                currentIntervalEnd = tasklog(logIdx).time
+                                totalDuration += currentIntervalEnd - currentIntervalStart
+                                inAcquireInterval = False
+                                haveAtLeastOneInterval = True
+                            Else ' Found a start when looing for an end.
+                                Throw New ItemCannotBeFoundException()
+                            End If
+                        End If
+                    End If ' Else we do not care about any of the other tasks.
+                Next
+
+                If Not haveAtLeastOneInterval AndAlso Not inAcquireInterval Then
+                    Throw New ItemCannotBeFoundException()
+                End If
+
+                If inAcquireInterval Then ' Last interval is still open, use now as endtime.
+                    totalDuration += DateTime.Now - currentIntervalStart
+                End If
+
+                Return CInt(Math.Truncate(totalDuration.TotalSeconds))
+            End Function
+
+
+
+            ''' <summary>
             ''' Get the start date and time of the acquisition fase.
             ''' </summary>
             ''' <exception cref="ItemCannotBeFoundException">When the log does not contain an Acruire Beginning</exception>
