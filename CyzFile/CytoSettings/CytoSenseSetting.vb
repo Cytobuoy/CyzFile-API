@@ -591,6 +591,12 @@ Namespace CytoSettings
                     End If
                 End If 'Else V08 electronics, no way to know. (most of the time, so we do not even try)
             End If ' Else a number was configured, so leave it alone.
+            If StainingModule Is Nothing Then
+                ' Older version that did not create the StainingModule settings until a StainingModule was actually used.
+                ' Now we always create one, with the InUse flag set to false. Untill we actually
+                ' use one.
+                StainingModule = New StainingModuleSettings()
+            End If
         End Sub
 
 
@@ -603,7 +609,7 @@ Namespace CytoSettings
         <Category("Staining Module"), DisplayName("Dye 1 Name"), Description("Name of Dye in unit 1."), ComponentModel.Browsable(True)>
         Public ReadOnly Property Dye1Name As String
             Get
-                If StainingModule Is Nothing OrElse Not StainingModule.DyeUnit1Present Then
+                If Not StainingModule.InUse OrElse Not StainingModule.DyeUnit1Present Then
                     Return ""
                 End If
                 Return StainingModule.DyeUnit1Stain
@@ -613,14 +619,14 @@ Namespace CytoSettings
         <Category("Staining Module"), DisplayName("Dye 2 Name"), Description("Name of Dye in unit 2."), ComponentModel.Browsable(True)>
         Public ReadOnly Property Dye2Name As String
             Get
-                If StainingModule Is Nothing OrElse Not StainingModule.DyeUnit2Present Then
+                If Not StainingModule.InUse OrElse Not StainingModule.DyeUnit2Present Then
                     Return ""
                 End If
                 Return StainingModule.DyeUnit2Stain
             End Get
         End Property
 
-        Public StainingModule As StainingModuleSettings = Nothing
+        Public StainingModule As StainingModuleSettings = New StainingModuleSettings()
         Public AutomaticInjector As CAutomaticInjectorSettings = Nothing
 
         Public DpsModule As DpsModuleSettings = Nothing  ' Nothing if no DPS was ever connected, something, if this CytoSense has seen a DPS before.

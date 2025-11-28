@@ -60,6 +60,11 @@ Namespace Data.Analysis
 
             clone.DataFile = datafile
 
+            If datafile IsNot Nothing Then
+                clone.XAxis.CytoSettings = datafile.CytoSettings
+                clone.YAxis.CytoSettings = datafile.CytoSettings
+            End If
+
             Return clone
         End Function
 

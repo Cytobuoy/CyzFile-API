@@ -1,4 +1,5 @@
 ﻿Imports System.Globalization
+Imports System.Runtime.Serialization
 
 Namespace CytoSettings
 
@@ -57,6 +58,17 @@ Namespace CytoSettings
         Public Offset As Single
         Public Slope As Single
     End Structure
+
+    ''' <summary>
+    ''' Which type of staining module.  To keep files backwards compatible, we serialize this as an integer
+    ''' so the numeric values assigned to the labels are important!
+    ''' </summary>
+    Public Enum StainingModuleModel_t
+        Invalid = 0
+        BsmV1   = 1
+        BsmV2   = 2
+    End Enum
+
 
     ''' <summary>
     ''' Configuration of and settings for the bacterial staining module!
@@ -119,6 +131,50 @@ Namespace CytoSettings
         Public DyeUnit2TargetTemperature As Double   = 4.0
         Public DyeUnit2PrimeCircuit As TimeSpan      = TimeSpan.FromMinutes(10) ' Prime time for the DyeCircuit 
         Public DyeUnit2PrimeDispense As TimeSpan     = TimeSpan.FromMinutes(5) ' Prime time for the dispense part of the DyeCircuit 
+
+        ''' <summary>
+        ''' What kind of staining module is in use, the V1 or the V2, and maybe other models will be added later.
+        ''' To keep the datafiles loadable, we store the enum as an integer because older code does not know the enum
+        ''' and cannot load the files.  When stored as an enum, they can load the files. But they do not use
+        ''' the model, so they cannot see which model is used, but they can load and process the rest of the file
+        ''' and this property is interesting but not required to analyze the data.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property Model As StainingModuleModel_t
+            Get
+                Return CType(_modelNumber, StainingModuleModel_t)
+            End Get
+            Set(value As StainingModuleModel_t)
+                _modelNumber = Convert.ToInt32(value)
+            End Set
+        End Property
+        Private _modelNumber As Integer
+
+        Public InUse As Boolean = False              '  Is the staining module used for this instrument or not.
+        ''' <summary>
+        ''' Initialize the Model to an invalid value before deserializing so we can be
+        ''' detect if it was loaded afterwards.
+        ''' </summary>
+        ''' <param name="context"></param>
+        <OnDeserializing()>
+        Private Sub OnDeserializing(context As StreamingContext)
+            _modelNumber = 0
+            InUse = True ' Initialize to True. If we have a serialized structure, without the member then it should be true.
+                         ' Newer structures have the member and there it can be false.
+        End Sub
+
+        ''' <summary>
+        ''' After deserialization check the value of the model, and if it is set
+        ''' to Invalid then it must be an older version, so we set it to
+        ''' BsmV1
+        ''' </summary>
+        ''' <param name="context"></param>
+        <OnDeserialized()>
+        Private Sub OnDeserializied(context As StreamingContext)
+            If Model = StainingModuleModel_t.Invalid Then
+                Model = StainingModuleModel_t.BsmV1
+            End If
+        End Sub
 
     End Class
 
