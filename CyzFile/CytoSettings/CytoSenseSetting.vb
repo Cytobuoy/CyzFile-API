@@ -1,6 +1,7 @@
 Imports System.ComponentModel
 Imports System.Runtime.Serialization
 Imports System.Threading
+Imports UnitsNet
 
 Namespace CytoSettings
 
@@ -544,6 +545,11 @@ Namespace CytoSettings
             _laserInfo = Nothing
             hasFlowSensor = False
             Model = ""
+
+            HpslRefreshTime              = TimeSpan.Zero
+            _hpslAvailableVolume_ml      = 0.0
+            _hpslMinimumSpeed_muls       = 0.0
+            HpslSlowSpeedRefreshInterval = TimeSpan.Zero
         End Sub
 
         ''' <summary>
@@ -647,9 +653,10 @@ Namespace CytoSettings
         Public CytoUSBSettings As CytoUSBSettings.CytoUSBSettings
 
         'sub mode
-        Public State1SubModeTime As Double  '30 State 1 of 4; Pumping water towards loop...
-        Public State2SubModeTime As Double  '60 State 2 of 4; Filling sample loop with water...
-        Public State3SubModeTime As Double  '50 State 3 of 4; Pumping water from loop to the flow cuvette...
+        Public State1SubModeTime As Double  'State 1: Fill the sample loop with sample (and flush sample pump with clean water)
+        Public State2SubModeTime As Double  'State 2: Transport sample to injector.
+        <Obsolete()>
+        Public State3SubModeTime As Double
         Private _subLoopVolume_uL As Double
         <ComponentModel.Browsable(False)>
         Public ReadOnly Property SubLoopVolume_uL As Double
@@ -660,6 +667,27 @@ Namespace CytoSettings
                 Return _subLoopVolume_uL
             End Get
         End Property
+        ' HPSL ==> High Pressure Sample Loop
+        Public HpslRefreshTime              As TimeSpan ' Time need to do a quick refresh of the sample loop during the measurement.
+        Private _hpslAvailableVolume_ml As Double
+        Public Property HpslAvailableVolume As Volume ' Effectiavely usable volume of the HPSL
+            Get
+                Return Volume.FromMilliliters(_hpslAvailableVolume_ml)
+            End Get
+            Set(value As Volume)
+                _hpslAvailableVolume_ml = value.Milliliters()
+            End Set
+        End Property
+        Private _hpslMinimumSpeed_muls As Double
+        Public Property HpslMinimumSpeed    As VolumeFlow ' Minimum speed needed to avoid large particles ending up on the bottom in one segment of the loop.
+            Get
+                Return VolumeFlow.FromMicrolitersPerSecond(_hpslMinimumSpeed_muls)
+            End Get
+            Set(value As VolumeFlow)
+                _hpslMinimumSpeed_muls = value.MicrolitersPerSecond()
+            End Set
+        End Property
+        Public HpslSlowSpeedRefreshInterval As TimeSpan ' If the samplepump is slow (< minimum speed) we need to refresh after the specified interval regardless of the volume pumped.
 
         Public FixSamplePumpPosition As Boolean
 
