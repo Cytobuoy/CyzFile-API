@@ -1999,6 +1999,7 @@ Namespace Data
                 SetCytoSenseToMeasuringSettings = 13
                 MeasureBackGroundLevels = 14
                 Saving = 15
+                HpslRefresh = 16
             End Enum
 
             <Serializable()> Public Structure LogItem
