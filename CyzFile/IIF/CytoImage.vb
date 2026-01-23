@@ -93,6 +93,9 @@ Namespace Data.ParticleHandling
                             imgProcSettings.ApplyBrightFieldCorrection, imgProcSettings.ExtendObjectDetection)
         End Function
 
+        Public Function GetCroppedImage(marginBase As Integer, marginFactor As Double, bgThreshold As Integer, erosionDilation As Integer) As OpenCvSharp.Mat
+            Return GetCroppedImage(marginBase,marginFactor,bgThreshold,erosionDilation,True, True)
+        End Function
 
         ''' <summary>
         ''' Crop the image using the specified parameters and return the cropped image.
