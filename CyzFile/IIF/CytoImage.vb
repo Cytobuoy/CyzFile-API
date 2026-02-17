@@ -22,6 +22,14 @@ Namespace Data.ParticleHandling
             BackgroundWrong
         End Enum
 
+        'Set the default value to unused, when the image still needs to be compressed
+        Public CompressionStatus As CompressionStatusEnum = CompressionStatusEnum.Unused
+        Public Enum CompressionStatusEnum
+            Unused      'Default status, when image is not added to the compression processor yet
+            Available   'When the image is added to the compression processor and is available to be compressed
+            Busy        'Used to claim an image in a compression thread and start the compressing, other threads should not access this image
+            Done        'Used to release the image when the compression thread is done, safe access to the image from the thread cannot be ensured anymore
+        End Enum
 
         'Data
         <NonSerialized>
