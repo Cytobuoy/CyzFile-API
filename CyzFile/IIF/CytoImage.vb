@@ -30,6 +30,7 @@ Namespace Data.ParticleHandling
         <NonSerialized>
         Private _imageParticleData As ImageParticleDataStruct
         Private _croppedRect As Rect
+        Private _frameNr As Integer
         
         Private _cytoSettings As CytoSettings.CytoSenseSetting 'is used only for background image currently
 
@@ -47,11 +48,12 @@ Namespace Data.ParticleHandling
             End If
         End Sub
 
-        Public Sub New(cytosettings As CytoSettings.CytoSenseSetting, im As Mat, ims As IO.MemoryStream, crpRct As OpenCvSharp.Rect)
+        Public Sub New(cytosettings As CytoSettings.CytoSenseSetting, im As Mat, ims As IO.MemoryStream, crpRct As OpenCvSharp.Rect, Optional frameNr As Integer = -1)
             _cytoSettings = cytosettings
             _imageMat = im
             _imageStream = ims
             _croppedRect = crpRct
+            _frameNr = frameNr
         End Sub
 
         Public Sub ProcessImage(imgProcSettings As ImageProcessingSettings)
@@ -155,6 +157,18 @@ Namespace Data.ParticleHandling
         Public ReadOnly Property CropRect As OpenCvSharp.Rect
             Get 
                 Return _croppedRect
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Return the frame number of the image. This is used for testing if the
+        ''' order of the images that are added to the compression processor is the 
+        ''' same as when they are outputted.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property FrameNr As Integer
+            Get
+                Return _frameNr
             End Get
         End Property
 

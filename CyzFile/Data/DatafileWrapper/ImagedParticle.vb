@@ -21,9 +21,9 @@ Namespace Data.ParticleHandling
             MyBase.New(p.ChannelData_Hardware, p.ID, p.CytoSettings, p.MeasurementSettings)
             _image = image
         End Sub
-        Public Sub New(p As CytoSense.Data.ParticleHandling.Particle, image As OpenCvSharp.Mat, imagestream As IO.MemoryStream, cropRect As OpenCvSharp.Rect)
+        Public Sub New(p As CytoSense.Data.ParticleHandling.Particle, image As OpenCvSharp.Mat, imagestream As IO.MemoryStream, cropRect As OpenCvSharp.Rect, Optional frameNr As Integer = -1)
             MyBase.New(p.ChannelData_Hardware, p.ID, p.CytoSettings, p.MeasurementSettings)
-            _image = New CytoImage(CytoSettings, image, imagestream, cropRect)
+            _image = New CytoImage(CytoSettings, image, imagestream, cropRect, frameNr)
         End Sub
         Public Sub New(p As RawIIFParticle, cytoSettings As CytoSense.CytoSettings.CytoSenseSetting, measurement As CytoSense.MeasurementSettings.Measurement, start As DateTime)
             MyBase.New(p, cytoSettings, measurement, start)
