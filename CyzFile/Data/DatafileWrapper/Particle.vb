@@ -6,6 +6,13 @@ Imports System.Threading
 Imports CytoSense.CytoSettings
 
 Namespace Data.ParticleHandling
+    Public Interface IParticle
+        ReadOnly Property ChannelData_Hardware As ChannelData_Hardware()
+        ReadOnly Property ID As Int32
+        ReadOnly Property CytoSettings As CytoSense.CytoSettings.CytoSenseSetting
+        ReadOnly Property MeasurementSettings As CytoSense.MeasurementSettings.Measurement
+    End Interface
+
     ''' <summary>
     ''' Contains all data for a CytoSense particle. Most data is calculated on demand and accessible from properties.
     ''' </summary>
@@ -13,6 +20,8 @@ Namespace Data.ParticleHandling
     ''' NOTE,WARNING: DO NOT LOCK ON A PARTICLE. SyncLock Me is used internally.
     ''' </remarks>
     <Serializable()> Public Class Particle
+        Implements IParticle
+
         Private _channelData As ChannelData() 
         Private _channelData_hardware As ChannelData_Hardware()
         Private _virtualChannelData As ChannelData() 'nr (0) is gereserveerd voor FWScurvature, nr (1) voor een FLREDsplitchannel, nr (2) voor een ratiochannel (CC3)
@@ -163,13 +172,13 @@ Namespace Data.ParticleHandling
             End If
         End Sub
 
-        Public ReadOnly Property CytoSettings As CytoSense.CytoSettings.CytoSenseSetting
+        Public ReadOnly Property CytoSettings As CytoSense.CytoSettings.CytoSenseSetting Implements IParticle.CytoSettings
             Get
                 Return _CytoSettings
             End Get
         End Property
 
-        Public ReadOnly Property MeasurementSettings As CytoSense.MeasurementSettings.Measurement
+        Public ReadOnly Property MeasurementSettings As CytoSense.MeasurementSettings.Measurement Implements IParticle.MeasurementSettings
             Get
                 Return _measurement
             End Get
@@ -248,7 +257,7 @@ Namespace Data.ParticleHandling
         ''' <summary>
         ''' Represents a unique number for this particle in this file. 
         ''' </summary>
-        Public ReadOnly Property ID As Int32
+        Public ReadOnly Property ID As Int32 Implements IParticle.ID
             Get
                 Return _ID
             End Get
@@ -263,7 +272,7 @@ Namespace Data.ParticleHandling
             _ID = id
         End Sub
 
-        Public ReadOnly Property ChannelData_Hardware As ChannelData_Hardware()
+        Public ReadOnly Property ChannelData_Hardware As ChannelData_Hardware() Implements IParticle.ChannelData_Hardware
             Get
                 Return _channelData_hardware
             End Get
