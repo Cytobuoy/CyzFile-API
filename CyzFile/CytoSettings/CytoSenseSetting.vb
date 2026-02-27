@@ -603,6 +603,8 @@ Namespace CytoSettings
 #End Region
 
         Public DCSamplePump As Calibration.SamplePump.DCSamplePump
+        Public LastAutomaticInjectorCalibration As Calibration.AutomaticInjector
+        Public LastAutomaticInjectorCheck As Calibration.AutomaticInjector
         Public PIC As PICSettings
 
 
