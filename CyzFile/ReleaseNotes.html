@@ -83,6 +83,27 @@
               <th>Description</th>
           </tr>
           <tr>
+              <td>1.6.2.0</td>
+              <td>2026-03-12</td>
+              <td>
+                  <h4>Changes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Added GetCroppedImageWithRect function.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  The original GetCroppedImage function returned a cropped image, but it would not tell you where that cropped image was
+                                  located in the original one.  The new function returns a tuple consisting of the cropped image and a rectangle with information
+                                  on where the cropped image came from.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+              </td>
+          </tr>
+          <tr>
               <td>1.6.1.0</td>
               <td>2026-01-27</td>
               <td>
@@ -92,7 +113,8 @@
                           <tr><th>Subject:</th><th>Added image parameter calculation functions.</th></tr>
                           <tr>
                               <th>Summary:</th>
-                              <td>Added some basic functions and properties that allow calculation of some image parameters in CytoClus.
+                              <td>
+                                  Added some basic functions and properties that allow calculation of some image parameters in CytoClus.
                               </td>
                           </tr>
                           <tr><th>Status:</th><td>Implemented</td></tr>
