@@ -22,8 +22,8 @@ Public Class TestSerialization
     ''' </summary>
     <TestMethod()>
     Public Sub TestSimpelSaveNoPreviousFile()
-
-        Dim testName = "TestSimpelSaveNoPreviousFile.dat"
+        Dim procId = Process.GetCurrentProcess().Id
+        Dim testName = String.Format("TestSimpelSaveNoPreviousFile-{0}.dat", procId)
         Dim tmpPath = Path.GetTempPath()
 
         Dim testFileName = Path.Combine(tmpPath,testName)
@@ -55,7 +55,8 @@ Public Class TestSerialization
     <TestMethod()>
     Public Sub TestSimpelSaveTwoTimes()
 
-        Dim testName = "TestSimpelSaveTwoTimes.dat"
+        Dim procId = Process.GetCurrentProcess().Id
+        Dim testName = String.Format("TestSimpelSaveTwoTimes-{0}.dat",procId)
         Dim tmpPath = Path.GetTempPath()
 
         Dim testFileName = Path.Combine(tmpPath,testName)
@@ -111,7 +112,8 @@ Public Class TestSerialization
     <TestMethod()>
     Public Sub TestSimpelSaveThreeTimes()
 
-        Dim testName = "TestSimpelSaveThreeTimes.dat"
+        Dim procId = Process.GetCurrentProcess().Id
+        Dim testName = String.Format("TestSimpelSaveThreeTimes-{0}.dat",procId)
         Dim tmpPath = Path.GetTempPath()
 
         Dim testFileName = Path.Combine(tmpPath,testName)
@@ -184,7 +186,8 @@ Public Class TestSerialization
     <TestMethod()>
     Public Sub TestSimpelSaveLeftOverTempFile()
 
-        Dim testName = "TestSimpelSaveLeftOverTempFile.dat"
+        Dim procId = Process.GetCurrentProcess().Id
+        Dim testName = String.Format("TestSimpelSaveLeftOverTempFile-{0}.dat",procId)
         Dim tmpPath = Path.GetTempPath()
 
         Dim testFileName = Path.Combine(tmpPath,testName)

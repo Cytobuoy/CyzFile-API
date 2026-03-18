@@ -264,6 +264,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="DataFiles\ZOO80um_50t60m_diluted5x_8uls_SWST50L60_5min_IIFall_sh high_smrttr SWS SL300 SWS max1000 2025-12-18 13h02.cyz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="GPS_GERALD_2023-04-28 23h59.log">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

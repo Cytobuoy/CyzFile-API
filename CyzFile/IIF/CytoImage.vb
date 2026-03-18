@@ -88,11 +88,34 @@ Namespace Data.ParticleHandling
             End SyncLock
         End Sub
 
+
+        Public Function GetCroppedImageWithRect(imgProcSettings As ImageProcessingSettings) As Tuple( Of Mat,OpenCvSharp.Rect)
+            Return GetCroppedImageWithRect(imgProcSettings.MarginBase, imgProcSettings.MarginFactor, imgProcSettings.Threshold, imgProcSettings.ErosionDilation,
+                            imgProcSettings.ApplyBrightFieldCorrection, imgProcSettings.ExtendObjectDetection)
+        End Function
+        Public Function GetCroppedImageWithRect(marginBase As Integer, marginFactor As Double, bgThreshold As Integer, erosionDilation As Integer) As Tuple( Of Mat,OpenCvSharp.Rect)
+            Return GetCroppedImageWithRect(marginBase,marginFactor,bgThreshold,erosionDilation,True, True)
+        End Function
+        Public Function GetCroppedImageWithRect(marginBase As Integer, marginFactor As Double, bgThreshold As Integer, erosionDilation As Integer, brightFieldCorrection As Boolean, extendObjectDetection As Boolean) As Tuple( Of Mat,OpenCvSharp.Rect)
+            If _imageStream Is Nothing Then
+                CropResult = CropResultEnum.NoImage
+                Return Tuple.Create(Of Mat,OpenCvSharp.Rect)(Nothing, Rect.FromLTRB(0,0,0,0))
+            Else
+                Try
+                    Return AutoCropOpenCVWithRect(_cytoSettings.iif.OpenCvBackground, _cytoSettings.iif.OpenCvBackgroundMean, marginBase, marginFactor, bgThreshold, erosionDilation, brightFieldCorrection, extendObjectDetection, _croppedRect)
+                Catch ex As Exception
+                    Throw New Exception(ex.ToString())
+                End Try
+            End If
+        End Function
+
+
+
+
         Public Function GetCroppedImage(imgProcSettings As ImageProcessingSettings) As Mat
             Return GetCroppedImage(imgProcSettings.MarginBase, imgProcSettings.MarginFactor, imgProcSettings.Threshold, imgProcSettings.ErosionDilation,
                             imgProcSettings.ApplyBrightFieldCorrection, imgProcSettings.ExtendObjectDetection)
         End Function
-
 
         ''' <summary>
         ''' Crop the image using the specified parameters and return the cropped image.
@@ -109,7 +132,7 @@ Namespace Data.ParticleHandling
                 Return Nothing
             Else
                 Try
-                    Return AutoCropOpenCV(_cytoSettings.iif.OpenCvBackground, _cytoSettings.iif.OpenCvBackgroundMean, marginBase, marginFactor, bgThreshold, erosionDilation, brightFieldCorrection, extendObjectDetection, _croppedRect)
+                    Return AutoCropOpenCVWithRect(_cytoSettings.iif.OpenCvBackground, _cytoSettings.iif.OpenCvBackgroundMean, marginBase, marginFactor, bgThreshold, erosionDilation, brightFieldCorrection, extendObjectDetection, _croppedRect).Item1
                 Catch ex As Exception
                     Throw New Exception(ex.ToString())
                 End Try
@@ -247,7 +270,8 @@ Namespace Data.ParticleHandling
         ''' <param name="marginFactor"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Private Function AutoCropOpenCV(ByVal bgImg As Mat, bgMean As Double, marginBase As Integer, marginFactor As Double, bgThreshold As Integer, erosionDilation As Integer, brightFieldCorrection As Boolean, extendObjectDetection As Boolean, optional ByVal croppedRect As OpenCvSharp.Rect = Nothing) As OpenCvSharp.Mat
+        Private Function AutoCropOpenCVWithRect(ByVal bgImg As Mat, bgMean As Double, marginBase As Integer, marginFactor As Double, bgThreshold As Integer, erosionDilation As Integer, brightFieldCorrection As Boolean, extendObjectDetection As Boolean, optional ByVal croppedRect As OpenCvSharp.Rect = Nothing) As Tuple(Of OpenCvSharp.Mat, OpenCvSharp.Rect)
+            Dim cropRectangle As Rect
             If CropResult = CropResultEnum.AwaitingCrop OrElse (marginBase <> _processingSettings.MarginBase OrElse marginFactor <> _processingSettings.MarginFactor OrElse bgThreshold <> _processingSettings.Threshold OrElse  erosionDilation <> _processingSettings.ErosionDilation) Then ' Do the calculations.
                 If bgImg Is Nothing Then 'No background, cannot crop.
                     CropResult = CropResultEnum.BackgroundNeededButNotFound
@@ -265,7 +289,7 @@ Namespace Data.ParticleHandling
                             Dim rect = Cv2.BoundingRect(objCntr)
                             Dim largeRect = ImageUtil.CalculateLargeBoundingBox(rect, marginBase, marginFactor, img.Cols,img.Rows, IMG_STEP_SIZE, IMG_STEP_SIZE)
 
-                            Dim cropRectangle As Rect
+                            ' Dim cropRectangle As Rect
                             If extendObjectDetection Then
                                 Dim extObjBB As Rect
                                 Dim extLargeBB As Rect
@@ -289,9 +313,11 @@ Namespace Data.ParticleHandling
                 End If
             End If
             If CropResult = CropResultEnum.CropOK Then ' Return detected rect.
-                Return _croppedImage
+                ' Add offset of live crop rectangle to the one we use now, to get the global crop rect for the full image.
+                Return Tuple.Create(_croppedImage, cropRectangle.Add(_croppedRect.TopLeft)) ' Temporary need to get rectangle stuff correct, still need to add top left of _cropRect field to this.
             Else If CropResult = CropResultEnum.NoBlobFound OrElse CropResult = CropResultEnum.BackgroundNeededButNotFound OrElse CropResult = CropResultEnum.BackgroundWrong Then 'Return complete image
-                Return ImageMat
+                Dim imgMat = ImageMat
+                Return Tuple.Create(imgMat, Rect.FromLTRB(0,0,imgMat.Width-1,imgMat.Height-1))
             Else
                 Throw New Exception(String.Format("Error cropping image: '{0}'", CropResult))
             End If
@@ -354,6 +380,7 @@ Namespace Data.ParticleHandling
 
             'Calculate average per pixel
             Dim result As Double = sumSq / (img.Width * img.Height)
+            return result
             return result
         End Function
     End Class
