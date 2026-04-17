@@ -1298,6 +1298,10 @@ Namespace Data
                             Return "Load [%]"
                         Case SensorLogTypes.LASER_INPUT_VOLTAGE
                             Return "Volt [V]"
+                        Case SensorLogTypes.HUMIDITY
+                            Return "Relative Humidity [%]"
+                        Case SensorLogTypes.HUMIDITY_TEMPERATURE
+                            Return "Temperature [°C]"
                         Case SensorLogTypes.Unknown
                             Return _yString
                         Case Else
@@ -1413,6 +1417,10 @@ Namespace Data
                             Return "Laser Tec Load"
                         Case SensorLogTypes.LASER_INPUT_VOLTAGE
                             Return "Laser Input Voltage"
+                        Case SensorLogTypes.HUMIDITY
+                            Return "Humidity"
+                        Case SensorLogTypes.HUMIDITY_TEMPERATURE
+                            Return "Humidity Temperature"
                         Case SensorLogTypes.Unknown
                             Return _description
                         Case Else
@@ -1818,6 +1826,8 @@ Namespace Data
                 LASER_DIODE_CURRENT
                 LASER_TEC_LOAD
                 LASER_INPUT_VOLTAGE
+                HUMIDITY
+                HUMIDITY_TEMPERATURE
                 'when adding fields, don't forget to add descriptions in Y_axis en X_axis!
             End Enum
 
