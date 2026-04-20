@@ -2137,6 +2137,8 @@ Namespace CytoSettings
         Private _laserInfo() As LaserInfoT
 
         Private _system As SystemSettings = New SystemSettings()
+
+        <Browsable(False)>
         Public ReadOnly Property System As SystemSettings
             Get
                 Return _system

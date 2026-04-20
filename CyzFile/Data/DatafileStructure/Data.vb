@@ -665,6 +665,23 @@ Namespace Data
                     Return CSng(MeanOrNaN(sensorLogs.internalRecharge))
                 End Get
             End Property
+
+
+            <Category("Auxilary sensors"), DisplayName("Relative Humidity"), DescriptionAttribute(""), Browsable(True), DataBase.Attributes.Format("#0.0 \%")>
+            Public ReadOnly Property Humidity As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.Humidity))
+                End Get
+            End Property
+
+            <Category("Auxilary sensors"), DisplayName("Humidity Temperature"), DescriptionAttribute("Temperature of the humidity sesnors"), Browsable(True), DataBase.Attributes.Format("#0.0  \°C")>
+            Public ReadOnly Property HumidityTemperature As Single
+                Get
+                    Return CSng(MeanOrNaN(sensorLogs.HumidityTemperature))
+                End Get
+            End Property
+
+
 #End Region
 
             ''' <summary>
@@ -1088,7 +1105,8 @@ Namespace Data
             Dim Laser1InputVoltage     As DataPointList
             Dim Laser1Mode             As LaserModeDataPointList
 
-
+            Dim Humidity            As DataPointList 
+            Dim HumidityTemperature As DataPointList 
 
            <OnDeserializing> _ 
             Private Sub OnDes(sc As StreamingContext)
