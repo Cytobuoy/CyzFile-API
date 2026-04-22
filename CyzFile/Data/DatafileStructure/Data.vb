@@ -2,7 +2,7 @@
 Imports System.Data
 Imports System.Runtime.Serialization
 Imports CytoSense.CytoSettings
-
+Imports System.Runtime.CompilerServices
 Namespace Data
     ''' <summary>
     ''' The following classes cannot be moved due to serialization limitations
@@ -1952,6 +1952,18 @@ Namespace Data
 
         End Class
 
+
+
+        ''' <summary>
+        ''' An interval during which the measurement was run.  Originally a measurement was a single interval
+        ''' but this was changed when we redesigned the deepsub protocol.
+        ''' </summary>
+        Public Structure MeasurementInterval
+            Public IntervalStart As TimeSpan
+            Public IntervalEnd As TimeSpan
+        End Structure
+
+
         ''' <summary>
         ''' A log of the major actions/events during a measurement, such as the start/stop of flushing, the actual start/stop of
         ''' the measuring, etc.   This is later used to calculate total measurement time, and related things as concentration, etc.
@@ -2033,12 +2045,46 @@ Namespace Data
             ''' not really significant, but this way my numbers stay the same and that is easier for validation. (Althuough rounding, or not going to integer would
             ''' be theoretically more correct)</remarks>
             Public Function getAqcuireDuration() As Integer
+                Dim totalDuration =  getAcquireIntervals(Interval.Closed).Sum( Function(interval As MeasurementInterval) (interval.IntervalEnd - interval.IntervalStart) )
+                Return CInt(Math.Truncate(totalDuration.TotalSeconds))
+            End Function
 
-                Dim totalDuration As TimeSpan = New TimeSpan(0)
+            Public Enum Interval
+                Closed
+                Open
+            End Enum
 
+            ''' <summary>
+            ''' Get a list of all the measurement intervals, all the periods during the measurement that we were actually recording
+            ''' measurements.  Normally this will be a a single interval, but when we are runnign a new deepsub protocol there
+            ''' could be multiple intervals because the actual recording of particles stops during a refresh of the subloop.
+            ''' </summary>
+            ''' <param name="acquisitionActive">When set to true indicate that an acquisition is active, and the last interval could be open.
+            ''' In that case we will use DateTime.Now as the end of the last interval.</param>
+            ''' <returns>A list of the intervals during measuring.</returns>
+            ''' <remarks>We could use this function as the basis for the both the getAcuireDuration functions.  This will do the
+            ''' parsing and the create the list, and based on this we get the actual duration. That way we only have the parsing in
+            ''' one location.  It costs a little bit of extra time, but it makes sure we have our logic in only one spot.
+            ''' When doing this add extra tests for this function as well.
+            ''' 
+            ''' The file keeps real date times, and we want the relative, but sometimes we want the real.
+            ''' Converting real to relative is easy, we could do it here immediately or add a function to
+            ''' do it for us.  I think we do not really need a real list with absolute datetimes, so we
+            ''' really can do it here, no sense in creating an extra function.
+            ''' 
+            ''' For now this function will throw if called during acquisition, it will not return an open last interval.
+            ''' This means it cannot be used in the implementation of getAcquireDuration_WhileAcuiring.
+            ''' We could change that, it is easy to use DateTime.Now as the end of an open interval. Then
+            ''' we have only a single function.  A parameter could indicate if an acquisition is active and in
+            ''' that case we can simply do that.  If it is not active we throw the exceptions.
+            ''' Logic in one place is always good.
+            ''' </remarks>
+            Public Function getAcquireIntervals( lastInterval As Interval) As List(Of MeasurementInterval)
+                Dim intervalList = New List(Of MeasurementInterval)
+
+                Dim initialStart As DateTime
                 Dim currentIntervalStart As DateTime
                 Dim currentIntervalEnd   As DateTime
-                Dim haveAtLeastOneInterval As Boolean = False
                 Dim inAcquireInterval As Boolean = False ' Are we currently in an interval (i.e. after start, before end) or not.
 
                 For logIdx As Integer = 0 To tasklog.Count - 1
@@ -2047,15 +2093,17 @@ Namespace Data
                             If tasklog(logIdx).BeginorEnd = BeginOrEndEnum.Begining Then
                                 currentIntervalStart = tasklog(logIdx).time
                                 inAcquireInterval = True
+                                If intervalList.Count = 0 Then
+                                    initialStart = currentIntervalStart
+                                End If
                             Else ' Found an end before a beginning.
                                 Throw New ItemCannotBeFoundException()
                             End If
                         Else ' Looking for the end of the interval
                             If tasklog(logIdx).BeginorEnd = BeginOrEndEnum.Ending Then ' 2 starts in a row, could not find end belonging to the first one.
                                 currentIntervalEnd = tasklog(logIdx).time
-                                totalDuration += currentIntervalEnd - currentIntervalStart
+                                intervalList.Add( New MeasurementInterval() With { .IntervalStart = currentIntervalStart - initialStart, .intervalEnd = currentIntervalEnd - initialStart } )            
                                 inAcquireInterval = False
-                                haveAtLeastOneInterval = True
                             Else ' Found a start when looing for an end.
                                 Throw New ItemCannotBeFoundException()
                             End If
@@ -2063,13 +2111,18 @@ Namespace Data
                     End If ' Else we do not care about any of the other tasks.
                 Next
 
-                If Not haveAtLeastOneInterval OrElse inAcquireInterval Then
+                If lastInterval = Interval.Open And inAcquireInterval Then '' Close the last interval, using DateTime.Now as the end.
+                    intervalList.Add( New MeasurementInterval() With { .IntervalStart = currentIntervalStart - initialStart, .intervalEnd = DateTime.Now - initialStart } )            
+                    inAcquireInterval = False
+                End If
+
+                If intervalList.Count = 0 OrElse inAcquireInterval Then
                     Throw New ItemCannotBeFoundException()
                 End If
 
-                Return CInt(Math.Truncate(totalDuration.TotalSeconds))
-
+                Return intervalList
             End Function
+
 
             ''' <summary>
             ''' Get the duration of hte measurement, this one can be called while the acquisition is active, in that case if
@@ -2081,46 +2134,9 @@ Namespace Data
             ''' <remarks>For backwards compatibility we truncate the number of seconds, it is not that important, but that is what the old
             ''' implementation did.</remarks>
             Public Function getAcquireDuration_WhileAcuiring() As Integer
-                Dim totalDuration As TimeSpan = New TimeSpan(0)
-
-                Dim currentIntervalStart As DateTime
-                Dim currentIntervalEnd As DateTime
-                Dim haveAtLeastOneInterval As Boolean = False
-                Dim inAcquireInterval As Boolean = False ' Are we currently in an interval (i.e. after start, before end) or not.
-
-                For logIdx As Integer = 0 To tasklog.Count - 1
-                    If tasklog(logIdx).task = Tasks.Acquiring Then
-                        If Not inAcquireInterval Then ' Looking for the beginning of the interval
-                            If tasklog(logIdx).BeginorEnd = BeginOrEndEnum.Begining Then
-                                currentIntervalStart = tasklog(logIdx).time
-                                inAcquireInterval = True
-                            Else ' Found an end before a beginning.
-                                Throw New ItemCannotBeFoundException()
-                            End If
-                        Else ' Looking for the end of the interval
-                            If tasklog(logIdx).BeginorEnd = BeginOrEndEnum.Ending Then ' 2 starts in a row, could not find end belonging to the first one.
-                                currentIntervalEnd = tasklog(logIdx).time
-                                totalDuration += currentIntervalEnd - currentIntervalStart
-                                inAcquireInterval = False
-                                haveAtLeastOneInterval = True
-                            Else ' Found a start when looing for an end.
-                                Throw New ItemCannotBeFoundException()
-                            End If
-                        End If
-                    End If ' Else we do not care about any of the other tasks.
-                Next
-
-                If Not haveAtLeastOneInterval AndAlso Not inAcquireInterval Then
-                    Throw New ItemCannotBeFoundException()
-                End If
-
-                If inAcquireInterval Then ' Last interval is still open, use now as endtime.
-                    totalDuration += DateTime.Now - currentIntervalStart
-                End If
-
+                Dim totalDuration =  getAcquireIntervals(Interval.Open).Sum( Function(interval As MeasurementInterval) (interval.IntervalEnd - interval.IntervalStart) )
                 Return CInt(Math.Truncate(totalDuration.TotalSeconds))
             End Function
-
 
 
             ''' <summary>
@@ -2173,6 +2189,24 @@ Namespace Data
 
             End Class
         End Class
+    End Module
+
+    ''' <summary>
+    ''' A support module with some LINQ extension methods that make implementing some of the other functions a bit easier.
+    ''' (And it looks cool).
+    ''' </summary>
+    Module LinqExtensionMethods
+        <Extension()>
+        Public Function Sum(Of T)(self As IEnumerable(Of T), selector As Func(Of T, TimeSpan)) As TimeSpan
+            ArgumentNullException.ThrowIfNull(self)
+            ArgumentNullException.ThrowIfNull(selector)
+
+            Dim acc As TimeSpan = TimeSpan.Zero
+            For Each val As T In self
+                acc += selector(val)
+            Next
+            Return acc
+        End Function
     End Module
 
 End Namespace
