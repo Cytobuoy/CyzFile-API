@@ -392,6 +392,59 @@ End Sub
     End Sub
 
 
+
+
+    ''' <summary>
+    ''' It turns out that some old files, pre CS-2017-85 instruments, have datafiles where the target range option for imaging is
+    ''' indicated by NOT having any other option selected. Later we added an explicit option for target range as well, but
+    ''' when loading these older files that value was not initialized correctly.  CytoClus did not care, but when processing the
+    ''' datafiles further, e.g. exporting using the Cyz2Json tool, it got confused because it did not recognize which imaging
+    ''' mode was used since none of the mode flags were set. 
+    ''' 
+    ''' NOTE: What should the mode return when no IifCheck is set? I think it should return No Imaging, right now it does not do this,
+    ''' so we can fix that as well.
+    ''' </summary>
+    ''' <param name="filename"></param>
+    ''' <param name="exp"></param>
+    <DataTestMethod>
+    <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                          "No Imaging")>
+    <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                          "No Imaging")>
+    <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                             "No Imaging")>
+    <DataRow("DataFiles/1p6umbeads 2011-05-19 13u06.cyz",                                 "Target Range IIF")>
+    <DataRow("DataFiles/1umFLYbeads 2011-02-21 10u51.cyz",                                "Target Range IIF")>
+    <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                  "No Imaging")>
+    <DataRow("DataFiles/algjes 2011-01-07 14u59.cyz",                                     "Target Range IIF")>
+    <DataRow("DataFiles/algjes machteld 2010-11-22 11u33.cyz",                            "No Imaging")>
+    <DataRow("DataFiles/beads 2010-12-08 15u00.cyz",                                      "Target Range IIF")>
+    <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",     "No Imaging")>
+    <DataRow("DataFiles/beads reservoir measurement 2021-10-04 15h00.cyz",                "Smart Grid IIF")>
+    <DataRow("DataFiles/beads1.6u.cyz-2010-06-16 13-10.CYZ",                              "Target Range IIF")>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                           "No Imaging")>
+    <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz",                     "No Imaging")>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10.cyz",                                   "Target Range IIF")>
+    <DataRow("DataFiles/BerreIIF 2011-09-26 17u10_orig.cyz",                              "Target Range IIF")>
+    <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz",                                "Target Range IIF")>
+    <DataRow("DataFiles/dsc sea water  sch haven oud 2019-12-20 11h38_All No Images.cyz", "Smart Grid IIF")>
+    <DataRow("DataFiles/FunctionalTest_measurement#1 2019-01-22 08h52.cyz",               "No Imaging")>
+    <DataRow("DataFiles/LW_2017_protocol_1 2017-04-20 12h00.cyz",                         "Smart Grid IIF")>
+    <DataRow("DataFiles/Maaswater gevoeliger 256K 2012-10-10 12u03.cyz",                  "No Imaging")>
+    <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                             "No Imaging")>
+    <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                             "No Imaging")>
+    <DataRow("DataFiles/pollen 2011-05-19 16u19.cyz",                                     "Target Range IIF")>
+    <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz",      "Smart Grid IIF")>
+    <DataRow("DataFiles/ruistest_1 2023-07-18 14h46_2.cyz",                               "No Imaging")>
+    <DataRow("DataFiles/scenedesmus 230410 gemengd in kraanwater 2010-12-03 15u17.cyz",   "No Imaging")>
+    <DataRow("DataFiles/Segmented 2014-09-30 15u13.cyz",                                  "No Imaging")>
+    <DataRow("DataFiles/ZOO80um_50t60m_diluted5x_8uls_SWST50L60_5min_IIFall_sh high_smrttr SWS SL300 SWS max1000 2025-12-18 13h02.cyz", "Target All IIF")>
+    Public Sub TestIifMode( filename As String, exp As String)
+        Dim dfw = New DataFileWrapper(filename)
+        Dim act=dfw.MeasurementSettings.SelectedIifMode
+        Assert.AreEqual(exp, act)
+    End Sub
+
+
+
+
    public class DoubleComparer
         Implements IComparer
        Public Sub New(delta As Double)

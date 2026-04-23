@@ -1473,7 +1473,9 @@ Namespace MeasurementSettings
             ComponentModel.Browsable(True)>
         Public readonly Property SelectedIifMode As String
             Get
-                Dim bool = Nothing
+                If Not IIFCheck Then
+                    Return "No Imaging"
+                End If
                 If IIFuseTargetAll Then
                     return "Target All IIF"
                 ElseIf IIFuseSmartGrid Then
@@ -1482,8 +1484,8 @@ Namespace MeasurementSettings
                     Return "Target Range IIF"
                 ElseIf IIFUseSetDefintionSelector Then
                     Return "Set Definition IIF"
-                Else 
-                    Return "Unknown IIF setting"
+                Else ' If we get here, imaging is enabled and non of the other options is selected, so it must be "Target Range IIF" (Applies to old files)
+                    Return "Target Range IIF"
                 End If
                     
             End Get
