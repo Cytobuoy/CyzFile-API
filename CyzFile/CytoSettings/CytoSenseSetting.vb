@@ -604,6 +604,9 @@ Namespace CytoSettings
                 ' use one.
                 StainingModule = New StainingModuleSettings()
             End If
+            If _system Is Nothing Then
+                _system = New SystemSettings()
+            End If
         End Sub
 
 
@@ -2171,6 +2174,17 @@ Namespace CytoSettings
 
         Private _numberOfLasers As Integer
         Private _laserInfo() As LaserInfoT
+
+        Private _system As SystemSettings = New SystemSettings()
+
+        <Browsable(False)>
+        Public ReadOnly Property System As SystemSettings
+            Get
+                Return _system
+            End Get
+        End Property
+
+
 
     End Class
 

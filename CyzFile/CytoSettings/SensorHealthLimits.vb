@@ -28,6 +28,9 @@
         LaserDiodeCurrent     = New SensorLimit(150, 220) 'degC
         LaserTecLoad          = New SensorLimit(0,80) ' percentage
         LaserInputVoltage     = New SensorLimit(4.5,5.3) 'Volt
+
+        HumidityPercentage = New SensorLimit(0.0, 80)
+        HumidityTemperature = New SensorLimit(3.0, 40)
     End Sub
 
     ''' <summary>
@@ -41,7 +44,21 @@
         _laserDiodeCurrent     = New SensorLimit(0, 220) 'degC
         _laserTecLoad          = New SensorLimit(0,80) ' percentage
         _laserInputVoltage     = New SensorLimit(4.4,5.3) 'Volt
+        _humidityPercentage    = New SensorLimit(0.0, 80)
+        _humidityTemperature   = New SensorLimit(3.0, 40)
     End Sub
+
+
+    <OnDeserialized>
+    Private Sub OnDeserialized(sc As StreamingContext)
+        If _humidityPercentage.minValue = 0 AndAlso _humidityPercentage.maxValue = 0 Then
+            ' We have a saved uninitialized SensorLimit, during testing a few of these settings files existed.
+            ' Should not happen in the wild, but for now just overwrite them with the default values.
+            _humidityPercentage    = New SensorLimit(0.0, 80)
+            _humidityTemperature   = New SensorLimit(3.0, 40)
+        End If
+    End Sub
+
 
     ''' <summary>
     ''' This is not good enough, detector levels should be per channel
@@ -147,6 +164,9 @@
     Public Property LaserDiodeCurrent     As SensorLimit
     Public Property LaserTecLoad          As SensorLimit
     Public Property LaserInputVoltage     As SensorLimit
+
+    Public Property HumidityPercentage As SensorLimit
+    Public Property HumidityTemperature As SensorLimit
 
     <Serializable()> Public Structure SensorLimit
         Public Sub New(minValue As Double, maxValue As Double)

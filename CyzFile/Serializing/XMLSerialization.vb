@@ -97,6 +97,16 @@ Namespace Serializing
 		End Function
 
 		<Extension>
+		Public Function GetAttributeAsInteger( node As XmlElement, name As String, defValue As Integer) As Integer
+            Dim valStr = node.GetAttribute(name)
+            If String.IsNullOrEmpty(valStr) Then
+                Return defValue
+            Else
+                Return CInt(valStr)
+            End If
+		End Function
+
+		<Extension>
 		Public Function GetAttributeAsEnum(of T)( node As XmlElement, name As String) As T
 			Return CType([Enum].Parse(GetType(T), node.GetAttribute(name)), T)
 		End Function

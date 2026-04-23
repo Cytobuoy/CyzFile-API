@@ -73,6 +73,8 @@ Namespace CytoUSBSettings
         Public DisableLaser1Sensor As Boolean     = False
         Public DisableLaser2Sensor As Boolean     = False
 
+        Public DisableHumiditySensor As Boolean = False ' New sensor, first added for Aneris
+
         'pay attention here, when adding fields, to also update AtLeastOneSensorDisabled is necessary!
 
         Public DisableSheathFlowSensor As Boolean            = False
