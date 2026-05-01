@@ -607,6 +607,27 @@ Namespace CytoSettings
             If _system Is Nothing Then
                 _system = New SystemSettings()
             End If
+
+            'Check if we still have the 0 values, if so override with the default values.
+            If State1SubModeTime = 0.0 Then
+                State1SubModeTime = 40.0
+            End If
+            If State2SubModeTime = 0.0 Then
+                State1SubModeTime = 30.0
+            End If
+            If HpslRefreshTime = TimeSpan.Zero Then
+                HpslRefreshTime = TimeSpan.FromSeconds(40)
+            End If
+            If _hpslAvailableVolume_ml =  0.0 Then
+                _hpslAvailableVolume_ml = 1.5
+            End If
+            If _hpslMinimumSpeed_muls = 0.0 Then
+                _hpslMinimumSpeed_muls = 9.0
+            End If
+            If HpslSlowSpeedRefreshInterval = TimeSpan.Zero Then
+                HpslSlowSpeedRefreshInterval = TimeSpan.FromSeconds(90)
+            End If
+
         End Sub
 
 
@@ -656,8 +677,8 @@ Namespace CytoSettings
         Public CytoUSBSettings As CytoUSBSettings.CytoUSBSettings
 
         'sub mode
-        Public State1SubModeTime As Double  'State 1: Fill the sample loop with sample (and flush sample pump with clean water)
-        Public State2SubModeTime As Double  'State 2: Transport sample to injector.
+        Public State1SubModeTime As Double  = 40.0 'State 1: Fill the sample loop with sample (and flush sample pump with clean water)
+        Public State2SubModeTime As Double  = 30.0 'State 2: Transport sample to injector.
         <Obsolete()>
         Public State3SubModeTime As Double
         Private _subLoopVolume_uL As Double
@@ -671,8 +692,8 @@ Namespace CytoSettings
             End Get
         End Property
         ' HPSL ==> High Pressure Sample Loop
-        Public HpslRefreshTime              As TimeSpan ' Time need to do a quick refresh of the sample loop during the measurement.
-        Private _hpslAvailableVolume_ml As Double
+        Public HpslRefreshTime              As TimeSpan = TimeSpan.FromSeconds(10) ' Time need to do a quick refresh of the sample loop during the measurement.
+        Private _hpslAvailableVolume_ml As Double = 1.5
         Public Property HpslAvailableVolume As Volume ' Effectiavely usable volume of the HPSL
             Get
                 Return Volume.FromMilliliters(_hpslAvailableVolume_ml)
@@ -681,7 +702,7 @@ Namespace CytoSettings
                 _hpslAvailableVolume_ml = value.Milliliters()
             End Set
         End Property
-        Private _hpslMinimumSpeed_muls As Double
+        Private _hpslMinimumSpeed_muls As Double = 9
         Public Property HpslMinimumSpeed    As VolumeFlow ' Minimum speed needed to avoid large particles ending up on the bottom in one segment of the loop.
             Get
                 Return VolumeFlow.FromMicrolitersPerSecond(_hpslMinimumSpeed_muls)
@@ -690,7 +711,7 @@ Namespace CytoSettings
                 _hpslMinimumSpeed_muls = value.MicrolitersPerSecond()
             End Set
         End Property
-        Public HpslSlowSpeedRefreshInterval As TimeSpan ' If the samplepump is slow (< minimum speed) we need to refresh after the specified interval regardless of the volume pumped.
+        Public HpslSlowSpeedRefreshInterval As TimeSpan = TimeSpan.FromSeconds(90)  ' If the samplepump is slow (< minimum speed) we need to refresh after the specified interval regardless of the volume pumped.
 
         Public FixSamplePumpPosition As Boolean
 
