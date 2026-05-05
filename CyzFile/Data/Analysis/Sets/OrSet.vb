@@ -36,6 +36,14 @@ Namespace Data.Analysis
     <Serializable()> Public Class OrSet
         Inherits CompositeSet
 
+        Public Shadows Const XML_NAME As String = "OrSet"
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Return XML_NAME
+            End Get
+        End Property
+
         ''' <summary>
         ''' Needed by XML (de)serializer code, DO NOT USE 
         ''' </summary>
@@ -90,6 +98,12 @@ Namespace Data.Analysis
 
         Public Sub New(sets As List(Of CytoSet), dfw As CytoSense.Data.DataFileWrapper, autoSet As Boolean)
             Me.New(GenerateName(sets), Drawing.Color.FromArgb(0, 0, 0, 0), sets, dfw, autoSet) ' Use fully transparent color ?!? Unfortunately there is no INVALID color
+        End Sub
+
+
+        Public Sub New(document As XmlDocument, parentNode As XmlElement)
+            MyBase.New(cytoSetType.OrSet, document, parentNode)
+            XmlDocumentLocal(document, parentNode)
         End Sub
 
         Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
@@ -201,7 +215,9 @@ Namespace Data.Analysis
 
         Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) 
             MyBase.XmlDocumentRead(document, parentNode)
-
+            XmlDocumentLocal(document, parentNode)
+        End Sub
+        Private Sub XmlDocumentLocal(document As XmlDocument, parentNode As XmlElement) 
             _setList = New List(Of CytoSet)
             _autoSet = parentNode.ReadChildElementAsBoolean("AutoSet")
 
@@ -211,5 +227,6 @@ Namespace Data.Analysis
                 _setList.Add(New CytoSetDummy(CInt(childNode.InnerText)))
             Next
         End Sub
+
     End Class
 End Namespace

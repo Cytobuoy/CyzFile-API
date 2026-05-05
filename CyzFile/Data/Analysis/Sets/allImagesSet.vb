@@ -1,4 +1,6 @@
-﻿Imports CytoSense.Data.ParticleHandling
+﻿Imports System.Xml
+Imports CytoSense.Serializing
+Imports CytoSense.Data.ParticleHandling
 
 Namespace Data.Analysis
 
@@ -7,6 +9,14 @@ Namespace Data.Analysis
     ''' </summary>
     <Serializable()> Public Class AllImagesSet
         Inherits CytoSet
+
+        Public Const XML_NAME As String = "AllImagesSet"
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Return XML_NAME
+            End Get
+        End Property
 
         Public Sub New()
             MyBase.New("All Imaged Particles", cytoSetType.allImages, Drawing.Color.Chartreuse)
@@ -32,6 +42,19 @@ Namespace Data.Analysis
             MyBase.New(other.Name, other.Type, other.ColorOfSet, other._datafile, other.ListID, other.Visible)
 
             RecalculateParticleIndices()
+        End Sub
+
+        Public Sub New(document As XmlDocument, parentNode As XmlElement)
+            MyBase.New(cytoSetType.allImages, document, parentNode)
+        End Sub
+
+        ''' <summary>
+        ''' Ucky, needed to pass on type of image focus class, should not exists.
+        ''' </summary>
+        ''' <param name="document"></param>
+        ''' <param name="parentNode"></param>
+        Public Sub New(type As cytoSetType, document As XmlDocument, parentNode As XmlElement)
+            MyBase.New(type, document, parentNode)
         End Sub
 
         Public ReadOnly Overrides Property UseInIIF As Boolean
@@ -81,6 +104,7 @@ Namespace Data.Analysis
         Public Overrides Function Clone() As CytoSet
             Return New AllImagesSet(Me)
         End Function
+
     End Class
 
     '
@@ -88,6 +112,15 @@ Namespace Data.Analysis
     '
     <Serializable> Public Class ImageFocusSet
         Inherits AllImagesSet
+
+        Public Shadows Const XML_NAME As String = "ImageFocusSet"
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Return XML_NAME
+            End Get
+        End Property
+
 
         Enum FocusEnum
             BelowRange
@@ -171,6 +204,34 @@ Namespace Data.Analysis
 
             RecalculateParticleIndices()
         End Sub
+
+        Public Sub New(document As XmlDocument, parentNode As XmlElement)
+            MyBase.New(cytoSetType.ImageFocusSet, document, parentNode)
+            XmlDocumentReadLocal(document, parentNode) 
+        End Sub
+
+
+        Public Overrides Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement) 
+            MyBase.XmlDocumentWrite(document, parentNode)
+
+            document.AppendChildElement(parentNode, "FocusType",   _focus)
+            document.AppendChildElement(parentNode, "RatioMin", _ratioMin)
+            document.AppendChildElement(parentNode, "RatioMax", _ratioMax)
+        End Sub
+
+        Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) 
+            MyBase.XmlDocumentRead(document,parentNode)
+            XmlDocumentReadLocal(document,parentNode)
+        End Sub
+
+
+        Private Sub XmlDocumentReadLocal(document As XmlDocument, parentNode As XmlElement) 
+            _focus = parentNode.ReadChildElementAsEnum(Of FocusEnum)("FocusType")
+            _ratioMin = CSng(parentNode.ReadChildElementAsDouble("RatioMin"))
+            _ratioMax = CSng(parentNode.ReadChildElementAsDouble("RatioMax"))
+        End Sub
+
+
 
         Public Property ratioMin As Single
             Get

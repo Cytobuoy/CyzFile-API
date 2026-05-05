@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SetList configuration_date="2010-12-07T00:00:00.0000000" ExclusiveSets="False" SerialNumber="CS-2009-27">
+  <DefaultSet ListID="0" Name="Default (all)" Color="Gray" Visible="True" />
+  <AllImagesSet ListID="1" Name="All Imaged Particles" Color="Chartreuse" Visible="True" />
+  <ImageFocusSet ListID="2" Name="Images focussed above range" Color="DarkRed" Visible="True">
+    <FocusType>2</FocusType>
+    <RatioMin>1.500001</RatioMin>
+    <RatioMax>3.4028235E+38</RatioMax>
+  </ImageFocusSet>
+  <ImageFocusSet ListID="3" Name="Images focussed inside range" Color="DarkGreen" Visible="True">
+    <FocusType>1</FocusType>
+    <RatioMin>0.5</RatioMin>
+    <RatioMax>1.5</RatioMax>
+  </ImageFocusSet>
+  <ImageFocusSet ListID="4" Name="Images focussed below range" Color="DarkBlue" Visible="True">
+    <FocusType>0</FocusType>
+    <RatioMin>-3.4028235E+38</RatioMin>
+    <RatioMax>0.499999</RatioMax>
+  </ImageFocusSet>
+</SetList>

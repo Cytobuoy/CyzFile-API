@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports System.Xml
 
 Namespace Data.Analysis
 
@@ -14,6 +15,11 @@ Namespace Data.Analysis
         Public Sub New(name As String, type As cytoSetType, myColor As Color, datafile As CytoSense.Data.DataFileWrapper, listId As Integer, vis As Boolean)
             MyBase.New(name, type, myColor, datafile, listId, vis)
         End Sub
+
+        Public Sub New(type As cytoSetType, document As XmlDocument, parentNode As XmlElement)
+            MyBase.New(type, document, parentNode)
+        End Sub
+
 
         Public MustOverride ReadOnly Property ChildSets As List(Of CytoSet)
     End Class

@@ -11,6 +11,14 @@ Namespace Data.Analysis
     <Serializable()> Public Class UnassignedParticlesSet
         Inherits CytoSet
 
+        Public Shadows Const XML_NAME As String = "UnassignedParticlesSet"
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Return XML_NAME
+            End Get
+        End Property
+
         Private _allsets As SetsList
         <NonSerialized()> Private _particles As ParticleHandling.Particle()
 
@@ -39,6 +47,10 @@ Namespace Data.Analysis
         Public Sub New(other As UnassignedParticlesSet)
             MyBase.New(other.Name, other.Type, other.ColorOfSet, other.Datafile, other.ListID, other.Visible)
             _allsets = other._allsets
+        End Sub
+
+        Public Sub New(document As XmlDocument, parentNode As XmlElement)
+            MyBase.New(cytoSetType.unassignedParticles, document, parentNode)
         End Sub
 
         Public Overrides Sub RecalculateParticleIndices()
@@ -98,10 +110,6 @@ Namespace Data.Analysis
                 Return False
             End Get
         End Property
-
-        Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) 
-            MyBase.XmlDocumentRead(document, parentNode)
-        End Sub
 
     End Class
 End Namespace

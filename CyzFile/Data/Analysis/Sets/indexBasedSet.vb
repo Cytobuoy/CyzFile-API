@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports System.Xml
 Imports CytoSense.Data.ParticleHandling
 
 Namespace Data.Analysis
@@ -9,6 +10,15 @@ Namespace Data.Analysis
     ''' <remarks></remarks>
     <Serializable()> Public Class indexBasedSet
         Inherits CytoSet
+
+        Public Shadows Const XML_NAME As String = "IndexBasedSet"
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Return XML_NAME
+            End Get
+        End Property
+
 
         Private _particles As ParticleHandling.Particle()
 
@@ -21,6 +31,19 @@ Namespace Data.Analysis
 
         Public Sub New(ByVal name As String, ByVal color As System.Drawing.Color, ByVal IDs As Integer(), ByVal datafile As CytoSense.Data.DataFileWrapper)
             MyBase.New(name, cytoSetType.indexBased, color, datafile)
+            Throw New NotImplementedException()
+        End Sub
+
+        Public Sub New(document As XmlDocument, parentNode As XmlElement)
+            MyBase.New(cytoSetType.indexBased, document, parentNode)
+            Throw New NotImplementedException()
+        End Sub
+
+        Public Overrides Sub XmlDocumentWrite(document As XmlDocument, parentNode As XmlElement) 
+            Throw New NotImplementedException()
+        End Sub
+
+        Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) 
             Throw New NotImplementedException()
         End Sub
 
@@ -58,6 +81,14 @@ Namespace Data.Analysis
     <Serializable()> Public Class DefaultSet
         ' This one always exists and contains all particles
         Inherits CytoSet
+
+        Public Shadows Const XML_NAME As String = "DefaultSet"
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Return XML_NAME
+            End Get
+        End Property
 
         Private _curMachine As String
 

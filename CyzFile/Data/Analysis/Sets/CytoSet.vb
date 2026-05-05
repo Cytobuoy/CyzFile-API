@@ -23,6 +23,13 @@ Namespace Data.Analysis
 		<NonSerialized> Protected _reducedParticleIndices As Integer()
         <NonSerialized> Protected _datafile As CytoSense.Data.DataFileWrapper
 
+
+        Public Sub New(type As cytoSetType, document As XmlDocument, parentNode As XmlElement) 
+            _myType = type
+            XmlDocumentReadLocal(document, parentNode)
+        End Sub
+
+
         Public Sub New(ByVal name As String, ByVal type As cytoSetType, ByVal myColor As Color)
             _listID = -1
             _name = name
@@ -44,6 +51,15 @@ Namespace Data.Analysis
             _listID = listId
             _visible = vis
         End Sub
+
+        ''' <summary>
+        ''' This is the tag used when storing this item in an Xml, inside a SetList.  If you want to use a different tag somewhere else,
+        ''' feel free, but then you need to manage it yourself.  The setlist uses this virtual property, to get the name
+        ''' when creating child nodes.  And it uses the accompanying XML_TAG constant defined in each class when reading
+        ''' an XML file.
+        ''' </summary>
+        ''' <returns></returns>
+        Public MustOverride ReadOnly Property XmlTagName As String
 
 #Region "General Set Properties"
         Public ReadOnly Overridable Property UseInIIF As Boolean
@@ -314,6 +330,10 @@ Namespace Data.Analysis
         End Sub
 
         Public Overridable Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) Implements IXmlDocumentIO.XmlDocumentRead
+            XmlDocumentReadLocal(document, parentNode) 
+        End Sub
+
+        Private Sub XmlDocumentReadLocal(document As XmlDocument, parentNode As XmlElement) 
             If parentNode.TryGetAttribute(Of Integer)("ListID", _listID)
 				_name = parentNode.GetAttribute("Name")
 				_myColor = Color.FromName(parentNode.GetAttribute("Color"))
@@ -325,6 +345,7 @@ Namespace Data.Analysis
 				_visible = parentNode.ReadChildElementAsBoolean("Visible")
 			End If
         End Sub
+
     End Class
 
     <Serializable()> Public Enum cytoSetType
@@ -338,6 +359,7 @@ Namespace Data.Analysis
         OrSet
         SuccessFullyCroppedImages
         CropFailedImages
+        ImageFocusSet
     End Enum
 
     ''' <summary>
@@ -392,6 +414,12 @@ Namespace Data.Analysis
     ''' </summary>
     Public Class CytoSetDummy
         Inherits CytoSet
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Throw New NotImplementedException()
+            End Get
+        End Property
 
         Public Sub New(ListID As Integer)
             MyBase.New("dummy", cytoSetType.Invalid, Drawing.Color.LightCyan)

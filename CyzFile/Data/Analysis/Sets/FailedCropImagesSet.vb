@@ -22,6 +22,15 @@ Namespace Data.Analysis
     Public Class FailedCropImagesSet
         Inherits CytoSet
 
+        Public Shadows Const XML_NAME As String = "FailedCropImagesSet"
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Return XML_NAME
+            End Get
+        End Property
+
+
         Public Const SETNAME As String = "Cropping Failed Images"
         <NonSerialized> Private _calcFinished As Boolean 'Set to True to indicate that the calculations are finished, and we have all particles.
         <NonSerialized> Private _recalcTimer As System.Threading.Timer
@@ -100,6 +109,12 @@ Namespace Data.Analysis
             RecalculateParticleIndices()
         End Sub
 
+        Public Sub New(document As XmlDocument, parentNode As XmlElement)
+            MyBase.New(cytoSetType.CropFailedImages, document, parentNode)
+            XmlDocumentReadLocal(document, parentNode) 
+        End Sub
+
+
         ''' <summary>
         ''' TEST CLASSES, Can behave strange if deserialized with different values as current ones..
         ''' </summary>
@@ -121,13 +136,16 @@ Namespace Data.Analysis
         ''' <param name="parentNode"></param>
         Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) 
             MyBase.XmlDocumentRead(document,parentNode)
+            XmlDocumentReadLocal(document,parentNode)
+        End Sub
 
+
+        Private Sub XmlDocumentReadLocal(document As XmlDocument, parentNode As XmlElement) 
             _cropMarginBase      = parentNode.ReadChildElementAsInteger("AutoCropMarginBase")
             _cropMarginFactor    = parentNode.ReadChildElementAsDouble("AutoCropMarginFactor")
             _cropBgThreshold     = parentNode.ReadChildElementAsInteger("BackgroundThreshold")
             _cropErosionDilation = parentNode.ReadChildElementAsInteger("ErosionDilation")
         End Sub
-
 
         Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
             Get

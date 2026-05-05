@@ -11,6 +11,14 @@ Namespace Data.Analysis
         Inherits CompositeSet
         Implements ISerializable
 
+        Public Shadows Const XML_NAME As String = "CombinedSet"
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Return XML_NAME
+            End Get
+        End Property
+
         ''' <summary>
         ''' Needed by XML (de)serializer code, DO NOT USE
         ''' </summary>
@@ -37,6 +45,13 @@ Namespace Data.Analysis
             _set2 = set2
             _myGateCombi = combiType
         End Sub
+
+
+        Public Sub New(document As XmlDocument, parentNode As XmlElement)
+            MyBase.New(cytoSetType.combined, document, parentNode)
+            XmlDocumentReadLocal(document, parentNode) 
+        End Sub
+
 
         Public Overrides Property Datafile As CytoSense.Data.DataFileWrapper
             Get
@@ -170,7 +185,10 @@ Namespace Data.Analysis
 
         Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) 
             MyBase.XmlDocumentRead(document, parentNode)
+            XmlDocumentReadLocal(document, parentNode) 
+        End Sub
 
+        Private Sub XmlDocumentReadLocal(document As XmlDocument, parentNode As XmlElement) 
             _set1 = New CytoSetDummy(parentNode.ReadChildElementAsInteger("Set1ListID"))
             _set2 = New CytoSetDummy(parentNode.ReadChildElementAsInteger("Set2ListID"))
             _myGateCombi = parentNode.ReadChildElementAsEnum(Of SetsCombinationType)("CombinationType")

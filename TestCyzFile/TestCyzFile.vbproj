@@ -274,6 +274,9 @@
     <None Update="DataFiles\Segmented 2014-09-30 15u13.cyz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="SetFiles\Algjes_ImageFocusSets.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestExportXml.c4e">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

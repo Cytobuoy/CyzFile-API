@@ -995,4 +995,32 @@ Public Class TestSets
 
 
 
+    ''' <summary>
+    ''' We test serialization and deserialization of image focus sets, we do not test all the statistics stuff here, this is just verification that
+    ''' we can deserialize the sets correctly.
+    ''' </summary>
+    <TestMethod()>
+    Public Sub Algjes_ImageFocusSets()
+
+        Dim testSets = LoadSetsList("DataFiles/algjes 2011-01-07 14u59.cyz","SetFiles/Algjes_ImageFocusSets.xml")
+        
+        Dim allImages = GetSetNr(testSets,1)
+        Assert.AreEqual( cytoSetType.allImages, allImages.Type)
+        Assert.AreEqual( 31, allImages.ParticleIndices.Length)
+        Dim aboveImages = GetSetNr(testSets,2)
+        Assert.AreEqual( cytoSetType.ImageFocusSet, aboveImages.Type)
+        Assert.AreEqual( ImageFocusSet.FocusEnum.AboveRange, DirectCast(aboveImages, ImageFocusSet).Focus)
+        Assert.AreEqual( 16, aboveImages.ParticleIndices.Length)
+        Dim inImage = GetSetNr(testSets,3)
+        Assert.AreEqual( cytoSetType.ImageFocusSet, inImage.Type)
+        Assert.AreEqual( ImageFocusSet.FocusEnum.InsideRange, DirectCast(inImage, ImageFocusSet).Focus)
+        Assert.AreEqual( 15, inImage.ParticleIndices.Length)
+        Dim belowImages = GetSetNr(testSets,4)
+        Assert.AreEqual( cytoSetType.ImageFocusSet, belowImages.Type)
+        Assert.AreEqual( ImageFocusSet.FocusEnum.BelowRange, DirectCast(belowImages, ImageFocusSet).Focus)
+        Assert.AreEqual( 0, belowImages.ParticleIndices.Length)
+
+    End Sub
+
+
 End Class

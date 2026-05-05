@@ -7,6 +7,14 @@ Namespace Data.Analysis
     <Serializable()> Public Class gateBasedSet
         Inherits CytoSet
 
+        Public Shadows Const XML_NAME As String = "GateBasedSet"
+
+        Public Overrides ReadOnly Property XmlTagName As String
+            Get
+                Return XML_NAME
+            End Get
+        End Property
+
         Private gatesUpdated As Boolean = False ' Not used anymore, but unsure if it can remove because it is serialized
         Private myGates As GateCollection
 
@@ -58,6 +66,12 @@ Namespace Data.Analysis
                 AddGate(gate)
             Next
         End Sub
+
+        Public Sub New(document As XmlDocument, parentNode As XmlElement) 
+            MyBase.New(cytoSetType.gateBased, document, parentNode)
+            XmlDocumentReadLocal(document, parentNode)
+        End Sub
+
 
 #Region "Indexes calculation"
 
@@ -293,8 +307,14 @@ Namespace Data.Analysis
             myGates.XmlDocumentWrite(document, document.AppendChildElement(parentNode, "GateCollection"))
         End Sub
 
+
+
         Public Overrides Sub XmlDocumentRead(document As XmlDocument, parentNode As XmlElement) 
             MyBase.XmlDocumentRead(document, parentNode)
+            XmlDocumentReadLocal(document, parentNode)
+        End Sub
+
+        Private Sub XmlDocumentReadLocal(document As XmlDocument, parentNode As XmlElement) 
 
             myGates = New GateCollection()
             myGates.XmlDocumentRead(document, parentNode.Item("GateCollection"))

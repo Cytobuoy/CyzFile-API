@@ -93,13 +93,7 @@ Namespace Data.Analysis
         ''' <param name="s"></param>
         Public Sub AddBasicSetInfo(s As CytoSet, dfw As DataFileWrapper)
             If s.Type = cytoSetType.allImages Then
-                Dim imageFocusSet As ImageFocusSet = TryCast(s, ImageFocusSet)
-
-                If imageFocusSet IsNot Nothing Then
-                    Add(New ImageFocusSet(imageFocusSet, dfw))
-                Else
-                    Add(New AllImagesSet(dfw, s.ListID, s.Visible))
-                End If
+                 Add( New AllImagesSet(dfw, s.ListID, s.Visible))
             ElseIf s.Type = cytoSetType.SuccessFullyCroppedImages Then
                 Dim sfcImgSet = DirectCast(s, SuccessFullyCroppedImagesSet)
                 Add(New SuccessFullyCroppedImagesSet(dfw, s.ListID, s.Visible, sfcImgSet.CropMarginBase, sfcImgSet.CropMarginFactor, sfcImgSet.CropBgThreshold, sfcImgSet.CropErosionDilation))
@@ -126,6 +120,8 @@ Namespace Data.Analysis
                 Add(New OrSet(incOrSet.Name, incOrSet.ColorOfSet, New List(Of CytoSet)(), dfw, incOrSet.AutoSet, s.ListID, s.Visible))
             ElseIf s.Type = cytoSetType.indexBased Then
                 Throw New NotImplementedException("Index based sets currently not supported")
+            ElseIf s.Type = cytoSetType.ImageFocusSet Then
+                Add(New ImageFocusSet(DirectCast(s,ImageFocusSet), dfw))
             Else
                 Throw New NotImplementedException("Gate type unknown")
             End If
@@ -133,6 +129,8 @@ Namespace Data.Analysis
 
     Public Sub CompleteAddSet(srcSet As CytoSet)
         If srcSet.Type = cytoSetType.allImages Then
+            ' Nothing to do, completely added in Add BasicSetInfo
+        Else If srcSet.Type = cytoSetType.ImageFocusSet Then
             ' Nothing to do, completely added in Add BasicSetInfo
         ElseIf srcSet.Type = cytoSetType.SuccessFullyCroppedImages Then
             ' Nothing to do, completely added in Add BasicSetInfo
@@ -159,7 +157,7 @@ Namespace Data.Analysis
         ElseIf srcSet.Type = cytoSetType.indexBased Then
             Throw New NotImplementedException("Index based sets currently not supported")
         Else
-            Throw New NotImplementedException("Gate type unknown")
+            Throw New NotImplementedException("Set type unknown")
         End If
     End Sub
 
@@ -396,33 +394,7 @@ Namespace Data.Analysis
 			parentNode.SetAttribute("SerialNumber", SerialNumber)
 
             For Each cytoSet In _list
-                If TryCast(cytoSet, IXmlDocumentIO) IsNot Nothing Then
-                    Select Case cytoSet.GetType()
-                        Case GetType(gateBasedSet)
-                            DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "GateBasedSet"))
-
-                        Case GetType(DefaultSet)
-                            DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "DefaultSet"))
-
-                        Case GetType(AllImagesSet)
-                            DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "AllImagesSet"))
-
-                        Case GetType(combinedSet)
-                            DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "CombinedSet"))
-
-                        Case GetType(OrSet)
-                            DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "OrSet"))
-
-                        Case GetType(UnassignedParticlesSet)
-                            DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "UnassignedParticlesSet"))
-
-                        Case GetType(FailedCropImagesSet)
-                            DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "FailedCropImagesSet"))
-
-                        Case GetType(SuccessFullyCroppedImagesSet)
-                            DirectCast(cytoSet, IXmlDocumentIO).XmlDocumentWrite(document, document.AppendChildElement(parentNode, "SuccessFullyCroppedImagesSet"))
-                    End Select
-                End If
+                cytoSet.XmlDocumentWrite(document, document.AppendChildElement(parentNode, cytoSet.XmlTagName))
             Next
         End Sub
 
@@ -439,47 +411,34 @@ Namespace Data.Analysis
 
             For Each setNode As XmlElement In parentNode.ChildNodes()
                 Select Case setNode.Name
-                    Case "GateBasedSet"
-                        Dim cytoSet As New gateBasedSet()
-                        cytoSet.XmlDocumentRead(document, setNode)
-                        _list.Add(cytoSet)
-
-                    Case "DefaultSet"
+                    Case gateBasedSet.XML_NAME
+                        _list.Add(New gateBasedSet(document, setNode))
+                    Case DefaultSet.XML_NAME
                         ' The default set is always present, even in newly created setlist, so we do not add it/
                         ' Instead retrieve it and let it load its properties from the XmlDocument.
                         Dim defSet = FindSetById(0)
                         defSet.XmlDocumentRead(document, setNode)
-                    Case "AllImagesSet"
-                        Dim cytoSet = New AllImagesSet()
-                        cytoSet.XmlDocumentRead(document, setNode)
-                        _list.Add(cytoSet)
-
-                    Case "CombinedSet"
-                        Dim cytoSet = New combinedSet()
-                        cytoSet.XmlDocumentRead(document, setNode)
-                        _list.Add(cytoSet)
-
-                    Case "OrSet"
-                        Dim cytoSet = New OrSet()
-                        cytoSet.XmlDocumentRead(document, setNode)
-                        _list.Add(cytoSet)
-
-                    Case "UnassignedParticlesSet"
-                        Dim cytoSet = New UnassignedParticlesSet()
-                        cytoSet.XmlDocumentRead(document, setNode)
-                        _list.Add(cytoSet)
-
-                    Case "FailedCropImagesSet"
-                        Dim cytoSet = New FailedCropImagesSet()
-                        cytoSet.XmlDocumentRead(document, setNode)
-                        _list.Add(cytoSet)
-
-                    Case "SuccessFullyCroppedImagesSet"
-                        Dim cytoSet = New SuccessFullyCroppedImagesSet()
-                        cytoSet.XmlDocumentRead(document, setNode)
-                        _list.Add(cytoSet)
-                End Select
+                    Case AllImagesSet.XML_NAME
+                        _list.Add( New AllImagesSet(document, setNode) )
+                    Case combinedSet.XML_NAME
+                        _list.Add( New combinedSet(document, setNode))
+                    Case OrSet.XML_NAME
+                        _list.Add( New OrSet(document, setNode))
+                    Case UnassignedParticlesSet.XML_NAME                        
+                        _list.Add( New UnassignedParticlesSet(document, setNode))
+                    Case FailedCropImagesSet.XML_NAME
+                        _list.Add( New FailedCropImagesSet(document, setNode))
+                    Case SuccessFullyCroppedImagesSet.XML_NAME
+                        _list.Add( New SuccessFullyCroppedImagesSet(document, setNode))
+                    Case ImageFocusSet.XML_NAME
+                        _list.Add( New ImageFocusSet(document, setNode))
+                    Case indexBasedSet.XML_NAME
+                        _list.Add( New indexBasedSet(document, setNode))
+                    Case Else
+                        Throw New NotImplementedException(String.Format("Unsupported set type: '{0}' while reading XML setlist definition", setNode.Name))
+                End Select 
             Next
+
         End Sub
 
         ''' <summary>
