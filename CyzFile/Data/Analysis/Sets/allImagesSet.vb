@@ -22,6 +22,7 @@ Namespace Data.Analysis
             MyBase.New("All Imaged Particles", cytoSetType.allImages, Drawing.Color.Chartreuse)
         End Sub
 
+
         Public Sub New(name As String)
             MyBase.New(name, cytoSetType.allImages, Drawing.Color.Chartreuse)
         End Sub
@@ -55,6 +56,10 @@ Namespace Data.Analysis
         ''' <param name="parentNode"></param>
         Public Sub New(type As cytoSetType, document As XmlDocument, parentNode As XmlElement)
             MyBase.New(type, document, parentNode)
+        End Sub
+
+        Public Sub New(tp As cytoSetType)
+            MyBase.New("All Imaged Particles", tp, Drawing.Color.Chartreuse)
         End Sub
 
         Public ReadOnly Overrides Property UseInIIF As Boolean
@@ -179,7 +184,7 @@ Namespace Data.Analysis
         End Sub
 
         Public Sub New(focus As FocusEnum, datafile As CytoSense.Data.DataFileWrapper, ratioMin As Single, ratioMax As Single)
-            MyBase.New()
+            MyBase.New(cytoSetType.ImageFocusSet)
 
             _focus = focus
 
