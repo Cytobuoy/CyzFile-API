@@ -83,6 +83,11 @@ Public Class ImageUtil
         End Function
 
 
+        Public Shared Function RoundUpToMultiple(v As Integer, stepSize As Integer) As Integer
+            return ((v + stepSize - 1) \ stepSize) * stepSize
+        End Function
+
+
         ''' <summary>
         ''' Extend the bounding box bb, with a margin base number of pixels and a factor.  This way we get something of the surrounding of the particle
         ''' as well.  Max x and Y limit the size so we do not go outside the picture, and the stepX (and Y) indicate we only want sizes that are 
@@ -108,8 +113,8 @@ Public Class ImageUtil
             Dim width As Integer  = Math.Min(bb.Width + 2 * xMargin, maxX - left)
             Dim height As Integer = Math.Min(bb.Height + 2 * yMargin, maxY - top)
 
-            Dim newWidth As Integer = (CInt(width / stepX) + 1) * stepX
-            Dim newHeight As Integer = (CInt(height / stepY) + 1) * stepY
+            Dim newWidth As Integer = RoundUpToMultiple(width, stepX)
+            Dim newHeight As Integer = RoundUpToMultiple(height, stepY) 
             If newWidth < stepX Then
                 newWidth = stepX
             End If

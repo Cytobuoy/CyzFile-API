@@ -28,16 +28,16 @@ Imports Force.Crc32
 
 
         AssertImgParticle(imgParticles( 0),   122, 160, 160)
-        AssertImgParticle(imgParticles( 1),   302, 240, 160)
+        AssertImgParticle(imgParticles( 1),   302, 160, 160)
         AssertImgParticle(imgParticles( 2),   701, 160, 160)
         AssertImgParticle(imgParticles( 3),  1807, 160, 160)
         AssertImgParticle(imgParticles( 4),  2346, 160, 160)
         AssertImgParticle(imgParticles( 5),  3392, 160, 160)
-        AssertImgParticle(imgParticles( 6),  3870, 400, 160)
-        AssertImgParticle(imgParticles( 7),  6548, 320, 240)
+        AssertImgParticle(imgParticles( 6),  3870, 400,  80)
+        AssertImgParticle(imgParticles( 7),  6548, 320, 160)
         AssertImgParticle(imgParticles( 8),  7904, 160, 160)
-        AssertImgParticle(imgParticles( 9),  9361, 400, 160)
-        AssertImgParticle(imgParticles(10), 10899, 640, 160)
+        AssertImgParticle(imgParticles( 9),  9361, 320,  80)
+        AssertImgParticle(imgParticles(10), 10899, 560, 160)
 
     End Sub
 
@@ -76,16 +76,16 @@ Imports Force.Crc32
         Next
 
         AssertImgParticleWithRect(imgParticles( 0),   122, 160, 160,  778, 561)
-        AssertImgParticleWithRect(imgParticles( 1),   302, 240, 160,  856, 490)
+        AssertImgParticleWithRect(imgParticles( 1),   302, 160, 160,  896, 490)
         AssertImgParticleWithRect(imgParticles( 2),   701, 160, 160,  895, 492)
         AssertImgParticleWithRect(imgParticles( 3),  1807, 160, 160,  777, 499)
         AssertImgParticleWithRect(imgParticles( 4),  2346, 160, 160, 1194, 544)
         AssertImgParticleWithRect(imgParticles( 5),  3392, 160, 160,  840, 510)
-        AssertImgParticleWithRect(imgParticles( 6),  3870, 400, 160,  824, 538)
-        AssertImgParticleWithRect(imgParticles( 7),  6548, 320, 240,  851, 461)
+        AssertImgParticleWithRect(imgParticles( 6),  3870, 400,  80,  824, 578)
+        AssertImgParticleWithRect(imgParticles( 7),  6548, 320, 160,  851, 501)
         AssertImgParticleWithRect(imgParticles( 8),  7904, 160, 160,  818, 522)
-        AssertImgParticleWithRect(imgParticles( 9),  9361, 400, 160,  822, 494)
-        AssertImgParticleWithRect(imgParticles(10), 10899, 640, 160,  880, 556)
+        AssertImgParticleWithRect(imgParticles( 9),  9361, 320,  80,  862, 534)
+        AssertImgParticleWithRect(imgParticles(10), 10899, 560, 160,  920, 556)
     End Sub
 
 
@@ -109,10 +109,10 @@ Imports Force.Crc32
         AssertImgParticle(imgParticles( 2),   36653, 1936, 1464)
         AssertImgParticle(imgParticles( 3),   37297, 1936,  880)
         AssertImgParticle(imgParticles( 4),   69163, 1440,  240)
-        AssertImgParticle(imgParticles( 5),   70316, 1879, 1464)
-        AssertImgParticle(imgParticles( 6),   86595, 1920,  480)
+        AssertImgParticle(imgParticles( 5),   70316, 1839, 1464)
+        AssertImgParticle(imgParticles( 6),   86595, 1920,  320)
         AssertImgParticle(imgParticles( 7),  110001, 1936, 1464)
-        AssertImgParticle(imgParticles( 8),  143634,  880,  720)
+        AssertImgParticle(imgParticles( 8),  143634,  880,  640)
         AssertImgParticle(imgParticles( 9),  150849, 1600, 1440)
     End Sub
 
@@ -131,10 +131,10 @@ Imports Force.Crc32
         AssertImgParticleWithRect(imgParticles( 2),  36653, 1936, 1464,  0,   0)
         AssertImgParticleWithRect(imgParticles( 3),  37297, 1936,  880,  0, 197)
         AssertImgParticleWithRect(imgParticles( 4),  69163, 1440,  240,  0, 392)
-        AssertImgParticleWithRect(imgParticles( 5),  70316, 1879, 1464, 57,   0)
-        AssertImgParticleWithRect(imgParticles( 6),  86595, 1920,  480,  0, 420)
+        AssertImgParticleWithRect(imgParticles( 5),  70316, 1839, 1464, 97,   0)
+        AssertImgParticleWithRect(imgParticles( 6),  86595, 1920,  320,  0, 540)
         AssertImgParticleWithRect(imgParticles( 7), 110001, 1936, 1464,  0,   0)
-        AssertImgParticleWithRect(imgParticles( 8), 143634,  880,  720,  0, 330)
+        AssertImgParticleWithRect(imgParticles( 8), 143634,  880,  640,  0, 370)
         AssertImgParticleWithRect(imgParticles( 9), 150849, 1600, 1440,  0,   0)
     End Sub
 
