@@ -98,6 +98,7 @@ Namespace CytoSettings
             dBGain = Single.NaN
             opticalMagnification = Single.NaN
             DefaultTakeLargeParticlePictures = True
+            _backgroundLock = New Object()
         End Sub
 
         ' NOTE: For new electronics, the DSP RS232 settings are no longer used.
@@ -134,6 +135,7 @@ Namespace CytoSettings
             opticalMagnification = magnification
             FlashDurationCount = flash
             DefaultTakeLargeParticlePictures = True
+            _backgroundLock = New Object()
         End Sub
 
 
@@ -144,6 +146,7 @@ Namespace CytoSettings
                                 ' If a value was actually serialized, then that should overwrite this values.
             FlashDurationCount = -1 ' And actually serialized value will override this value.
             opticalMagnification = Single.NaN 'If  a real value is present that will overwrite, this allows us to detect unserialized values that need to calculated.
+            _backgroundLock = New Object()
         End Sub
 
         Dim EnableRS232 As Boolean
@@ -167,7 +170,13 @@ Namespace CytoSettings
         Dim AutoCameraDelay As Boolean
         Dim CameraDelayFactor As Double 'for bigger flow cell
         private ImageScaleMuPerPixel As Single ' = CameraPixelSizeInMu / Magnification
-        <Obsolete("Use the OpenCvBackground property")> ' Do not use directly, use the OpenCvBackground property
+        ''' <summary>
+        ''' We need the field, and it has to contain data to have a compatible on disk file, BUT DO not access it under any circumstance.
+        ''' Use the OpenCVMat background to work with and use the UpdateBackground function to modify it.  I tried to make
+        ''' the field readOnly, but then it can never be changed, and making it private could have other effects on code
+        ''' that is using the CyzFile DLL.  So you will be able to shoot yourself in the foot, but please try not to.
+        ''' </summary>
+        <Obsolete("REALLY DO NOT USE IT! Use the OpenCvBackground property")> ' Do not use directly, use the OpenCvBackground property
         Dim Background As Imaging.CyzFileBitmap ' Was System.Drawing.Image Image 
         Dim _backgroundStream As Serializing.CytoMemoryStream
 
@@ -201,15 +210,31 @@ Namespace CytoSettings
                 _enableOverrideMuPerPixel = value
             End Set
         End Property
-        'Public ReadOnly Property BackgroundStream As IO.MemoryStream
-        '    Get
-        '        If _backgroundStream Is Nothing Then
-        '            _backgroundStream = New IO.MemoryStream()
-        '            Background.Save(_backgroundStream, Imaging.ImageFormat.Bmp)
-        '        End If
-        '        Return _backgroundStream
-        '    End Get
-        'End Property
+
+        ''' <summary>
+        ''' Utility function to update the actual background.  This function will update the old
+        ''' background property, AND it will clear the the openCV background if it already exists.
+        ''' That way it will make sure CytoUsb uses the latest version.  This is related to 
+        ''' issue #1664 in CytoUsb.  The OpenCV background caches the openCV mat object, but in CytoUsb
+        ''' a settings object is reused for all measurements, and the cache was never cleared.  We need
+        ''' to keep using the original background property to keep the files backwards compatible. So to fix
+        ''' this I made the member readonly, and created this update function that uses reflection to
+        ''' work around the access restriction. Not very pretty.
+        ''' </summary>
+        ''' <param name="bg">The new background image to set.</param>
+        ''' <remarks>Using reflection for this is ugly, and it is even more ugly because it is a structure, so we need
+        ''' to make a copy on the heap, modify that and copy back or we cannot change. Really ugly this.
+        ''' </remarks>
+        Public Sub UpdateBackgroundImage(bg As Imaging.CyzFileBitmap)
+            SyncLock _backgroundLock
+                _openCvBackground = Nothing
+#Disable Warning BC40000 ' Type or member is obsolete
+                Background = bg
+#Enable Warning BC40000 ' Type or member is obsolete
+            End SyncLock
+        End Sub
+
+        <NonSerialized> Private _backgroundLock As Object
         ''' <summary>
         ''' Not pretty, caching a converted OpenCV background image here to reuse for processing all the images. 
         ''' It really does not belong here, but for now i am copying the
@@ -222,14 +247,14 @@ Namespace CytoSettings
             Get
 #Disable Warning BC40000 ' Type or member is obsolete
                 If _openCvBackground Is Nothing AndAlso Background IsNot Nothing Then
-                    SyncLock Background
+                    SyncLock _backgroundLock
                         Using imgStr As New System.IO.MemoryStream(Background.Data)
+#Enable Warning BC40000 ' Type or member is obsolete
                             _openCvBackground = ImageUtil.LoadOpenCvImage(imgStr)
                         End Using
                         _openCvBackgroundMean = OpenCvSharp.Cv2.Mean(_openCvBackground).Val0
                     End SyncLock
                 End If
-#Enable Warning BC40000 ' Type or member is obsolete
                 Return _openCvBackground
             End Get
         End Property
@@ -239,14 +264,14 @@ Namespace CytoSettings
         Get
 #Disable Warning BC40000 ' Type or member is obsolete
                 If _openCvBackground Is Nothing AndAlso Background IsNot Nothing Then
-                    SyncLock Background
+                    SyncLock _backgroundLock
                         Using imgStr As New System.IO.MemoryStream(Background.Data)
+#Enable Warning BC40000 ' Type or member is obsolete
                             _openCvBackground = ImageUtil.LoadOpenCvImage(imgStr)
                         End Using
                         _openCvBackgroundMean = OpenCvSharp.Cv2.Mean(_openCvBackground).Val0
                     End SyncLock
                 End If
-#Enable Warning BC40000 ' Type or member is obsolete
                 Return _openCvBackgroundMean
         End Get
         End Property
