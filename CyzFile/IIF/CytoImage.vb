@@ -244,7 +244,14 @@ Namespace Data.ParticleHandling
         ''' <param name="marginBase"></param>
         ''' <param name="marginFactor"></param>
         ''' <returns></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>I changed the order of calculating new images and setting the crop result, I initialily did it by first setting the cropresult, and then
+        ''' the data.  this resulted in occasional crashes as the image overview thread ran in paralell with the cropping.  The current solution is better,
+        ''' but since the check and retrieval, for performance reasons does not lock, it is still not theoretically sound.  I think the nice solution is
+        ''' to actually use something like a Read Copy Update construction.  We put all the important data in a single class.  When we
+        ''' start updating, we create a new class, copy the values that need to stay the same.  Update the ones that are changing, and then when done, we simply
+        ''' replace the pointer to the data class.  this way users will see a complete old set of data, or a completely new set of data.
+        ''' When using it they should get a refernce to the data set, and then work on that stored reference.  this way they always have a consistent
+        ''' set of data.</remarks>
         Private Function AutoCropOpenCVWithRect(ByVal bgImg As Mat, bgMean As Double, marginBase As Integer, marginFactor As Double, bgThreshold As Integer, erosionDilation As Integer, brightFieldCorrection As Boolean, extendObjectDetection As Boolean, optional ByVal croppedRect As OpenCvSharp.Rect = Nothing) As Tuple(Of OpenCvSharp.Mat, OpenCvSharp.Rect)
             Dim cropRectangle As Rect
             If CropResult = CropResultEnum.AwaitingCrop OrElse (marginBase <> _processingSettings.MarginBase OrElse marginFactor <> _processingSettings.MarginFactor OrElse bgThreshold <> _processingSettings.Threshold OrElse  erosionDilation <> _processingSettings.ErosionDilation) Then ' Do the calculations.
@@ -275,12 +282,12 @@ Namespace Data.ParticleHandling
                                 cropRectangle = New Rect(largeRect.X, largeRect.Y, largeRect.Width, largeRect.Height)
                             End If
 
-                            CropResult           = CropResultEnum.CropOK
                             _processingSettings.MarginBase      = marginBase
                             _processingSettings.MarginFactor    = marginFactor
                             _processingSettings.Threshold       = bgThreshold
                             _processingSettings.ErosionDilation = erosionDilation
                             _croppedImage = ImageUtil.CropEnhanceImage(img, cropRectangle, brightFieldCorrection, bgImg, bgMean)
+                            CropResult           = CropResultEnum.CropOK ' Now that all is done, mark as done.
                         Else
                             CropResult = CropResultEnum.NoBlobFound
                         End If
