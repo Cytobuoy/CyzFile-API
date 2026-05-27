@@ -547,8 +547,8 @@ Namespace CytoSettings
             Model = ""
 
             HpslRefreshTime              = TimeSpan.Zero
-            _hpslAvailableVolume_ml      = 0.0
-            _hpslMinimumSpeed_muls       = 0.0
+            _hpslAvailableVolume_ml      = -1.0
+            _hpslMinimumSpeed_muls       = -1.0
             HpslSlowSpeedRefreshInterval = TimeSpan.Zero
         End Sub
 
@@ -607,27 +607,6 @@ Namespace CytoSettings
             If _system Is Nothing Then
                 _system = New SystemSettings()
             End If
-
-            'Check if we still have the 0 values, if so override with the default values.
-            If State1SubModeTime = 0.0 Then
-                State1SubModeTime = 40.0
-            End If
-            If State2SubModeTime = 0.0 Then
-                State1SubModeTime = 30.0
-            End If
-            If HpslRefreshTime = TimeSpan.Zero Then
-                HpslRefreshTime = TimeSpan.FromSeconds(40)
-            End If
-            If _hpslAvailableVolume_ml =  0.0 Then
-                _hpslAvailableVolume_ml = 1.5
-            End If
-            If _hpslMinimumSpeed_muls = 0.0 Then
-                _hpslMinimumSpeed_muls = 9.0
-            End If
-            If HpslSlowSpeedRefreshInterval = TimeSpan.Zero Then
-                HpslSlowSpeedRefreshInterval = TimeSpan.FromSeconds(90)
-            End If
-
         End Sub
 
 
@@ -2147,10 +2126,10 @@ Namespace CytoSettings
         ''' <remarks>Use serNum when loading default settings, this allows e.g. loading from the original
         ''' settings when the serial number is changed for a simulator.</remarks>
         Public Sub InitializeNewSettings(tmpSettings As CytoSense.CytoSettings.CytoSenseSetting)
+
             ' Check if laser data is in the current object, and if not, check if it is available now in the software.
             If _laserInfo Is Nothing Then
-                
-                If tmpSettings._laserInfo IsNot Nothing Then 'We have laser data, so use it to set the one in the current version.
+                If tmpSettings IsNot Nothing AndAlso tmpSettings._laserInfo IsNot Nothing Then 'We have laser data, so use it to set the one in the current version.
                     _numberOfLasers = tmpSettings._numberOfLasers
                     _laserInfo      = tmpSettings._laserInfo
                 End If 'Else no laser data available, so nothing to do.
@@ -2169,6 +2148,17 @@ Namespace CytoSettings
                     End If
                 End If 'Else V08 electronics, no way to know. (most of the time, so we do not even try)
             End If ' Else a number was configured, so leave it alone.
+
+            ' If HPSL volume was not deserialized, it will be negative, we use this as a trigger to initialize
+            ' ALL values.  This also overrides the State1 and State2 submode times that were used before.
+            If _hpslAvailableVolume_ml <  0.0 Then
+                State1SubModeTime            = 40.0
+                State2SubModeTime            = 30.0
+                HpslRefreshTime              = TimeSpan.FromSeconds(10)
+                _hpslAvailableVolume_ml      = 1.5
+                _hpslMinimumSpeed_muls       = 9.0
+                HpslSlowSpeedRefreshInterval = TimeSpan.FromSeconds(90)
+             End If
 
         End Sub
 
