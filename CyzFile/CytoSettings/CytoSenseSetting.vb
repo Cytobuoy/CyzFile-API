@@ -2152,11 +2152,11 @@ Namespace CytoSettings
             ' If HPSL volume was not deserialized, it will be negative, we use this as a trigger to initialize
             ' ALL values.  This also overrides the State1 and State2 submode times that were used before.
             If _hpslAvailableVolume_ml <  0.0 Then
-                State1SubModeTime            = 40.0
-                State2SubModeTime            = 30.0
-                HpslRefreshTime              = TimeSpan.FromSeconds(10)
-                _hpslAvailableVolume_ml      = 1.5
-                _hpslMinimumSpeed_muls       = 9.0
+                State1SubModeTime            = 50.0
+                State2SubModeTime            = 40.0
+                HpslRefreshTime              = TimeSpan.FromSeconds(15)
+                _hpslAvailableVolume_ml      = 1.7
+                _hpslMinimumSpeed_muls       = 7.9
                 HpslSlowSpeedRefreshInterval = TimeSpan.FromSeconds(90)
              End If
 
