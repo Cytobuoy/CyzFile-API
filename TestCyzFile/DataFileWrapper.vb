@@ -531,11 +531,11 @@ End Sub
 
         dfw.CytoSettings.InitializeNewSettings(Nothing)
 
-        Assert.AreEqual(40.0,                                     dfw.CytoSettings.State1SubModeTime, 0.001)
-        Assert.AreEqual(30.0,                                     dfw.CytoSettings.State2SubModeTime, 0.001)
-        Assert.AreEqual(TimeSpan.FromSeconds(10),                 dfw.CytoSettings.HpslRefreshTime)
-        Assert.AreEqual(Volume.FromMilliliters(1.5),              dfw.CytoSettings.HpslAvailableVolume)
-        Assert.AreEqual(VolumeFlow.FromMicrolitersPerSecond(9.0), dfw.CytoSettings.HpslMinimumSpeed)
+        Assert.AreEqual(50.0,                                     dfw.CytoSettings.State1SubModeTime, 0.001)
+        Assert.AreEqual(40.0,                                     dfw.CytoSettings.State2SubModeTime, 0.001)
+        Assert.AreEqual(TimeSpan.FromSeconds(15),                 dfw.CytoSettings.HpslRefreshTime)
+        Assert.AreEqual(Volume.FromMilliliters(1.7),              dfw.CytoSettings.HpslAvailableVolume)
+        Assert.AreEqual(VolumeFlow.FromMicrolitersPerSecond(7.9), dfw.CytoSettings.HpslMinimumSpeed)
         Assert.AreEqual(TimeSpan.FromSeconds(90),                 dfw.CytoSettings.HpslSlowSpeedRefreshInterval)
     End Sub
 
