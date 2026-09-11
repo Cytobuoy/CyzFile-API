@@ -83,6 +83,110 @@
               <th>Description</th>
           </tr>
           <tr>
+              <td>1.8.0.0</td>
+              <td>2026-09-11</td>
+              <td>
+                  <h4>Changes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Added support for humidity sensor.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  On some submersible instruments we are now adding humidity sensors to track the humidity inside the
+                                  instruments on long deployments.  The DLL now supports the settings and data from this sensor.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Added support for new HPSL Protocol.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  There is a new High Pressure Sample Loop Protocol (Used for deep submersibles), and it has some
+                                  new settings.  Support for these settings was added to the DLL.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <h4>Bug Fixes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>IifMode fix for older files.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  On some old data files, the DLL would report incorrectly that no imaging was available. Now the DLL
+                                  recognizes these and returns the correct information.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fixed an XML storage problem for Image Focus Sets.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  This appliest to CytoClus only.  These special sets were stored incorrectly in the workspace and that could
+                                  lead to strange behavior of CytoClus.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fixed a minor bug in image cropsize calculation.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  The calculated size was rounded up to a multiple of 80, but we were a bit to enthousiastic, so in some case
+                                  we went up a stepsize to much.  Not a big issue, but some images were slightly bigger then they needed to
+                                  be after cropping.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fixed a bug in background image handling.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  This issue affected only CytoUsb, it would cause CytoUsb to use an old background image when doing live
+                                  cropping instead of the most recent one.  This was due to a cache implementation that did not recognized when it
+                                  needed to refresh.  It only affected live cropping in CytoUsb, but if a small change happened in the background
+                                  that all cropping would be incorrect until CytoUsb was restarted.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fixed a race condition in setting the data results of cropping.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  This issue affected only CytoClus, because of the order in which things were set, CytoClus sometimes thought the 
+                                  image cropping data was available but in reality the background thread had not finished writing it all.  The window
+                                  for this to occur was small, but if open several files with 10000 images it would happen. After changing
+                                  the order this no longer happens.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+              </td>
+          </tr>
+          <tr>
               <td>1.6.2.0</td>
               <td>2026-03-12</td>
               <td>
