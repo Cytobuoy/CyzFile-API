@@ -143,7 +143,9 @@ Public Class TestConfig
 
             s.State1SubModeTime = 15
             s.State2SubModeTime = 60
+#Disable Warning BC40008 ' Type or member is obsolete
             s.State3SubModeTime = 50
+#Enable Warning BC40008 ' Type or member is obsolete
 
             s.EnableWarmingUp = True
             s.EnableSeperateUSBProgram = False
