@@ -26,7 +26,7 @@ Imports UnitsNet
         Return PropValue
     End Function
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("pumpedVolume", 734.4)>
     Public Sub TestSubSetSmartTriggerProperty(propName As String, expected As Double)
         Dim dfw = New DataFileWrapper("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz")
@@ -242,7 +242,7 @@ End Sub
         Assert.AreEqual(92820L,  dfw.MeasurementInfo.NumberofCountedParticles )
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",          True, 0.6801,  19.6859, 3481, 100753)>
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",          True, 0.5125,  12.4003, 2623,  63465)>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz", False,   -1.0,  22.3965,   -1 , 92820)>
@@ -271,7 +271,7 @@ End Sub
         End If
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",          True)>
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",          True)>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50_Beads.cyz", False)>
@@ -293,7 +293,7 @@ End Sub
 
 
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                           1.05)>
     <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                  3.93)>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",     4.99)>
@@ -307,7 +307,7 @@ End Sub
         Assert.AreEqual(exp, act, 1e-3)
     End Sub
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                            15)>
     <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                   36)>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",      61)>
@@ -321,7 +321,7 @@ End Sub
         Assert.AreEqual(exp, act)
     End Sub
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                           1.05)>
     <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                  3.93)>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",     4.99)>
@@ -335,7 +335,7 @@ End Sub
         Assert.AreEqual(exp, act, 1e-3)
     End Sub
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                            15)>
     <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                   36)>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",      61)>
@@ -349,7 +349,7 @@ End Sub
         Assert.AreEqual(exp, act)
     End Sub
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                           63)>
     <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                  110.04)>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",     898.2)>
@@ -363,7 +363,7 @@ End Sub
         Assert.AreEqual(exp, act, 1e-3)
     End Sub
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                           23.8877)>
     <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                  88.7891)>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",     897.6528)>
@@ -378,7 +378,7 @@ End Sub
     End Sub
 
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",                           1542.6795)>
     <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz",                  1359.7505)>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz",       51.1701)>
@@ -407,7 +407,7 @@ End Sub
     ''' </summary>
     ''' <param name="filename"></param>
     ''' <param name="exp"></param>
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                          "No Imaging")>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                          "No Imaging")>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                             "No Imaging")>
@@ -449,7 +449,7 @@ End Sub
     ''' Apparently older files ahd different defaults for the state 1 and state 2 submode times.
     ''' </summary>
     ''' <param name="filename"></param>
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz", 15.0, 60.0)>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz", 15.0, 60.0)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                             15.0, 60.0)>
@@ -496,7 +496,7 @@ End Sub
     ' Normally the initialize new settings is only called in CytoUsb when loading CytoSettings.dat.
     ' For testing we now do it after loading a datafile.  This verifies the behavior, but is not
     ' normally used this way.
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz")>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz")>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz")>
@@ -561,7 +561,7 @@ End Sub
         Private _delta As Double
     End Class
 
-<DataTestMethod>
+<TestMethod>
     <DataRow("DataFiles/BeadsCalibration 2017-02-08 13h50.cyz",  New Double(){
         0.0000, 0.0700, 0.1400, 0.2100, 0.2800, 0.3500, 0.4200, 0.4900, 0.5600, 0.6300, 
         0.7000, 0.7700, 0.8400, 0.9100, 0.9800, 1.0500, 1.1200, 1.1900, 1.2600, 1.3300, 
@@ -652,7 +652,7 @@ End Sub
         {"DataFiles/1p6umbeads 2011-05-19 13u06.cyz",                                 &H069EB400L}   ' Old bitmap Crc: &HC3B63BD2L
         }
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz")>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz")>
     <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz")>
@@ -689,7 +689,7 @@ End Sub
     ''' <summary>
     ''' Very simple test, just check if we can open the datafiles without any errors occuring.
     ''' </summary>
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz")>
     <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz")>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz")>
@@ -721,7 +721,7 @@ End Sub
         If numParticles > 0 Then
             Dim p1 = dfw.SplittedParticles(0) ' Force loading of all the particle Data.
         End If
-        Assert.IsTrue(True) ' If we get here, all is well.
+        ' If we get here, all is well.
     End Sub
 
 
@@ -732,7 +732,7 @@ End Sub
     ' For now I decided not to invest anymore time in this format, just report we do not support it.
     ' If it turns out there are actually significant data files that use this format we will look
     ' at supporting them.  The code can still be found in the repository for the CytoOLD DLL.
-   <DataTestMethod>
+   <TestMethod>
    <DataRow("DataFiles/Measurement 2012-06-20 14u01.cyz")>
     Public Sub TestOpenSectioned(filename As String)
         Try
@@ -744,7 +744,7 @@ End Sub
             Assert.Fail("File is a sctioned file that is not supported, should have thrown.") ' If we get here, all is well.
         Catch ex As Exception
             If ex.InnerException IsNot Nothing AndAlso ex.InnerException.Message.StartsWith("Sectioned datafiles are not supported") Then
-                Assert.IsTrue(True) ' We expect this because this format is not supported!
+                ' We expect this because this format is not supported!
             Else    ' Another unexpected exception happend.
                 Assert.Fail(String.Format("Expected 'Sectioned datafiles are not supported' error, got: '{0} ({1})'", ex.Message, If(ex.InnerException IsNot Nothing,ex.InnerException.Message,"")))
             End If
@@ -844,7 +844,7 @@ End Sub
     ''' Since I do not know how to pass variable sized arrays as parameter, I create a dictionary above that will hold the CRCs.
     ''' If no dictionary is present, I will simply dump out the CRCs if there are any.
     ''' </summary>
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz")>
     <DataRow("DataFiles/Algae and beads very fast 2012-02-16 14u35.cyz")>
     <DataRow("DataFiles/beads Measurement - Medium sensitivity 2019-08-20 15h50.cyz")>
@@ -906,7 +906,7 @@ End Sub
     '''     DataFiles/nano_cend16_20 2020-10-07 04u00.cyz ==> Concentration mismatch
     ''' </remarks>
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz")>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz")>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz")>

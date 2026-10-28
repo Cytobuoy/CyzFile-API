@@ -20,7 +20,7 @@ Imports OpenCvSharp
     ' First test the different methods to access the measurement start time.
 
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                              2020, 10,  6,  5,  0, 30, 475,  19,  5)>
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                              2020, 10,  7,  4,  0, 29, 975, 814,  1)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              2013,  4,  8, 14, 56, 32, 366, 758,  4)>
@@ -54,7 +54,7 @@ Imports OpenCvSharp
 
 
     ' These files do not have a measurement log yet.
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz")>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz")>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz")>
@@ -91,7 +91,7 @@ Imports OpenCvSharp
     End Sub
 
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                              2020, 10,  6,  5,  0, 30, 475,  19,  5)>
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                              2020, 10,  7,  4,  0, 29, 975, 814,  1)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              2013,  4,  8, 14, 56, 32, 366, 758,  4)>
@@ -138,7 +138,7 @@ Imports OpenCvSharp
 
     ' Then WithEvents test the different measurements to access measurement durations.
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                              600)>
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                              600)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              155)>
@@ -163,7 +163,7 @@ Imports OpenCvSharp
 
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz")>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz")>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz")>
@@ -198,7 +198,7 @@ Imports OpenCvSharp
 
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                              600.0F)>
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                              600.0F)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              155.0F)>
@@ -223,7 +223,7 @@ Imports OpenCvSharp
 
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz",                              159.0F)>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                         59.0F)>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                         59.0F)>
@@ -253,7 +253,7 @@ Imports OpenCvSharp
 
     ' Measurement.endAcquireTime.
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                              2020, 10,  6,  5, 10, 30, 654, 873, 7)>
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                              2020, 10,  7,  4, 10, 30, 608,  69, 1)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              2013,  4,  8, 14, 59,  7, 494, 631, 2)>
@@ -285,7 +285,7 @@ Imports OpenCvSharp
 
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz")>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz")>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz")>
@@ -320,7 +320,7 @@ Imports OpenCvSharp
 
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz",                              600)>
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz",                              600)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              155)>
@@ -345,7 +345,7 @@ Imports OpenCvSharp
 
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/d0_a1_run_3 2011-06-11 09u28.cyz",                              159)>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                         59)>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                         59)>
@@ -375,7 +375,7 @@ Imports OpenCvSharp
 
 
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                            30.68)>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                            30.68)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                               10.85)>
@@ -415,7 +415,7 @@ Imports OpenCvSharp
     End Sub
 
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                              9.318)>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                              9.624)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                                 0)> ' Analyzed is 0, no downloaded particles.
@@ -455,7 +455,7 @@ Imports OpenCvSharp
         End If
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz")> ' Mismatch error exception.
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz")> ' Mismatch error exception.
     Public Sub Test_AnalyzedVolume_ConcentrationMismatch( filename As String)
@@ -484,7 +484,7 @@ Imports OpenCvSharp
 
 
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                          3143.412)>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                          2726.299)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              675.119)>
@@ -524,7 +524,7 @@ Imports OpenCvSharp
         End If
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/nano_cend16_20 2020-10-06 05u00.cyz")> ' Mismatch error exception.
     <DataRow("DataFiles/nano_cend16_20 2020-10-07 04u00.cyz")> ' Mismatch error exception.
     Public Sub Test_Concentration_ConcentrationMismatch( filename As String)
@@ -560,7 +560,7 @@ Imports OpenCvSharp
     ''' Maybe we should add some special code for these, to also check the actual preconcentration
     ''' calculations are not messed up.</remarks>
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                          2306.754)>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                          3430.081)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                               -1.0)> ' No preconcentration measurent
@@ -601,7 +601,7 @@ Imports OpenCvSharp
 
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("DataFiles/1 2011-12-14 13u50.cyz",                                          3143.412)>
     <DataRow("DataFiles/1 2011-12-14 13u51.cyz",                                          2726.299)>
     <DataRow("DataFiles/1p6um NF beads 2013-04-08 14u56.cyz",                              675.119)>

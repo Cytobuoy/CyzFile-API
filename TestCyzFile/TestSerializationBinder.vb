@@ -23,7 +23,7 @@ Public Class TestSerializationBinder
 
     ' <DataRow(", CyzFile",               "",               "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("System.Drawing.Color, System.Drawing",                                       "System.Drawing.Color",                                               "System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")>
     <DataRow("System.Drawing.Point, System.Drawing",                                       "System.Drawing.Point",                                               "System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")>
     <DataRow("System.IO.Ports.Handshake, System",                                          "System.IO.Ports.Handshake",                                          "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")>
@@ -39,7 +39,6 @@ Public Class TestSerializationBinder
     <DataRow("CytoSense.CytoSettings.CameraDescriptors, CyzFile",                          "CytoSense.CytoSettings.CameraDescriptors",                           "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.CameraFeatures, CyzFile",                             "CytoSense.CytoSettings.CameraFeatures",                              "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.CarbonFilterModuleOptionsT, CyzFile",                 "CytoSense.CytoSettings.CarbonFilterModuleOptionsT",                  "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
-    <DataRow("CytoSense.CytoSettings.channel, CyzFile",                                    "CytoSense.CytoSettings.channel",                                     "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.channel, CyzFile",                                    "CytoSense.CytoSettings.channel",                                     "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.channel+LaserColorEnum, CyzFile",                     "CytoSense.CytoSettings.channel+LaserColorEnum",                      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.ChannelAccessMode, CyzFile",                          "CytoSense.CytoSettings.ChannelAccessMode",                           "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
@@ -106,7 +105,7 @@ Public Class TestSerializationBinder
     End Sub
     
 
-    <DataTestMethod()>
+    <TestMethod()>
     <DataRow("System.Drawing.Color, System.Drawing",                                       Nothing,                                                              Nothing)>
     <DataRow("System.Drawing.Point, System.Drawing",                                       Nothing,                                                              Nothing)>
     <DataRow("System.IO.Ports.Handshake, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",                                             Nothing, "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")>
@@ -122,7 +121,6 @@ Public Class TestSerializationBinder
     <DataRow("CytoSense.CytoSettings.CameraDescriptors, CyzFile",                          Nothing,                           "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.CameraFeatures, CyzFile",                             Nothing,                              "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.CarbonFilterModuleOptionsT, CyzFile",                 Nothing,                  "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
-    <DataRow("CytoSense.CytoSettings.channel, CyzFile",                                    Nothing,                                     "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.channel, CyzFile",                                    Nothing,                                     "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.channel+LaserColorEnum, CyzFile",                     Nothing,                      "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>
     <DataRow("CytoSense.CytoSettings.ChannelAccessMode, CyzFile",                          Nothing,                           "CytoSense, Version=1.0.8697.18894, Culture=neutral, PublicKeyToken=null")>

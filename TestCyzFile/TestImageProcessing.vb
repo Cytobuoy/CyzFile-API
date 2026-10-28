@@ -14,7 +14,7 @@ Imports Force.Crc32
     ''' <summary>
     ''' 
     ''' </summary>
-    <DataTestMethod()>
+    <TestMethod()>
     Public Sub TestCropping_profiles_LW_2017()
         Dim dfw = New DataFileWrapper("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz")
 
@@ -65,7 +65,7 @@ Imports Force.Crc32
     End Sub
 
 
-    <DataTestMethod()>
+    <TestMethod()>
     Public Sub TestCroppingWithRect_profiles_LW_2017()
         Dim dfw = New DataFileWrapper("DataFiles/profiles_LW_2017_protocol_1 2017-04-20 12h00_New Set 2.cyz")
 
@@ -91,7 +91,7 @@ Imports Force.Crc32
 
 
 
-        <DataTestMethod()>
+        <TestMethod()>
     Public Sub TestCropping_LiveCropped_ZOO80()
         Dim dfw = New DataFileWrapper("DataFiles/ZOO80um_50t60m_diluted5x_8uls_SWST50L60_5min_IIFall_sh high_smrttr SWS SL300 SWS max1000 2025-12-18 13h02.cyz")
 
@@ -116,7 +116,7 @@ Imports Force.Crc32
         AssertImgParticle(imgParticles( 9),  150849, 1600, 1440)
     End Sub
 
-    <DataTestMethod()>
+    <TestMethod()>
     Public Sub TestCroppingWithRect_ZOO80()
         Dim dfw = New DataFileWrapper("DataFiles/ZOO80um_50t60m_diluted5x_8uls_SWST50L60_5min_IIFall_sh high_smrttr SWS SL300 SWS max1000 2025-12-18 13h02.cyz")
 

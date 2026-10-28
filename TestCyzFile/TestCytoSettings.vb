@@ -98,7 +98,7 @@ Imports CytoSense.Serializing
     ''' initialized settings.
     ''' </summary>
     ''' <param name="testfile"></param>
-    <DataTestMethod>
+    <TestMethod>
     <DataRow("DataFiles\1 2011-12-14 13u50.cyz")>
     <DataRow("DataFiles\1 2011-12-14 13u51.cyz")>
     <DataRow("DataFiles\1p6um NF beads 2013-04-08 14u56.cyz")>

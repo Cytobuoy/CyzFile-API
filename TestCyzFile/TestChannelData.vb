@@ -35,7 +35,7 @@ Imports CytoSense.Data.ParticleHandling.Channel
     Private Const REDDATA As Integer = 1
 
 
-    <DataTestMethod>
+    <TestMethod>
     <DataRow(SWSDATA, SWSDATA, ChannelData.ParameterSelector.Length,           5.1213)>
     <DataRow(SWSDATA, SWSDATA, ChannelData.ParameterSelector.Total,        11118.5976)>
     <DataRow(SWSDATA, SWSDATA, ChannelData.ParameterSelector.Maximum,        778.3907)>
