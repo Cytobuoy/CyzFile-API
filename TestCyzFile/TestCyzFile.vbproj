@@ -235,7 +235,6 @@
 	  </PackageReference>
 	  <PackageReference Include="OpenCvSharp4" version="4.13.0.20260627" />
 	  <PackageReference Include="OpenCvSharp4.runtime.win" version="4.13.0.20260627" />
-	  <PackageReference Include="OpenCvSharp4.Windows" version="4.13.0.20260627" />
 	  <PackageReference Include="System.Drawing.Common" version="10.0.14" />
 	  <PackageReference Include="UnitsNet" Version="5.75.1" />	
 	
