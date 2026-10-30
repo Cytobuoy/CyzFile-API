@@ -864,7 +864,7 @@ End Sub
                 Dim imgStr = ip.ImageHandling.ImageStream
                 imgStr.Position = 0 ' Reset reading to the beginning
 
-                Dim crc As UInteger = Crc32Algorithm.Compute(imgStr.ToArray(),0,imgStr.Length)
+                Dim crc As UInteger = Crc32Algorithm.Compute(imgStr.ToArray(),0,CInt(imgStr.Length))
                 Dim lCrc As Long = CLng(crc)
                 Debug.WriteLine("&H{0:X8}L,", lCrc)
             Next
@@ -877,7 +877,7 @@ End Sub
                 Dim ip = imgParts(i)
                 Dim imgStr = ip.ImageHandling.ImageStream
                 imgStr.Position = 0 ' Reset reading to the beginning
-                Dim crc As UInteger = Crc32Algorithm.Compute(imgStr.ToArray(),0,imgStr.Length)
+                Dim crc As UInteger = Crc32Algorithm.Compute(imgStr.ToArray(),0,CInt(imgStr.Length))
                 Dim lCrc As Long = CLng(crc)
                 crcs.Add(lCrc)
 

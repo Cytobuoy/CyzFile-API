@@ -214,7 +214,7 @@ Namespace Data.Analysis
             End Set
         End Property
 
-        Public Sub AddGate(ByRef thisGate As IGate)
+        Public Sub AddGate(thisGate As IGate)
             myGates.Add(thisGate.CreateWorkfileCopy(_datafile))
 
             _Invalid = True
