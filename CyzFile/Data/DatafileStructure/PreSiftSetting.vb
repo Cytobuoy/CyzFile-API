@@ -9,6 +9,16 @@ Namespace Data
         Dim _minimumValue As Int32 = 0
         Dim _maximumValue As Int32 = 0
 
+        '' ONLY USED IN TEST CODE
+        <Obsolete()>
+        Sub New()
+            _channel = Nothing
+            _parameter = CytoSense.Data.ParticleHandling.Channel.ChannelData_Hardware.ParameterSelector.Length
+            _minimumValue = 0
+            _maximumValue = 0
+            _channelid = 0
+        End Sub
+
 
         Sub New(ByVal channel As CytoSense.CytoSettings.channel, ByVal par As CytoSense.Data.ParticleHandling.Channel.ChannelData_Hardware.ParameterSelector, ByVal minimum As Int32, ByVal maximum As Int32, ByVal channelID As Integer)
             _channel = channel

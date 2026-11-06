@@ -24,6 +24,20 @@ Namespace MeasurementSettings
         Dim _maximumValue_single As Single = 0
         Dim _accessMode As CytoSense.CytoSettings.ChannelAccessMode
 
+        '' ONLY USED IN TEST CODE
+        <Obsolete>
+        Public Sub New()
+            _channelID           = 0
+            _channelName         = ""
+            _parameter           = CytoSense.Data.ParticleHandling.Channel.ChannelData_Hardware.ParameterSelector.Length
+            _minimumValue        = 0
+            _maximumValue        = 0
+            _minimumValue_single = 0.0
+            _maximumValue_single = 0.0
+            _accessMode          = CytoSense.CytoSettings.ChannelAccessMode.Normal
+        End Sub
+
+
         Sub New(ByVal channel As CytoSense.CytoSettings.ChannelWrapper, ByVal par As CytoSense.Data.ParticleHandling.Channel.ChannelData_Hardware.ParameterSelector, ByVal minimum As Single, ByVal maximum As Single)
             _channelID = channel.ID
             _channelName = channel.ChannelInfo.name

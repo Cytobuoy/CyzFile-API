@@ -45,6 +45,7 @@ Namespace MeasurementSettings
         Implements ICloneable
 
         Private _cytosettings As CytoSense.CytoSettings.CytoSenseSetting
+        <Obsolete>
         Public release As New Serializing.VersionTrackableClass(New Date(2013, 4, 23))
         <NonSerialized()> Public Event RefreshNeeded()
 
@@ -193,6 +194,7 @@ Namespace MeasurementSettings
 
             _useStainingModule             = other._useStainingModule
             _includeUnstainedMeasurement   = other._includeUnstainedMeasurement
+            _stainFlushWhileIncubate       = other._stainFlushWhileIncubate
             _useExternalStaining           = other._useExternalStaining
             _cleanStainingModuleAfterwards = other._cleanStainingModuleAfterwards
             _cleanStainingModuleAfterwardsIncludeSamplePump = other._cleanStainingModuleAfterwardsIncludeSamplePump
@@ -246,6 +248,10 @@ Namespace MeasurementSettings
             _useDps       = other._useDps
             _depth        = other._depth
             _depthProfile = New List(Of Single)(other._depthProfile)
+
+
+            _injectorFocus    = other._injectorFocus
+            _injectorPosition = other._injectorPosition
         End Sub
 
         Private Sub SetDefaultMeasurement(name As String, folderPath As String)
@@ -1998,6 +2004,7 @@ Namespace MeasurementSettings
             End Set
         End Property
 
+        <Obsolete>
         Private _stainDyeInjectAmount As Integer = -1
         <Obsolete> Public Property StainDyeInjectAmount As Integer
             Get

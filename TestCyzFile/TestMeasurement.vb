@@ -4,11 +4,175 @@ Imports CytoSense.Data.Data
 Imports CytoSense.Data.MeasurementLog
 Imports OpenCvSharp
 
+Imports System.Reflection
 ''' <summary>
 ''' Test functions of the measurment log, added when changing the way it is used because of a new SubDeep protocol.
 ''' </summary>
 ''' <remarks></remarks>
-<TestClass()> Public Class TestMeasurementLog
+<TestClass()> Public Class TestMeasurement
+
+
+    ''' <summary>
+    ''' Use reflection to set all fields of a measurement and then assign it to a new one and verify that all values are
+    ''' the same.  This can check if we do not accidentally forget to copy one. E.g. when adding a new one.  It has happened
+    ''' before, and I recently found a staining module option that was not copied, which has probably been in there for
+    ''' quite some time.
+    ''' </summary>
+    ''' <remarks>We use reflection, so it should pick up any fields. Code is based Gemini.
+    ''' 
+    ''' We need a Cytosense settings object, and all the code for initializing specific instrument is not in this DLL, so we simply load one
+    ''' from a recent test file and use that.
+    ''' </remarks>
+    <TestMethod()>
+    Public Sub TestAssign()
+
+        Dim dfw = New DataFileWrapper("DataFiles/ruistest_1 2023-07-18 14h46_2.cyz")
+
+        
+        Dim cytoSettings = dfw.CytoSettings
+
+        Dim original = New CytoSense.MeasurementSettings.Measurement("TestAssign", "C:\Prutser", cytoSettings)
+        Dim target   = New CytoSense.MeasurementSettings.Measurement("Oopsie", "C:\Temp", cytoSettings)
+
+        Dim flags As BindingFlags = BindingFlags.Instance Or BindingFlags.Public Or BindingFlags.NonPublic
+
+        ' 2. Vul alle velden van 'original' automatisch met unieke testdata
+        Dim fields = GetType(CytoSense.MeasurementSettings.Measurement).GetFields(flags).
+                     Where(Function(f) Not f.Name.Contains("<") AndAlso
+                                       Not f.IsDefined(GetType(ObsoleteAttribute), inherit:=True))
+        
+        For Each field In fields
+            
+            Dim dummyValue = CreateDummyValue(field.FieldType)
+            field.SetValue(original, dummyValue)
+        Next
+
+
+        ' 3 Copy data to the target.
+        target.Assign(original)
+
+        '4 Now compare and see if any were missed:
+
+        Dim unassignedFields As New List(Of String)()
+
+        For Each field In fields
+            Dim originalValue = field.GetValue(original)
+            Dim targetValue = field.GetValue(target)
+
+            ' Controleer op null of ongelijke waardes
+            If Not AreValuesEqual(originalValue, targetValue) Then
+                unassignedFields.Add(field.Name)
+            End If
+        Next
+
+        ' 5. Rapporteer exact welke velden niet gekopieerd zijn
+        If unassignedFields.Count > 0 Then
+            Assert.Fail($"De volgende {unassignedFields.Count} velden zijn NIET meegegaan in de Assign: {String.Join(", ", unassignedFields)}")
+        End If
+
+    End Sub
+
+
+    Private Function AreValuesEqual(val1 As Object, val2 As Object) As Boolean
+        If val1 Is Nothing AndAlso val2 Is Nothing Then Return True
+        If val1 Is Nothing OrElse val2 Is Nothing Then Return False
+
+        ' 1. Afhandeling van Arrays
+        If TypeOf val1 Is Array AndAlso TypeOf val2 Is Array Then
+            Dim arr1 As Array = DirectCast(val1, Array)
+            Dim arr2 As Array = DirectCast(val2, Array)
+
+            ' Als de lengte niet overeenkomt, zijn ze sowieso niet gelijk
+            If arr1.Length <> arr2.Length Then Return False
+
+            ' Vergelijk elk element recursief!
+            For i As Integer = 0 To arr1.Length - 1
+                If Not AreValuesEqual(arr1.GetValue(i), arr2.GetValue(i)) Then
+                    Return False
+                End If
+            Next
+
+            Return True
+        End If
+
+        Dim type1 As Type = val1.GetType()
+
+        ' 2. Basis datatypes, Strings, Datums & Enums vergelijken op waarde
+        If type1.IsPrimitive OrElse type1 Is GetType(String) OrElse type1 Is GetType(DateTime) OrElse type1 Is GetType(Decimal) OrElse type1.IsEnum Then
+            Return val1.Equals(val2)
+        End If
+
+        ' 3. Complexe Custom Objecten: vergelijk al hun velden via Reflection
+        Dim flags As BindingFlags = BindingFlags.Instance Or BindingFlags.Public Or BindingFlags.NonPublic
+        Dim fields = type1.GetFields(flags).
+            Where(Function(f) Not f.Name.Contains("<") AndAlso 
+                              Not f.IsDefined(GetType(ObsoleteAttribute), True)).
+            ToArray()
+
+        For Each field In fields
+            Dim subVal1 = field.GetValue(val1)
+            Dim subVal2 = field.GetValue(val2)
+
+            If Not AreValuesEqual(subVal1, subVal2) Then
+                Return False
+            End If
+        Next
+
+        Return True
+    End Function
+
+    '' Helper to compare values (handles Arrays properly via SequenceEqual)
+    'Private Function AreValuesEqual(val1 As Object, val2 As Object) As Boolean
+    '    If val1 Is Nothing AndAlso val2 Is Nothing Then Return True
+    '    If val1 Is Nothing OrElse val2 Is Nothing Then Return False
+
+    '    ' Handle Arrays (e.g. Integer(), Enum(), String())
+    '    If TypeOf val1 Is Array AndAlso TypeOf val2 Is Array Then
+    '        Dim arr1 = DirectCast(val1, IEnumerable).Cast(Of Object)()
+    '        Dim arr2 = DirectCast(val2, IEnumerable).Cast(Of Object)()
+    '        Return arr1.SequenceEqual(arr2)
+    '    End If
+
+    '    ' Fallback to standard equality for scalar types
+    '    Return val1.Equals(val2)
+    'End Function
+
+
+    ''' <summary>
+    ''' Small helper to generate random data for most fields.
+    ''' </summary>
+    ''' <param name="t"></param>
+    ''' <returns></returns>
+    Private Function CreateDummyValue(t As Type) As Object
+        If t.IsArray Then
+            Dim elementType As Type = t.GetElementType()
+            Dim sampleArray As Array = Array.CreateInstance(elementType, 3)
+            For i As Integer = 0 To 2
+                sampleArray.SetValue(CreateDummyValue(elementType), i)
+            Next
+            Return sampleArray
+        End If
+
+        If t Is GetType(String) Then Return Guid.NewGuid().ToString()
+        If t Is GetType(Integer) Then Return New Random().Next(1, 10000)
+        If t Is GetType(Boolean) Then Return True
+        If t Is GetType(DateTime) Then Return DateTime.Now.AddDays(New Random().Next(1, 100))
+        If t Is GetType(Decimal) Then Return CDec(New Random().Next(1, 1000))
+        If t Is GetType(Double) Then Return CDbl(New Random().Next(1, 1000))
+        If t.IsEnum Then
+            Dim values As Array = [Enum].GetValues(t)
+            If values.Length > 0 Then
+                Return values.GetValue(0)
+            End If
+        End If        
+        ' Voor overige complexe objecten/referentie types
+        Try
+            Return Activator.CreateInstance(t)
+        Catch
+            Return Nothing
+        End Try
+    End Function
+
 
     ' We create a series of tests that access the different measurement start/end/duration functions.
     ' Before we start changing the measurement log functions.  These test functions do not only call the actual measurement log
