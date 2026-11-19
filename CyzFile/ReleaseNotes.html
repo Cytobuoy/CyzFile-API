@@ -83,6 +83,39 @@
               <th>Description</th>
           </tr>
           <tr>
+              <td>1.10.0</td>
+              <td>2026-11-19</td>
+              <td>
+                  <h4>Changes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Target .net 10.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>The previous target .Net 8 is no longer supported by MicroSoft, as is the case for .Net 9.  The currently
+                              supported (LTS) version is .Net 10, so we changed the build files to target this platform now.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Implemented</td></tr>
+                      </table>
+                  </p>
+                  <h4>Bug Fixes</h4>
+                  <p>
+                      <table class="item">
+                          <tr><th>Subject:</th><th>Fixed copying problem in Measurement settings.</th></tr>
+                          <tr>
+                              <th>Summary:</th>
+                              <td>
+                                  The copying functions forgot to copy one of the fields, and that caused issues in CytoUsb when trying to select a
+                                  certain (rarely used) option for staining your sample.
+                              </td>
+                          </tr>
+                          <tr><th>Status:</th><td>Fixed</td></tr>
+                      </table>
+                  </p>
+              </td>
+          </tr>
+          <tr>
               <td>1.8.0.0</td>
               <td>2026-09-11</td>
               <td>
@@ -175,7 +208,7 @@
                           <tr>
                               <th>Summary:</th>
                               <td>
-                                  This issue affected only CytoClus, because of the order in which things were set, CytoClus sometimes thought the 
+                                  This issue affected only CytoClus, because of the order in which things were set, CytoClus sometimes thought the
                                   image cropping data was available but in reality the background thread had not finished writing it all.  The window
                                   for this to occur was small, but if open several files with 10000 images it would happen. After changing
                                   the order this no longer happens.
